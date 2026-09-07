@@ -1,0 +1,11 @@
+---
+import { getCollection } from "astro:content";
+import SiteLayout from "../../layouts/SiteLayout.astro";
+
+const posts = await getCollection("posts");
+---
+
+<SiteLayout title="Journal | Oguz Kabasakal">
+  <section class="page-shell page-intro mx-auto w-[min(1400px,calc(100%-2rem))] py-10 max-[767px]:w-full max-[767px]:px-6 md:py-16"><p class="eyebrow">Journal</p><h1 class="max-w-[65rem] text-[clamp(2.75rem,6vw,5.8rem)] font-[550] leading-[1.05] tracking-[-.06em] text-balance">Notes from the <span class="text-primary">workbench.</span></h1><p class="mt-5 max-w-[38rem] text-base leading-7 text-pretty text-muted-foreground">Small observations about making things.</p></section>
+  <section class="section page-shell journal-list mx-auto w-[min(1400px,calc(100%-2rem))] border-t border-border py-16 pb-28 max-[767px]:w-full max-[767px]:px-6">{posts.map((post) => <a class="journal-entry grid grid-cols-[1fr_1fr_auto] items-center gap-8 border-b border-border py-8 max-[767px]:grid-cols-[1fr_auto] max-[767px]:gap-x-4 max-[767px]:gap-y-2" href={`/journal/${post.id}`}><div><p class="eyebrow">{post.data.publishedAt.toLocaleDateString("en", { year: "numeric", month: "long", day: "numeric" })}</p><h2 class="text-[clamp(1.8rem,3vw,3rem)]">{post.data.title}</h2></div><p class="text-muted-foreground leading-relaxed max-[767px]:col-span-full">{post.data.excerpt}</p><span class="text-2xl text-primary" aria-hidden="true">↗</span></a>)}</section>
+</SiteLayout>

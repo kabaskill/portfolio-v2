@@ -1,0 +1,67 @@
+---
+import { getCollection } from "astro:content";
+import HeroArt from "../components/HeroArt.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
+
+const projects = (await getCollection("projects")).filter(({ data }) => data.published !== false);
+const featuredSlugs = ["unides-yawara", "naviri", "formenwerkstatt", "sound-showreel"];
+const featured = featuredSlugs.flatMap((slug) => projects.filter(({ data }) => data.slug === slug));
+const experiment = projects.find(({ data }) => data.slug === "droplet");
+const gridSpans = ["md:col-span-7", "md:col-span-5 md:pt-20", "md:col-span-5", "md:col-span-7 md:pt-12"];
+---
+
+<SiteLayout>
+  <section class="hero page-shell mx-auto grid w-[min(1400px,calc(100%-2rem))] items-center gap-10 py-20 md:min-h-140 md:grid-cols-[1.55fr_1fr] md:gap-4 md:py-24 lg:min-h-[min(720px,calc(100dvh-72px))] lg:gap-12 lg:py-28 max-[767px]:w-full max-[767px]:grid-cols-1 max-[767px]:gap-14 max-[767px]:px-6 max-[767px]:py-12">
+    <div class="hero__copy reveal" data-reveal>
+      <h1 class="max-w-[900px] text-[clamp(3.3rem,8vw,7.5rem)] font-[550] leading-[.94] tracking-[-.075em]"><span class="hero__title block text-[clamp(4rem,8.75vw,8rem)] leading-none">Developer</span><span class="hero__subtitle mt-2.5 block pb-[.15em] text-[clamp(1.8rem,3.85vw,3.65rem)] leading-[1.22] tracking-[-.065em]">with a <em class="font-medium text-primary not-italic">designer's eye.</em></span></h1>
+      <p class="hero__lede mt-4 max-w-[31rem] text-base leading-7 text-pretty text-muted-foreground md:mt-7 md:text-[1.0625rem]">I build fast, expressive web experiences shaped by code, visual design, and a decade of sound work.</p>
+      <div class="hero__actions mt-8 flex flex-wrap gap-3"><span class="magnetic inline-flex" data-magnetic><a class="inline-flex min-h-13 items-center justify-center gap-4 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground transition duration-200 hover:-translate-y-0.5" href="/work">View work <span aria-hidden="true">↗</span></a></span><a class="inline-flex min-h-13 items-center justify-center gap-4 rounded-full border border-border bg-transparent px-6 py-3.5 text-sm font-semibold text-foreground transition duration-200 hover:border-foreground hover:bg-foreground hover:text-background" href="#about">About me <span aria-hidden="true">↘</span></a></div>
+    </div>
+    <HeroArt />
+  </section>
+
+  <section class="section home-selected page-shell mx-auto w-[min(1400px,calc(100%-2rem))] border-t border-border py-16 md:py-28 max-[767px]:w-full max-[767px]:px-6 max-[767px]:py-10">
+    <div class="section-heading mb-8 flex items-center justify-between gap-8 reveal max-[767px]:mb-5 max-[767px]:flex-col max-[767px]:items-start max-[767px]:gap-5" data-reveal>
+      <div>
+        <h2 class="text-[clamp(2.4rem,5vw,4.5rem)] leading-[1.08] tracking-[-.06em] text-balance">Selected <span class="text-primary">work.</span></h2>
+      </div>
+      <a class="inline-flex min-h-13 items-center justify-center gap-4 rounded-full border border-border bg-transparent px-6 py-3.5 text-sm font-semibold text-foreground transition duration-200 hover:border-foreground hover:bg-foreground hover:text-background" href="/work">All work <span aria-hidden="true">↗</span></a>
+    </div>
+    <p class="section-lede mb-12 max-w-[46rem] text-base leading-7 text-pretty text-muted-foreground reveal max-[767px]:mb-12" data-reveal>A focused set of projects across software, design, and sound, where implementation and creative direction belong to the same process.</p>
+    <div class="project-grid grid grid-cols-1 gap-x-6 gap-y-14 md:grid-cols-12 md:gap-y-20">
+      {featured.map((project, index) => <ProjectCard project={project} layoutClass={gridSpans[index % gridSpans.length]} />)}
+    </div>
+  </section>
+
+  <section id="about" class="capabilities-shell scroll-mt-24 rounded-[20px] bg-card md:mx-4 md:rounded-[32px]">
+    <div class="page-shell capabilities mx-auto w-[min(1400px,calc(100%-2rem))] py-20 lg:py-28 max-[767px]:w-full max-[767px]:px-6 max-[767px]:py-20">
+      <h2 class="reveal max-w-4xl text-[clamp(2.4rem,5vw,4.5rem)] leading-[1.08] tracking-[-.06em] text-balance" data-reveal>Technical decisions should be visible in <span class="text-primary">how a product feels.</span></h2>
+      <div class="capabilities__grid mt-10 grid gap-8 md:mt-16 md:grid-cols-[1.2fr_1fr] md:gap-x-20 md:gap-y-10 max-[767px]:grid-cols-1 max-[767px]:gap-8">
+        <article class="reveal grid grid-cols-[3.5rem_1fr] gap-x-4 gap-y-2 border-t border-border pt-6 md:row-span-2 md:block md:pt-8" data-reveal>
+          <svg class="capabilities__icon mb-5 block size-11 text-primary md:mb-8 md:size-20" viewBox="0 0 256 256" aria-hidden="true"><path d="M240,128l-48,40H64L16,128,64,88H192Z" opacity=".2" fill="currentColor"/><path d="M69.12,94.15,28.5,128l40.62,33.85a8,8,0,1,1-10.24,12.29l-48-40a8,8,0,0,1,0-12.29l48-40a8,8,0,0,1,10.24,12.3Zm176,27.7-48-40a8,8,0,1,0-10.24,12.3L227.5,128l-40.62,33.85a8,8,0,1,0,10.24,12.29l48-40a8,8,0,0,0,0-12.29ZM162.73,32.48a8,8,0,0,0-10.25,4.79l-64,176a8,8,0,0,0,4.79,10.26A8.14,8.14,0,0,0,96,224a8,8,0,0,0,7.52-5.27l64-176A8,8,0,0,0,162.73,32.48Z" fill="currentColor"/></svg>
+          <h3 class="text-[clamp(1.4rem,2.6vw,2.2rem)] font-[550] leading-tight tracking-[-.045em]">Engineering</h3><p class="max-w-md text-[.95rem] leading-7 text-muted-foreground">Type-safe React systems, deliberate server boundaries, and performance treated as a feature.</p>
+        </article>
+        <article class="reveal grid grid-cols-[3.5rem_1fr] gap-x-4 gap-y-2 border-t border-border pt-6" data-reveal>
+          <svg class="capabilities__icon row-span-2 size-11 text-primary" viewBox="0 0 256 256" aria-hidden="true"><path d="M135.88,43.11l-25,143.14a35.71,35.71,0,0,1-41.34,29.2h0a36,36,0,0,1-28.95-41.71l25-143.13a8,8,0,0,1,9.19-6.49l54.67,9.73A8,8,0,0,1,135.88,43.11Z" opacity=".2" fill="currentColor"/><path d="M88,180a12,12,0,1,1-12-12A12,12,0,0,1,88,180Zm152-23.81V208a16,16,0,0,1-16,16H76a46.36,46.36,0,0,1-7.94-.68,44,44,0,0,1-35.43-50.95l25-143.13a15.94,15.94,0,0,1,18.47-13L130.84,26a16,16,0,0,1,12.92,18.52l-12.08,69L199.49,89a16,16,0,0,1,20.45,9.52L239,150.69A18.35,18.35,0,0,1,240,156.19ZM103,184.87,128,41.74,73.46,32l-25,143.1A28,28,0,0,0,70.9,207.57,27.29,27.29,0,0,0,91.46,203,27.84,27.84,0,0,0,103,184.87ZM116.78,195,224,156.11,204.92,104,128.5,131.7l-9.78,55.92A44.63,44.63,0,0,1,116.78,195ZM224,173.12,127.74,208H224Z" fill="currentColor"/></svg>
+          <h3 class="text-[clamp(1.4rem,2.6vw,2.2rem)] font-[550] leading-tight tracking-[-.045em]">Visual design</h3><p class="max-w-md text-[.95rem] leading-7 text-muted-foreground">Typography, interaction, and responsive composition built together instead of handed off in layers.</p>
+        </article>
+        <article class="reveal grid grid-cols-[3.5rem_1fr] gap-x-4 gap-y-2 border-t border-border pt-6" data-reveal>
+          <svg class="capabilities__icon row-span-2 size-11 text-primary" viewBox="0 0 256 256" aria-hidden="true"><path d="M80,88v80H32a8,8,0,0,1-8-8V96a8,8,0,0,1,8-8Z" opacity=".2" fill="currentColor"/><path d="M155.51,24.81a8,8,0,0,0-8.42.88L77.25,80H32A16,16,0,0,0,16,96v64a16,16,0,0,0,16,16H77.25l69.84,54.31A8,8,0,0,0,160,224V32A8,8,0,0,0,155.51,24.81ZM32,96H72v64H32ZM144,207.64,88,164.09V91.91l56-43.55Zm54-106.08a40,40,0,0,1,0,52.88,8,8,0,0,1-12-10.58,24,24,0,0,0,0-31.72,8,8,0,0,1,12-10.58ZM248,128a79.9,79.9,0,0,1-20.37,53.34,8,8,0,0,1-11.92-10.67,64,64,0,0,0,0-85.33,8,8,0,1,1,11.92-10.67A79.83,79.83,0,0,1,248,128Z" fill="currentColor"/></svg>
+          <h3 class="text-[clamp(1.4rem,2.6vw,2.2rem)] font-[550] leading-tight tracking-[-.045em]">Sound thinking</h3><p class="max-w-md text-[.95rem] leading-7 text-muted-foreground">A production background that brings timing, pacing, and attention to detail into interface work.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  {experiment && (
+    <a class="experiment-teaser page-shell reveal mx-auto grid w-[min(1400px,calc(100%-2rem))] items-center gap-10 py-16 md:grid-cols-[1fr_1.1fr] md:gap-16 md:py-32 max-[767px]:w-full max-[767px]:grid-cols-1 max-[767px]:gap-10 max-[767px]:px-6 max-[767px]:py-16" data-reveal href="/experiments">
+      <div>
+        <h2 class="text-[clamp(2.4rem,5vw,4.5rem)] leading-[1.08] tracking-[-.06em] text-balance">Ideas need room to <span class="text-primary">misbehave.</span></h2>
+        <p class="mt-5 max-w-[38rem] text-base leading-7 text-pretty text-muted-foreground">WebGL, unusual interfaces, and small technical detours. A space to try things out.</p>
+        <span class="mt-7 inline-flex min-h-13 items-center justify-center gap-4 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground">View experiments <span aria-hidden="true">↗</span></span>
+      </div>
+      <img class="aspect-[1.2] rounded-xl object-cover transition-transform duration-500 ease-out motion-safe:hover:rotate-0 md:rotate-3" src={experiment.data.cover} alt={experiment.data.alt} loading="lazy" />
+    </a>
+  )}
+</SiteLayout>

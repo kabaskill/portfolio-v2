@@ -1,0 +1,41 @@
+---
+const artwork = [
+  { src: "/profile/oguz-kabasakal.png", alt: "Illustrated portrait of Oguz Kabasakal", label: "Portrait" },
+  { src: "/art/sound-loop.webp", alt: "Orange audio cable twisted into a sculptural loop", label: "Sound in shape" },
+];
+---
+
+<div class="hero-art reveal w-[min(100%,27rem)] justify-self-end max-[767px]:w-[min(82%,20.875rem)] max-[767px]:justify-self-center" data-reveal data-hero-art>
+  <button type="button" class="hero-art__stack relative block aspect-square w-full cursor-pointer border-0 bg-transparent p-0" data-shuffle aria-label="Shuffle portrait and sound artwork">
+    {artwork.map((item, index) => (
+      <span class:list={["hero-art__card absolute inset-0 block overflow-hidden rounded-xl border-[.4rem] border-background bg-card shadow-[0_16px_38px] shadow-foreground/12 transition duration-[600ms] ease-out", { "hero-art__card--active": index === 0 }]} data-art-card={index} aria-hidden={index !== 0}>
+        <img class="block size-full object-cover" src={item.src} alt={item.alt} loading={index === 0 ? "eager" : "lazy"} />
+      </span>
+    ))}
+  </button>
+  <button type="button" class="hero-art__caption mt-8 flex w-full items-center justify-between gap-4 border-0 border-b border-border bg-transparent px-1 py-3 font-mono text-xs text-muted-foreground transition-colors hover:text-primary md:mt-10" data-shuffle>
+    <span data-art-label>{artwork[0].label}</span>
+    <span>Shuffle <span aria-hidden="true">↻</span></span>
+  </button>
+</div>
+
+<script>
+  const initHeroArt = () => document.querySelectorAll<HTMLElement>("[data-hero-art]").forEach((root) => {
+    if (root.dataset.enhanced) return;
+    root.dataset.enhanced = "true";
+    const cards = [...root.querySelectorAll<HTMLElement>("[data-art-card]")];
+    const label = root.querySelector<HTMLElement>("[data-art-label]");
+    const shuffle = () => {
+      const active = cards.findIndex((card) => card.classList.contains("hero-art__card--active"));
+      const next = active === 0 ? 1 : 0;
+      cards.forEach((card, index) => {
+        card.classList.toggle("hero-art__card--active", index === next);
+        card.setAttribute("aria-hidden", String(index !== next));
+      });
+      if (label) label.textContent = next === 0 ? "Portrait" : "Sound in shape";
+    };
+    root.querySelectorAll<HTMLButtonElement>("[data-shuffle]").forEach((button) => button.addEventListener("click", shuffle));
+  });
+  initHeroArt();
+  document.addEventListener("astro:page-load", initHeroArt);
+</script>

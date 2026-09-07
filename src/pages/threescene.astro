@@ -1,0 +1,20 @@
+---
+import { getCollection } from "astro:content";
+import SpatialGallery from "../components/react/SpatialGallery";
+import SpatialLayout from "../layouts/SpatialLayout.astro";
+
+const spatialOrder = ["unides-yawara", "naviri", "droplet", "blitz-cache", "blitz-react", "doner-html-transpiler", "formenwerkstatt", "fugue-state", "gamedalf", "rubby-the-duck-tbd", "unity-demo-bedroom-guitarist", "unity-demo-angry-birds-clone", "p5-js-demo-snake-clone", "p5-js-demo-game-of-life", "p5-js-demo-clock-v2", "p5-js-demo-clock-v1"];
+const projects = (await getCollection("projects"))
+  .filter(({ data }) => data.published !== false && spatialOrder.includes(data.slug))
+  .sort((a, b) => spatialOrder.indexOf(a.data.slug) - spatialOrder.indexOf(b.data.slug))
+  .map(({ data }) => ({
+    title: data.title,
+    slug: data.slug,
+    cover: data.cover,
+    summary: data.summary,
+    disciplines: data.disciplines.filter((discipline) => discipline !== "experiment"),
+    link: data.links[0]?.url ?? (data.disciplines.includes("experiment") ? `/experiments/${data.slug}` : `/work/${data.slug}`),
+  }));
+---
+
+<SpatialLayout><SpatialGallery projects={projects} client:only="react" /></SpatialLayout>

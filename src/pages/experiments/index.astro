@@ -1,0 +1,21 @@
+---
+import { getCollection } from "astro:content";
+import ProjectCard from "../../components/ProjectCard.astro";
+import SignalStudy from "../../components/react/SignalStudy";
+import SiteLayout from "../../layouts/SiteLayout.astro";
+
+const experimentOrder = ["droplet", "blitz-cache", "blitz-react", "doner-html-transpiler", "3d-portfolio", "fugue-state", "gamedalf", "metanoia", "saya", "rubby-the-duck-tbd", "unity-demo-bedroom-guitarist", "unity-demo-angry-birds-clone", "p5-js-demo-snake-clone", "p5-js-demo-game-of-life", "p5-js-demo-clock-v2", "p5-js-demo-clock-v1"];
+const projects = (await getCollection("projects"))
+  .filter(({ data }) => data.published !== false && data.disciplines.includes("experiment"))
+  .sort((a, b) => experimentOrder.indexOf(a.data.slug) - experimentOrder.indexOf(b.data.slug));
+const gridSpans = ["md:col-span-7", "md:col-span-5 md:pt-20", "md:col-span-5", "md:col-span-7 md:pt-12"];
+---
+
+<SiteLayout title="Experiments | Oguz Kabasakal">
+  <section class="page-shell page-intro mx-auto w-[min(1400px,calc(100%-2rem))] py-10 max-[767px]:w-full max-[767px]:px-6 md:py-16">
+    <h1 class="max-w-[65rem] text-[clamp(2.75rem,6vw,5.8rem)] font-[550] leading-[1.05] tracking-[-.06em] text-balance">Prototypes, spatial<br class="hidden max-[767px]:block" />{" "}interfaces,<span class="text-primary"> useful detours.</span></h1>
+    <p class="mt-5 max-w-[38rem] text-base leading-7 text-pretty text-muted-foreground">A separate space for ideas that test a tool, interaction, or medium before they become conventional work.</p>
+  </section>
+  <section class="page-shell signal-section mx-auto w-[min(1400px,calc(100%-2rem))] pb-0 max-[767px]:w-full max-[767px]:px-6"><SignalStudy client:load /></section>
+  <section class="page-shell experiment-list mx-auto w-[min(1400px,calc(100%-2rem))] py-16 pb-28 max-[767px]:w-full max-[767px]:px-6"><div class="project-grid grid grid-cols-1 gap-x-6 gap-y-14 md:grid-cols-12 md:gap-y-20">{projects.map((project, index) => <ProjectCard project={project} layoutClass={gridSpans[index % gridSpans.length]} />)}</div></section>
+</SiteLayout>

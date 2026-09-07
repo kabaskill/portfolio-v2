@@ -1,0 +1,69 @@
+---
+interface Embed {
+  provider: "youtube" | "vimeo" | "spotify";
+  title: string;
+  url: string;
+}
+
+interface Props {
+  embeds: Embed[];
+}
+
+function getEmbedUrl(embed: Embed) {
+  try {
+    const url = new URL(embed.url);
+
+    if (embed.provider === "youtube") {
+      const host = url.hostname.replace(/^www\./, "");
+      let id = host === "youtu.be" ? url.pathname.split("/").filter(Boolean)[0] : null;
+      if ((host === "youtube.com" || host === "m.youtube.com") && url.pathname === "/watch") {
+        id = url.searchParams.get("v");
+      }
+      if (!id || !/^[A-Za-z0-9_-]{11}$/.test(id)) return null;
+      const start = url.searchParams.get("t") ?? url.searchParams.get("start");
+      const query = start ? `?rel=0&start=${encodeURIComponent(start)}` : "?rel=0";
+      return `https://www.youtube-nocookie.com/embed/${id}${query}`;
+    }
+
+    if (embed.provider === "vimeo") {
+      const id = url.pathname.split("/").filter(Boolean).find((part) => /^\d+$/.test(part));
+      return id ? `https://player.vimeo.com/video/${id}` : null;
+    }
+
+    if (url.hostname !== "open.spotify.com") return null;
+    const parts = url.pathname.split("/").filter(Boolean);
+    if (parts[0] === "embed") parts.shift();
+    const [type, id] = parts;
+    if (!type || !id || !["album", "episode", "playlist", "show", "track"].includes(type)) return null;
+    return `https://open.spotify.com/embed/${type}/${id}`;
+  } catch {
+    return null;
+  }
+}
+
+const { embeds } = Astro.props;
+const items = embeds.flatMap((embed) => {
+  const src = getEmbedUrl(embed);
+  return src ? [{ ...embed, src }] : [];
+});
+---
+
+{items.length > 0 && (
+  <section class="project-embeds" aria-label="Project media">
+    <p class="eyebrow">Media</p>
+    <div class="project-embeds__grid">
+      {items.map((embed) => (
+        <figure class:list={["project-embed", `project-embed--${embed.provider}`]}>
+          <iframe
+            src={embed.src}
+            title={embed.title}
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+            allowfullscreen
+          />
+          <figcaption>{embed.title}</figcaption>
+        </figure>
+      ))}
+    </div>
+  </section>
+)}

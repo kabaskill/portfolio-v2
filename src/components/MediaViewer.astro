@@ -1,0 +1,36 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  title: string;
+}
+
+const { src, alt, title } = Astro.props;
+---
+
+<div class="media-viewer" data-media-viewer>
+  <button type="button" class="media-viewer__trigger" data-open-media aria-label={`Open ${title} image`}>
+    <img src={src} alt={alt} loading="eager" />
+    <span aria-hidden="true">⌕</span>
+  </button>
+  <dialog class="media-viewer__dialog" data-media-dialog aria-label={title}>
+    <button type="button" class="media-viewer__close" data-close-media aria-label="Close image viewer">×</button>
+    <img src={src} alt={alt} />
+    <p>{title}</p>
+  </dialog>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-media-viewer]").forEach((viewer) => {
+    const dialog = viewer.querySelector<HTMLDialogElement>("[data-media-dialog]");
+    const trigger = viewer.querySelector<HTMLButtonElement>("[data-open-media]");
+    const close = viewer.querySelector<HTMLButtonElement>("[data-close-media]");
+    if (!dialog || !trigger || !close) return;
+
+    trigger.addEventListener("click", () => dialog.showModal());
+    close.addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+  });
+</script>
