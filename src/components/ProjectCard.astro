@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import { getProjectImage } from "../lib/project-images";
+import { getProjectCategoryLabel, getProjectPath } from "../lib/project-taxonomy";
 
 interface Props {
   layoutClass?: string;
@@ -11,7 +12,8 @@ interface Props {
       slug: string;
       cover: string;
       alt: string;
-      disciplines: string[];
+      category: "development-design" | "sound-music";
+      experiment: boolean;
       year?: number;
     };
   };
@@ -20,8 +22,8 @@ interface Props {
 const { project, layoutClass = "" } = Astro.props;
 const { data } = project;
 const cover = getProjectImage(data.cover);
-const href =
-  data.disciplines.includes("experiment") ? `/experiments/${data.slug}` : `/work/${data.slug}`;
+const href = getProjectPath(data);
+const label = `${data.experiment ? "Experiment · " : ""}${getProjectCategoryLabel(data.category)}`;
 ---
 
 <a class:list={["group reveal block", layoutClass]} data-reveal href={href}>
@@ -41,11 +43,7 @@ const href =
   <div class="flex gap-4 pt-4 sm:grid sm:grid-cols-[1fr_auto] sm:items-start">
     <div>
       <p class="mb-2 font-mono text-xs text-primary">
-        {
-          data.disciplines
-            .map((discipline) => discipline.charAt(0).toUpperCase() + discipline.slice(1))
-            .join(" · ")
-        }{data.year ? ` / ${data.year}` : ""}
+        {label}{data.year ? ` / ${data.year}` : ""}
       </p>
       <h3
         class="m-0 text-2xl font-semibold tracking-tight transition-colors duration-200 group-hover:text-primary sm:text-3xl"

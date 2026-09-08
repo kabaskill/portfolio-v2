@@ -4,11 +4,12 @@ import { getCollection, render } from "astro:content";
 import MediaCollection from "../../components/react/MediaCollection";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { getProjectImage } from "../../lib/project-images";
+import { getProjectCategoryLabel } from "../../lib/project-taxonomy";
 
 export async function getStaticPaths() {
   const projects = await getCollection("projects");
   return projects
-    .filter(({ data }) => data.published !== false && !data.disciplines.includes("experiment"))
+    .filter(({ data }) => data.published !== false && !data.experiment)
     .map((project) => ({ params: { slug: project.data.slug }, props: { project } }));
 }
 
@@ -43,11 +44,7 @@ const coverFull = await getImage({
       <main class="min-w-0">
         <header>
           <p class="font-mono text-xs text-primary">
-            {
-              project.data.disciplines
-                .map((discipline) => discipline.charAt(0).toUpperCase() + discipline.slice(1))
-                .join(" · ")
-            }
+            {getProjectCategoryLabel(project.data.category)}
           </p>
           <h1
             class="mt-4 max-w-[13ch] text-[clamp(2.75rem,6.2vw,5.6rem)] font-[560] leading-[.96] tracking-[-.065em] text-balance"

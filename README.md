@@ -27,6 +27,6 @@ bun run build
 
 ## Updating project content
 
-Project pages live in `src/content/projects`. Edit a Markdown file, add or replace a project image in `src/assets/images`, and keep its existing `/images/...` cover path in frontmatter. Astro resolves that path through the project image registry and generates optimized variants during the build. Run `bun run build` to produce the deployable static site. The one-time `bun run migrate:projects` script can fill in any missing project files from the current Payload seed without replacing existing Markdown entries.
+Project pages live in `src/content/projects`. Edit a Markdown file, add or replace a project image in `src/assets/images`, and keep its existing `/images/...` cover path in frontmatter. Each project uses one `category` (`development-design` or `sound-music`) and an `experiment` boolean. Astro resolves the cover path through the project image registry and generates optimized variants during the build. The shared display order lives in `src/lib/project-order.ts`. Run `bun run build` to produce the deployable static site. The one-time `bun run migrate:projects` script can fill in any missing project files from the current Payload seed without replacing existing Markdown entries.
 
 Replace the placeholder `site` value in `astro.config.mjs` before production deployment.

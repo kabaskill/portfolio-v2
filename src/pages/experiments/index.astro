@@ -3,28 +3,10 @@ import { getCollection } from "astro:content";
 import ProjectCard from "../../components/ProjectCard.astro";
 import SignalStudy from "../../components/react/SignalStudy";
 import SiteLayout from "../../layouts/SiteLayout.astro";
-
-const experimentOrder = [
-  "droplet",
-  "blitz-cache",
-  "blitz-react",
-  "doner-html-transpiler",
-  "3d-portfolio",
-  "fugue-state",
-  "gamedalf",
-  "metanoia",
-  "saya",
-  "rubby-the-duck-tbd",
-  "unity-demo-bedroom-guitarist",
-  "unity-demo-angry-birds-clone",
-  "p5-js-demo-snake-clone",
-  "p5-js-demo-game-of-life",
-  "p5-js-demo-clock-v2",
-  "p5-js-demo-clock-v1",
-];
+import { sortProjects } from "../../lib/project-order";
 const projects = (await getCollection("projects"))
-  .filter(({ data }) => data.published !== false && data.disciplines.includes("experiment"))
-  .sort((a, b) => experimentOrder.indexOf(a.data.slug) - experimentOrder.indexOf(b.data.slug));
+  .filter(({ data }) => data.published !== false && data.experiment);
+const orderedProjects = sortProjects(projects);
 const gridSpans = [
   "md:col-span-7",
   "md:col-span-5 md:pt-20",
@@ -58,7 +40,7 @@ const gridSpans = [
   >
     <div class="grid grid-cols-1 gap-x-6 gap-y-14 md:grid-cols-12 md:gap-y-20">
       {
-        projects.map((project, index) => (
+        orderedProjects.map((project, index) => (
           <ProjectCard project={project} layoutClass={gridSpans[index % gridSpans.length]} />
         ))
       }

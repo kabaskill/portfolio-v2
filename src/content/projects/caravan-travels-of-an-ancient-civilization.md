@@ -1,19 +1,20 @@
 ---
 title: "Caravan: Travels of an Ancient Civilization"
-summary: "Sound work for Caravan: Travels of an Ancient Civilization, with the finished piece available through the project link."
+summary: "Sound work for a 12-part documentary journey across Anatolia."
 slug: "caravan-travels-of-an-ancient-civilization"
 cover: "/images/caravan.jpg"
 alt: "Caravan: Travels of an Ancient Civilization project artwork"
-disciplines: ["sound"]
+category: "sound-music"
+experiment: false
 tags: ["Sound design","Audio production"]
 role: "Sound designer"
+year: 2019
 featured: false
-spatial: true
 published: true
 links: []
 embeds: [{"provider":"youtube","title":"Caravan: Travels of an Ancient Civilization video","url":"https://www.youtube.com/watch?v=YtIUmmLDSOE"}]
 ---
 
-Sound work for Caravan: Travels of an Ancient Civilization, with the finished piece available through the project link.
+Caravan: Travels of an Ancient Civilization follows a 1,920-kilometre route from Iğdır through Anatolia to the Mediterranean across twelve episodes. Erka Medya produced the documentary series for a route that moves through archaeological sites, local histories, interviews, and changing geographic conditions.
 
-This entry focuses on the sound work for Caravan: Travels of an Ancient Civilization. The embedded recording presents the work in context.
+I was the Sound/Audio Lead for the project. I handled field and studio recordings, voice-over direction, sound design and final mix for the project.

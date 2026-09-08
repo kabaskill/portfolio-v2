@@ -1,19 +1,18 @@
 ---
 title: "Philips Infomercials"
-summary: "Sound work for Philips Infomercials, with the finished piece available through the project link."
+summary: "Sound work for Philips Turkey infomercial spots."
 slug: "philips-infomercials"
 cover: "/images/philips.png"
 alt: "Philips Infomercials project artwork"
-disciplines: ["sound"]
+category: "sound-music"
+experiment: false
 tags: ["Sound design","Audio production"]
+year: 2016
 role: "Sound designer"
 featured: false
-spatial: true
 published: true
 links: []
 embeds: [{"provider":"youtube","title":"Philips Infomercials video","url":"https://youtu.be/WdwXRmtowxA?t=301"}]
 ---
 
-Sound work for Philips Infomercials, with the finished piece available through the project link.
-
-This entry focuses on the sound work for Philips Infomercials. The embedded recording presents the work in context.
+I handled sound post for these Philips Turkey infomercial spots, including dialogue, effects, transitions, and the final mix. The work had to keep product information intelligible while the picture moved through short demonstrations and cutaways.

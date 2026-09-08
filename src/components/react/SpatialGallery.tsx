@@ -3,35 +3,35 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
+import {
+  getProjectCategoryLabel,
+  projectCategories,
+  type ProjectCategory,
+} from "../../lib/project-taxonomy";
 
-type Discipline = "development" | "design" | "sound" | "music";
+type GalleryCategory = "all" | ProjectCategory;
 type Project = {
   title: string;
   slug: string;
   cover: string;
   summary: string;
-  disciplines: Discipline[];
+  category: ProjectCategory;
+  experiment: boolean;
   link: string | null;
 };
 
-const categories: Array<{ label: string; value: Discipline }> = [
-  { label: "Development", value: "development" },
-  { label: "Design", value: "design" },
-  { label: "Sound", value: "sound" },
-  { label: "Music", value: "music" },
+const categories: Array<{ label: string; value: GalleryCategory }> = [
+  { label: "All projects", value: "all" },
+  ...projectCategories,
 ];
 
 export default function SpatialGallery({ projects }: { projects: Project[] }) {
-  const initialCategory =
-    categories.find((category) =>
-      projects.some((project) => project.disciplines.includes(category.value)),
-    )?.value ?? "development";
-  const [category, setCategory] = useState<Discipline>(initialCategory);
+  const [category, setCategory] = useState<GalleryCategory>("all");
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [isDark, setIsDark] = useState(false);
   const visibleProjects = useMemo(
-    () => projects.filter((project) => project.disciplines.includes(category)),
+    () => projects.filter((project) => category === "all" || project.category === category),
     [category, projects],
   );
   const selectedProject = visibleProjects.find((project) => project.slug === selectedSlug) ?? null;
@@ -96,14 +96,15 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
       </Canvas>
 
       <div className="spatial-gallery__topbar">
-        <a className="spatial-gallery__back" href="/experiments">
-          ← Experiments
+        <a className="spatial-gallery__back" href="/">
+          ← Portfolio
         </a>
         <nav className="spatial-gallery__categories" aria-label="Gallery categories">
           {categories.map((item) => {
-            const count = projects.filter((project) =>
-              project.disciplines.includes(item.value),
-            ).length;
+            const count =
+              item.value === "all" ?
+                projects.length
+              : projects.filter((project) => project.category === item.value).length;
             return (
               <button
                 key={item.value}
@@ -149,7 +150,7 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
       <div className="spatial-gallery__info">
         {selectedProject ?
           <>
-            <p className="eyebrow">{itemLabel(category)}</p>
+            <p className="eyebrow">{projectLabel(selectedProject)}</p>
             <h2>{selectedProject.title}</h2>
             <p>{selectedProject.summary}</p>
             {selectedProject.link ?
@@ -159,7 +160,7 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
             : null}
           </>
         : <>
-            <h2>Spatial portfolio</h2>
+            <h2>3D portfolio gallery</h2>
             <p>
               Drag to orbit. Select a frame to focus, select it again to open, or click outside to
               return.
@@ -186,8 +187,8 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
   );
 }
 
-function itemLabel(category: Discipline) {
-  return categories.find((item) => item.value === category)?.label ?? "Development";
+function projectLabel(project: Project) {
+  return `${project.experiment ? "Experiment · " : ""}${getProjectCategoryLabel(project.category)}`;
 }
 
 function GalleryWorld({

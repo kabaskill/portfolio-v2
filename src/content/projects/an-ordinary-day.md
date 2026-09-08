@@ -1,19 +1,20 @@
 ---
 title: "An Ordinary Day"
-summary: "Sound work for An Ordinary Day, with the finished piece available through the project link."
+summary: "Sound design for An Ordinary Day, a short film about everyday sexism."
 slug: "an-ordinary-day"
 cover: "/images/anordinaryday.jpg"
 alt: "An Ordinary Day project artwork"
-disciplines: ["sound"]
+category: "sound-music"
+experiment: false
 tags: ["Sound design","Audio production"]
+year: 2015
 role: "Sound designer"
 featured: false
-spatial: true
 published: true
 links: []
 embeds: [{"provider":"youtube","title":"An Ordinary Day video","url":"https://www.youtube.com/watch?v=ttb41edWA7U"}]
 ---
 
-Sound work for An Ordinary Day, with the finished piece available through the project link.
+An Ordinary Day follows four women as ordinary encounters expose the harassment and pressure that often pass as normal. The short was directed by Umur Dağlı. Its structure stays close to everyday situations instead of using a large external plot.
 
-This entry focuses on the sound work for An Ordinary Day. The embedded recording presents the work in context.
+I handled all sound related work for the short film. The linked trailer is the available excerpt.

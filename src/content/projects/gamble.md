@@ -1,19 +1,20 @@
 ---
 title: "Gamble"
-summary: "Sound work for Gamble, with the finished piece available through the project link."
+summary: "Sound design for Gamble, an experimental short film about life after disaster."
 slug: "gamble"
 cover: "/images/gamble.jpg"
 alt: "Gamble project artwork"
-disciplines: ["sound"]
+category: "sound-music"
+experiment: false
 tags: ["Sound design","Audio production"]
+year: 2015
 role: "Sound designer"
 featured: false
-spatial: true
 published: true
 links: []
 embeds: [{"provider":"vimeo","title":"Gamble video","url":"https://vimeo.com/104676877"}]
 ---
 
-Sound work for Gamble, with the finished piece available through the project link.
+Gamble is a short experimental film set in the aftermath of an earthquake. It runs for little more than a minute, so the film has to establish its situation and escalation with very little screen time.
 
-This entry focuses on the sound work for Gamble. The embedded recording presents the work in context.
+I was responsible for the sound design and final mix of the film.

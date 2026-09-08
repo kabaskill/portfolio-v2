@@ -1,19 +1,20 @@
 ---
 title: "GameDalf"
-summary: "GameDalf, a web project available to explore in the linked application."
+summary: "A board-game discovery app built as my Neuefische bootcamp graduation project."
 slug: "gamedalf"
 cover: "/images/gamedalf.png"
 alt: "GameDalf project artwork"
-disciplines: ["development", "experiment"]
-tags: ["Creative coding"]
+category: "development-design"
+experiment: true
+tags: ["Web app", "API", "Neuefische"]
 role: "Developer"
+year: 2023
 featured: false
-spatial: true
 published: true
 links: [{"label":"Open project","url":"https://gamedalf.vercel.app"}]
 embeds: []
 ---
 
-GameDalf, a web project available to explore in the linked application.
+GameDalf is a board-game discovery app, not a game. It connects to a board-games API and lets people search for something to play instead of staring at an empty shelf or scrolling through a generic list.
 
-Follow the project link to explore the demo or watch it in action.
+I built it as my graduation project during the Neuefische bootcamp, working across the API connection, search flow, result presentation, and responsive interface. The user enters a search, the app requests and maps the results, and the interface gives them enough context to support a decision. The deployed app is the working reference for the final project.

@@ -1,19 +1,20 @@
 ---
 title: "Tapari-Spielwelt"
-summary: "Sound work for Tapari-Spielwelt, with the finished piece available through the project link."
+summary: "Sound design for Tapari, an interactive, screen-free story mat for children."
 slug: "tapari-spielwelt"
 cover: "/images/tapari-spielwelt.jpg"
 alt: "Tapari-Spielwelt project artwork"
-disciplines: ["sound"]
+category: "sound-music"
+experiment: false
 tags: ["Sound design","Audio production"]
-role: "Sound designer"
+role: "Sound designer and writer"
+year: 2023
 featured: false
-spatial: true
 published: true
 links: []
 embeds: [{"provider":"youtube","title":"Tapari-Spielwelt video","url":"https://www.youtube.com/watch?v=VWLYl_1PPBI"}]
 ---
 
-Sound work for Tapari-Spielwelt, with the finished piece available through the project link.
+Tapari is an interactive play mat that lets children move physical figures through a story. Each choice opens a different audio path.
 
-This entry focuses on the sound work for Tapari-Spielwelt. The embedded recording presents the work in context.
+I wrote one of the two prototype stories, directed the voice-over sessions, voiced an older character, and worked on sound design for the interactive play system. The prototype team included Jennifer Rink, Pedro Alves Zipf, Mark Lennart Böndgen, and Uta Janzen. Voice talent included Jess Bertrand, Josh Roeloff, Yannick, and me. The embedded video documents the project.

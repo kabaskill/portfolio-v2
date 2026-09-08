@@ -1,19 +1,20 @@
 ---
 title: "Soul of the Light"
-summary: "Sound work for Soul of the Light, with the finished piece available through the project link."
+summary: "Sound design for Soul of the Light, a short documentary about India and Diwali."
 slug: "soul-of-the-light"
 cover: "/images/soulofthelight.jpg"
 alt: "Soul of the Light project artwork"
-disciplines: ["sound"]
+category: "sound-music"
+experiment: false
 tags: ["Sound design","Audio production"]
 role: "Sound designer"
 featured: false
-spatial: true
+year: 2015
 published: true
 links: []
 embeds: [{"provider":"vimeo","title":"Soul of the Light video","url":"https://vimeo.com/242382390"}]
 ---
 
-Sound work for Soul of the Light, with the finished piece available through the project link.
+Soul of the Light is a short documentary about India and Diwali.
 
-This entry focuses on the sound work for Soul of the Light. The embedded recording presents the work in context.
+I was responsible for the sound design and final mix for this project.

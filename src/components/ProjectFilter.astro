@@ -1,5 +1,6 @@
 ---
 import ProjectCard from "./ProjectCard.astro";
+import { projectCategories } from "../lib/project-taxonomy";
 
 interface Project {
   id: string;
@@ -9,7 +10,8 @@ interface Project {
     slug: string;
     cover: string;
     alt: string;
-    disciplines: string[];
+    category: "development-design" | "sound-music";
+    experiment: boolean;
     year?: number;
   };
 }
@@ -19,13 +21,7 @@ interface Props {
 }
 
 const { projects } = Astro.props;
-const filters = [
-  ["all", "All work"],
-  ["development", "Development"],
-  ["design", "Design"],
-  ["sound", "Sound"],
-  ["music", "Music"],
-] as const;
+const filters = [{ value: "all", label: "All work" }, ...projectCategories];
 const spans = [
   "md:col-span-7",
   "md:col-span-5 md:pt-20",
@@ -41,7 +37,7 @@ const spans = [
     aria-label="Filter projects"
   >
     {
-      filters.map(([value, label], index) => (
+      filters.map(({ value, label }, index) => (
         <button
           class="min-h-11 rounded-full px-3.5 py-2.5 text-sm text-muted-foreground transition duration-200 hover:bg-muted active:scale-95 aria-pressed:bg-primary aria-pressed:text-primary-foreground"
           type="button"
@@ -61,7 +57,7 @@ const spans = [
           data-reveal
           data-project-item
           data-project-index={index}
-          data-disciplines={project.data.disciplines.join(",")}
+          data-category={project.data.category}
         >
           <ProjectCard project={project} />
         </div>
@@ -97,8 +93,8 @@ const spans = [
         let visible = 0;
         let matching = 0;
         items.forEach((item) => {
-          const disciplines = item.dataset.disciplines?.split(",") ?? [];
-          const matches = filter === "all" || disciplines.includes(filter);
+          const category = item.dataset.category;
+          const matches = filter === "all" || category === filter;
           if (matches) matching += 1;
           const shown = matches && visible < visibleCount;
           item.hidden = !shown;

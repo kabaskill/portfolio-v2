@@ -2,39 +2,10 @@
 import { getCollection } from "astro:content";
 import ProjectFilter from "../../components/ProjectFilter.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
-
-const workOrder = [
-  "unides-yawara",
-  "naviri",
-  "formenwerkstatt",
-  "sound-showreel",
-  "logo-design",
-  "tapari-spielwelt",
-  "con-b-podcast",
-  "benzersiz",
-  "caravan-travels-of-an-ancient-civilization",
-  "mevlana-s-744th-birthday",
-  "aksu-candy",
-  "human-unknown",
-  "philips-infomercials",
-  "blof",
-  "arpedduo",
-  "artern-lost-generation",
-  "an-ordinary-day",
-  "soul-of-the-light",
-  "gamble",
-  "zero",
-  "personal-music-projects",
-  "redesign-up",
-  "redesign-kia",
-  "redesign-subaru",
-  "10th-village",
-  "odemis-yem-infomercial",
-  "klein-verhaal-over-een-muzikant",
-];
+import { sortProjects } from "../../lib/project-order";
 const projects = (await getCollection("projects"))
-  .filter(({ data }) => data.published !== false && !data.disciplines.includes("experiment"))
-  .sort((a, b) => workOrder.indexOf(a.data.slug) - workOrder.indexOf(b.data.slug));
+  .filter(({ data }) => data.published !== false && !data.experiment);
+const orderedProjects = sortProjects(projects);
 ---
 
 <SiteLayout title="Work | Oguz Kabasakal">
@@ -56,6 +27,6 @@ const projects = (await getCollection("projects"))
   <section
     class="mx-auto w-[min(1400px,calc(100%-2rem))] pb-28 max-[767px]:w-full max-[767px]:px-6"
   >
-    <ProjectFilter projects={projects} />
+    <ProjectFilter projects={orderedProjects} />
   </section>
 </SiteLayout>

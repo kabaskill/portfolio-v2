@@ -1,12 +1,11 @@
 ---
 title: "Formenwerkstatt"
-summary: "A complete digital rebranding for Formenwerkstatt, a CNC workshop from Odenwald"
+summary: "A digital rebrand and website for Formenwerkstatt, a toolmaking company from Odenwald."
 slug: "formenwerkstatt"
 cover: "/images/fw-banner.png"
 alt: "Formenwerkstatt visual identity on a blue and white field"
-disciplines:
-  - development
-  - design
+category: "development-design"
+experiment: false
 tags:
   - Web design
   - Frontend
@@ -14,10 +13,11 @@ tags:
 year: 2024
 role: "Web developer and designer"
 featured: true
-spatial: true
 links:
   - label: "Visit website"
     url: "https://formenwerkstatt.de"
 ---
 
-Formenwerkstatt brought together the parts of digital work that are often separated: shaping the visual language, implementing the website, and managing the content that keeps it useful after launch.
+Formenwerkstatt is a toolmaking and manufacturing company from Reichelsheim, working across mold technology, CNC production, repair, milling, turning, EDM, and laser welding. I was responsible of recreating their digital rebranding. 
+
+I built a performant website, designed printed media and produced content for social media and other digital channels.
