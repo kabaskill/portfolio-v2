@@ -1,0 +1,355 @@
+---
+import waveform from "../data/win95-waveform.json";
+---
+
+<div class="hero-signal" data-hero-signal>
+  <audio data-waveform-audio src={waveform.src} preload="metadata"></audio>
+  <canvas class="hero-signal__canvas" aria-hidden="true"></canvas>
+  <input
+    class="hero-signal__seek"
+    type="range"
+    min="0"
+    max="100"
+    step="0.1"
+    value="0"
+    aria-label="Waveform playhead"
+    aria-valuetext="0% of waveform"
+    aria-describedby="waveform-help"
+  />
+  <span id="waveform-help" class="sr-only">Windows 95 startup sound. Click or use the arrow keys to seek. Space plays or pauses. Home returns to the start; End moves to the end.</span>
+  <div class="hero-signal__footer">
+    <div class="hero-signal__transport" role="group" aria-label="Waveform transport">
+      <button type="button" data-transport="play" aria-label="Play" aria-pressed="false" title="Play">
+        <span class="hero-signal__icon hero-signal__icon--play" aria-hidden="true"></span>
+      </button>
+      <button type="button" data-transport="pause" aria-label="Pause" aria-pressed="false" title="Pause">
+        <span class="hero-signal__icon hero-signal__icon--pause" aria-hidden="true"></span>
+      </button>
+      <button type="button" data-transport="stop" aria-label="Stop" aria-pressed="true" title="Stop">
+        <span class="hero-signal__icon hero-signal__icon--stop" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+  <p class="hero-signal__error" data-audio-error role="alert" hidden></p>
+  <span class="sr-only" role="status" data-transport-status>Stopped</span>
+</div>
+
+<script>
+  import waveform from "../data/win95-waveform.json";
+
+  // The audio element owns playback time; the canvas is only its visual representation.
+  const initSignals = () => {
+    document.querySelectorAll<HTMLElement>('[data-hero-signal]').forEach((root) => {
+      if (root.dataset.bound) return;
+      root.dataset.bound = 'true';
+      const canvas = root.querySelector('canvas')!;
+      const context = canvas.getContext('2d');
+      if (!context) return;
+      const audio = root.querySelector<HTMLAudioElement>('[data-waveform-audio]')!;
+      const error = root.querySelector<HTMLElement>('[data-audio-error]')!;
+      const seek = root.querySelector<HTMLInputElement>('.hero-signal__seek')!;
+      const controls = [...root.querySelectorAll<HTMLButtonElement>('[data-transport]')];
+      const status = root.querySelector<HTMLElement>('[data-transport-status]')!;
+      const controller = new AbortController();
+      const { signal } = controller;
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+      let width = 0, height = 0, frame = 0;
+      let lastPaint = 0;
+      let visible = false, disposed = false, needsDraw = true;
+      let state: 'playing' | 'paused' | 'stopped' = 'stopped';
+      let playhead = 0;
+      let hoverPosition: number | null = null;
+      let pendingSeek: number | null = null;
+      let playRequest = 0;
+      let playPending = false;
+      let displayPeaks: number[][] = [];
+      let accent = '', foreground = '';
+
+      const palette = () => {
+        const style = getComputedStyle(root);
+        accent = style.getPropertyValue('--accent').trim();
+        foreground = style.getPropertyValue('--foreground').trim();
+      };
+
+      const draw = () => {
+        if (!width || !height) return;
+        context.clearRect(0, 0, width, height);
+        const left = width * 0.055;
+        const right = width * 0.945;
+        const trackWidth = right - left;
+        const rulerY = height * 0.13;
+        const bottom = height * 0.91;
+        const scanX = left + playhead * trackWidth;
+        const count = displayPeaks.length;
+        const spacing = trackWidth / (count - 1);
+
+        // The ruler and center lines give the peaks an audio-editor reading.
+        context.strokeStyle = foreground;
+        context.globalAlpha = 0.15;
+        context.lineWidth = 1;
+        context.beginPath();
+        context.moveTo(left, rulerY);
+        context.lineTo(right, rulerY);
+        for (let tick = 0; tick <= 40; tick++) {
+          const x = left + tick / 40 * trackWidth;
+          context.moveTo(x, rulerY);
+          context.lineTo(x, rulerY + (tick % 5 === 0 ? 9 : 4));
+        }
+        context.stroke();
+
+        const centerY = height * 0.52;
+        const amplitude = height * 0.34;
+        context.strokeStyle = foreground;
+        context.globalAlpha = 0.14;
+        context.lineWidth = 1;
+        context.beginPath();
+        context.moveTo(left, centerY);
+        context.lineTo(right, centerY);
+        context.stroke();
+
+        context.strokeStyle = accent;
+        context.lineWidth = Math.max(1, spacing);
+        context.lineCap = 'butt';
+        for (let index = 0; index < count; index++) {
+          const t = index / (count - 1);
+          const x = left + t * trackWidth;
+          const [minimum, maximum] = displayPeaks[index];
+          context.globalAlpha = t <= playhead ? 0.92 : 0.48;
+          context.beginPath();
+          context.moveTo(x, centerY - maximum * amplitude);
+          context.lineTo(x, centerY - minimum * amplitude);
+          context.stroke();
+        }
+        // A ghost marker previews a seek without changing playback or the waveform.
+        if (hoverPosition !== null) {
+          const hoverX = left + hoverPosition * trackWidth;
+          context.lineCap = 'butt';
+          context.strokeStyle = foreground;
+          context.globalAlpha = 0.45;
+          context.lineWidth = 1;
+          context.setLineDash([3, 4]);
+          context.beginPath();
+          context.moveTo(hoverX, rulerY);
+          context.lineTo(hoverX, bottom);
+          context.stroke();
+          context.setLineDash([]);
+        }
+        context.lineCap = 'butt';
+        context.strokeStyle = accent;
+        context.globalAlpha = 0.8;
+        context.lineWidth = 1.25;
+        context.beginPath();
+        context.moveTo(scanX, rulerY);
+        context.lineTo(scanX, bottom);
+        context.stroke();
+        // A small playhead cap is part of the waveform, not a playback button.
+        context.fillStyle = accent;
+        context.globalAlpha = 1;
+        context.beginPath();
+        context.moveTo(scanX - 4, rulerY - 6);
+        context.lineTo(scanX + 4, rulerY - 6);
+        context.lineTo(scanX + 4, rulerY - 1);
+        context.lineTo(scanX, rulerY + 3);
+        context.lineTo(scanX - 4, rulerY - 1);
+        context.closePath();
+        context.fill();
+      };
+
+      const duration = () => Number.isFinite(audio.duration) && audio.duration > 0 ? audio.duration : waveform.duration;
+      const readPosition = () => {
+        if (pendingSeek === null) playhead = Math.max(0, Math.min(1, audio.currentTime / duration()));
+        seek.value = String(playhead * 100);
+        seek.setAttribute('aria-valuetext', `${(playhead * duration()).toFixed(1)} of ${duration().toFixed(1)} seconds`);
+      };
+      const updateControls = (message?: string) => {
+        const active = state === 'playing' ? 'play' : state === 'paused' ? 'pause' : 'stop';
+        controls.forEach((button) => {
+          button.setAttribute('aria-pressed', String(button.dataset.transport === active));
+          button.setAttribute('aria-busy', String(button.dataset.transport === 'play' && playPending));
+        });
+        status.textContent = message ?? (state === 'playing' ? 'Playing Windows 95 startup sound' : state === 'paused' ? 'Paused' : 'Stopped');
+      };
+      const running = () => !audio.paused && !audio.ended && visible && !document.hidden && !disposed;
+      const render = (time: number) => {
+        frame = 0;
+        if (disposed) return;
+        if (needsDraw || time - lastPaint >= (reduced.matches ? 250 : 30)) {
+          needsDraw = false;
+          lastPaint = time;
+          readPosition();
+          draw();
+        }
+        if (running()) frame = requestAnimationFrame(render);
+      };
+      const requestDraw = () => {
+        needsDraw = true;
+        if (!disposed && visible && !document.hidden && !frame) frame = requestAnimationFrame(render);
+      };
+      const sync = () => {
+        cancelAnimationFrame(frame);
+        frame = 0;
+        readPosition();
+        draw();
+        if (running()) requestDraw();
+      };
+      const applySeek = () => {
+        if (pendingSeek === null || !Number.isFinite(audio.duration) || audio.duration <= 0) return;
+        try {
+          audio.currentTime = pendingSeek * audio.duration;
+          pendingSeek = null;
+        } catch { /* Metadata may be available before the media is seekable. */ }
+      };
+      const setPosition = (position: number) => {
+        playhead = position;
+        pendingSeek = position;
+        applySeek();
+        readPosition();
+      };
+      const showError = (message: string) => {
+        error.textContent = message;
+        error.hidden = false;
+      };
+      const transport = (action: string) => {
+        if (action === 'play') {
+          if (playPending || (!audio.paused && !audio.ended)) return;
+          if (audio.error) audio.load();
+          if (audio.ended || playhead >= 1) setPosition(0);
+          applySeek();
+          const request = ++playRequest;
+          playPending = true;
+          error.hidden = true;
+          updateControls('Loading audio');
+          // Call in the user's click/key event so browser playback policies are respected.
+          audio.play().then(() => {
+            if (disposed || request !== playRequest) return;
+            playPending = false;
+            state = audio.paused ? 'paused' : 'playing';
+            updateControls();
+            sync();
+          }).catch((reason: unknown) => {
+            if (disposed || request !== playRequest) return;
+            playPending = false;
+            state = 'paused';
+            if (!(reason instanceof DOMException && reason.name === 'AbortError')) {
+              showError('Audio could not play. Press Play to try again.');
+            }
+            updateControls();
+            sync();
+          });
+          return;
+        }
+        ++playRequest;
+        playPending = false;
+        state = action === 'stop' ? 'stopped' : 'paused';
+        audio.pause();
+        if (action === 'stop') setPosition(0);
+        updateControls();
+        sync();
+      };
+      const resize = () => {
+        const rect = canvas.getBoundingClientRect();
+        width = rect.width;
+        height = rect.height;
+        const pixelRatio = Math.min(devicePixelRatio || 1, 2);
+        canvas.width = Math.round(width * pixelRatio);
+        canvas.height = Math.round(height * pixelRatio);
+        context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+        const count = Math.min(waveform.peaks.length, Math.max(72, Math.ceil(width * 0.89)));
+        displayPeaks = Array.from({ length: count }, (_, column) => {
+          const start = Math.floor(column * waveform.peaks.length / count);
+          const end = Math.max(start + 1, Math.floor((column + 1) * waveform.peaks.length / count));
+          let minimum = 0, maximum = 0;
+          for (let index = start; index < end; index++) {
+            minimum = Math.min(minimum, waveform.peaks[index][0]);
+            maximum = Math.max(maximum, waveform.peaks[index][1]);
+          }
+          return [minimum, maximum];
+        });
+        draw();
+      };
+      const preview = (event: PointerEvent) => {
+        if (event.pointerType === 'touch') return;
+        const rect = seek.getBoundingClientRect();
+        hoverPosition = Math.max(0, Math.min(1, (event.clientX - rect.left) / Math.max(1, rect.width)));
+        requestDraw();
+      };
+      const leave = () => { hoverPosition = null; requestDraw(); };
+      const commitSeek = () => {
+        setPosition(Math.max(0, Math.min(1, Number(seek.value) / 100)));
+        // Seeking changes the media position without starting or pausing it.
+        requestDraw();
+      };
+      const visibility = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); });
+      const dimensions = new ResizeObserver(resize);
+      const theme = new MutationObserver(() => { palette(); draw(); });
+      audio.addEventListener('loadedmetadata', () => { applySeek(); sync(); }, { signal });
+      audio.addEventListener('durationchange', () => { applySeek(); sync(); }, { signal });
+      audio.addEventListener('canplay', () => { applySeek(); sync(); }, { signal });
+      audio.addEventListener('timeupdate', () => { readPosition(); requestDraw(); }, { signal });
+      audio.addEventListener('seeked', () => { readPosition(); requestDraw(); }, { signal });
+      audio.addEventListener('playing', () => {
+        if (audio.paused) return;
+        state = 'playing';
+        playPending = false;
+        error.hidden = true;
+        updateControls();
+        sync();
+      }, { signal });
+      audio.addEventListener('pause', () => {
+        if (!audio.paused) return;
+        if (state !== 'stopped') state = 'paused';
+        updateControls();
+        sync();
+      }, { signal });
+      audio.addEventListener('ended', () => {
+        state = 'paused';
+        playPending = false;
+        pendingSeek = null;
+        updateControls('End of audio');
+        sync();
+      }, { signal });
+      audio.addEventListener('error', () => {
+        ++playRequest;
+        playPending = false;
+        state = 'paused';
+        showError('Audio could not load. Press Play to try again.');
+        updateControls();
+        sync();
+      }, { signal });
+      palette();
+      dimensions.observe(canvas);
+      visibility.observe(root);
+      theme.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+      seek.addEventListener('pointermove', preview, { passive: true, signal });
+      seek.addEventListener('pointerleave', leave, { signal });
+      seek.addEventListener('pointercancel', leave, { signal });
+      seek.addEventListener('blur', leave, { signal });
+      seek.addEventListener('input', commitSeek, { signal });
+      seek.addEventListener('keydown', (event) => {
+        if (event.code === 'Space') {
+          event.preventDefault();
+          if (!event.repeat) transport(state === 'playing' ? 'pause' : 'play');
+        }
+      }, { signal });
+      controls.forEach((button) => button.addEventListener('click', () => transport(button.dataset.transport!), { signal }));
+      window.addEventListener('blur', leave, { signal });
+      reduced.addEventListener('change', sync, { signal });
+      document.addEventListener('visibilitychange', sync, { signal });
+      document.addEventListener('astro:before-swap', () => {
+        disposed = true;
+        ++playRequest;
+        controller.abort();
+        audio.pause();
+        audio.removeAttribute('src');
+        audio.load();
+        cancelAnimationFrame(frame);
+        visibility.disconnect();
+        dimensions.disconnect();
+        theme.disconnect();
+        controller.abort();
+      }, { once: true, signal });
+    });
+  };
+  initSignals();
+  document.addEventListener('astro:page-load', initSignals);
+</script>

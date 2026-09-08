@@ -1,0 +1,129 @@
+---
+const navigation = [
+  { label: "Work", href: "/work" },
+  { label: "Experiments", href: "/experiments" },
+  { label: "Journal", href: "/journal" },
+];
+const activeIndex = navigation.findIndex(({ href }) => Astro.url.pathname.startsWith(href));
+---
+
+<header class="site-header" data-site-header>
+  <a class="site-header__brand" href="/">Oguz Kabasakal</a>
+  <nav
+    class="site-nav"
+    aria-label="Primary navigation"
+    data-active-index={activeIndex}
+    data-highlight={activeIndex >= 0}
+    style={`--nav-index: ${Math.max(0, activeIndex)}`}
+  >
+    <span class="site-nav__highlight" aria-hidden="true"></span>
+    {navigation.map(({ label, href }, index) => (
+      <a class="site-nav__link" href={href} aria-current={index === activeIndex ? "page" : undefined}>
+        <span class="site-nav__label">
+          <span>{label}</span>
+          <span aria-hidden="true">{label}</span>
+        </span>
+      </a>
+    ))}
+  </nav>
+  <div class="site-header__actions">
+    <a class="site-header__contact" href="mailto:oguzkabasakal@gmail.com" aria-label="Contact">
+      <span class="site-header__contact-label">Contact</span>
+      <span class="site-header__contact-arrow" aria-hidden="true">↗</span>
+    </a>
+    <button class="theme-toggle site-header__control" type="button" aria-label="Switch to dark theme" aria-pressed="false">
+      <span class="site-header__theme-symbol" aria-hidden="true"></span>
+    </button>
+    <button class="menu-toggle site-header__control" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-navigation">
+      <span class="site-header__menu-symbol" aria-hidden="true"></span>
+    </button>
+  </div>
+  <nav id="mobile-navigation" class="mobile-nav" aria-label="Mobile navigation" hidden>
+    {navigation.map(({ label, href }, index) => (
+      <a href={href} aria-current={index === activeIndex ? "page" : undefined} style={`--link-index: ${index}`}>
+        <span>{label}</span><span aria-hidden="true">↗</span>
+      </a>
+    ))}
+    <a class="mobile-nav__contact" href="mailto:oguzkabasakal@gmail.com" style="--link-index: 3">
+      <span>Contact</span><span aria-hidden="true">↗</span>
+    </a>
+  </nav>
+</header>
+
+<script>
+  const initHeaders = () => {
+    document.querySelectorAll<HTMLElement>('[data-site-header]').forEach((header) => {
+      if (header.dataset.bound) return;
+      header.dataset.bound = 'true';
+      const controller = new AbortController();
+      const { signal } = controller;
+      const nav = header.querySelector<HTMLElement>('.site-nav')!;
+      const links = [...nav.querySelectorAll<HTMLAnchorElement>('a')];
+      const active = Number(nav.dataset.activeIndex);
+      const themeButton = header.querySelector<HTMLButtonElement>('.theme-toggle')!;
+      const menuButton = header.querySelector<HTMLButtonElement>('.menu-toggle')!;
+      const mobileNav = header.querySelector<HTMLElement>('.mobile-nav')!;
+      const desktop = matchMedia('(min-width: 1024px)');
+      const systemTheme = matchMedia('(prefers-color-scheme: dark)');
+      let hovered = -1;
+      let focused = -1;
+      const highlight = () => {
+        const index = hovered >= 0 ? hovered : focused >= 0 ? focused : active;
+        nav.dataset.highlight = String(index >= 0);
+        if (index >= 0) nav.style.setProperty('--nav-index', String(index));
+      };
+      links.forEach((link, index) => {
+        link.addEventListener('pointerenter', () => { hovered = index; highlight(); }, { signal });
+        link.addEventListener('focus', () => { focused = index; highlight(); }, { signal });
+        link.addEventListener('blur', () => { focused = -1; highlight(); }, { signal });
+      });
+      nav.addEventListener('pointerleave', () => { hovered = -1; highlight(); }, { signal });
+
+      const savedTheme = () => {
+        try { return localStorage.getItem('theme'); } catch { return null; }
+      };
+      const applyTheme = (dark: boolean) => {
+        document.documentElement.classList.toggle('dark', dark);
+        themeButton.setAttribute('aria-pressed', String(dark));
+        themeButton.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+      };
+      const preference = savedTheme();
+      applyTheme(preference === 'dark' || (preference !== 'light' && systemTheme.matches));
+      themeButton.addEventListener('click', () => {
+        const dark = !document.documentElement.classList.contains('dark');
+        applyTheme(dark);
+        try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch { /* Theme still works without storage. */ }
+      }, { signal });
+      systemTheme.addEventListener('change', () => {
+        if (!savedTheme()) applyTheme(systemTheme.matches);
+      }, { signal });
+
+      const setMenu = (open: boolean, restoreFocus = false) => {
+        mobileNav.hidden = !open;
+        menuButton.setAttribute('aria-expanded', String(open));
+        menuButton.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        if (restoreFocus) menuButton.focus();
+      };
+      menuButton.addEventListener('click', () => setMenu(Boolean(mobileNav.hidden)), { signal });
+      mobileNav.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setMenu(false), { signal }));
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && !mobileNav.hidden) setMenu(false, true);
+      }, { signal });
+      document.addEventListener('pointerdown', (event) => {
+        if (!mobileNav.hidden && event.target instanceof Node && !header.contains(event.target)) setMenu(false);
+      }, { signal });
+      header.addEventListener('focusout', (event) => {
+        if (!mobileNav.hidden && event.relatedTarget instanceof Node && !header.contains(event.relatedTarget)) setMenu(false);
+      }, { signal });
+      desktop.addEventListener('change', () => {
+        if (desktop.matches) {
+          if (mobileNav.contains(document.activeElement) || document.activeElement === menuButton) links[Math.max(0, active)].focus();
+          setMenu(false);
+        }
+      }, { signal });
+      document.addEventListener('astro:before-swap', () => controller.abort(), { once: true, signal });
+    });
+  };
+  initHeaders();
+  document.addEventListener('astro:page-load', initHeaders);
+</script>
