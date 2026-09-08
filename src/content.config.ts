@@ -16,8 +16,18 @@ const projectSchema = z.object({
   spatial: z.boolean().default(false),
   published: z.boolean().default(true),
   links: z.array(z.object({ label: z.string(), url: z.string() })).default([]),
-  embeds: z.array(z.object({ provider: z.enum(["youtube", "vimeo", "spotify"]), title: z.string(), url: z.string() })).default([]),
-  gallery: z.array(z.object({ src: z.string(), alt: z.string(), caption: z.string().optional() })).default([]),
+  embeds: z
+    .array(
+      z.object({
+        provider: z.enum(["youtube", "vimeo", "spotify"]),
+        title: z.string(),
+        url: z.string(),
+      }),
+    )
+    .default([]),
+  gallery: z
+    .array(z.object({ src: z.string(), alt: z.string(), caption: z.string().optional() }))
+    .default([]),
 });
 
 const postSchema = z.object({

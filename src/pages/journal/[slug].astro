@@ -12,5 +12,20 @@ const { Content } = await render(post);
 ---
 
 <SiteLayout title={`${post.data.title} | Oguz Kabasakal`} description={post.data.excerpt}>
-  <article class="mx-auto w-[min(1000px,calc(100%-2rem))] py-8 pb-20 max-[767px]:w-full max-[767px]:px-6 md:py-12 lg:pb-28"><a class="inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-4 py-2 text-sm text-foreground transition-colors hover:border-foreground hover:bg-foreground hover:text-background" href="/journal">← All journal entries</a><p class="eyebrow mt-8">{post.data.publishedAt.toLocaleDateString("en", { dateStyle: "long" })}</p><h1 class="mt-4 max-w-[13ch] text-[clamp(2.75rem,6.2vw,5.6rem)] font-[560] leading-[.96] tracking-[-.065em] text-balance">{post.data.title}</h1><p class="mt-7 max-w-[58ch] text-lg leading-8 text-pretty text-muted-foreground">{post.data.excerpt}</p><div class="rich-text mt-16 max-w-[68ch]"><Content /></div></article>
+  <article
+    class="mx-auto w-[min(1000px,calc(100%-2rem))] py-8 pb-20 max-[767px]:w-full max-[767px]:px-6 md:py-12 lg:pb-28"
+  >
+    <a
+      class="inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-4 py-2 text-sm text-foreground transition-colors hover:border-foreground hover:bg-foreground hover:text-background"
+      href="/journal">← All journal entries</a
+    ><p class="eyebrow mt-8">
+      {post.data.publishedAt.toLocaleDateString("en", { dateStyle: "long" })}
+    </p><h1
+      class="mt-4 max-w-[13ch] text-[clamp(2.75rem,6.2vw,5.6rem)] font-[560] leading-[.96] tracking-[-.065em] text-balance"
+    >
+      {post.data.title}
+    </h1><p class="mt-7 max-w-[58ch] text-lg leading-8 text-pretty text-muted-foreground">
+      {post.data.excerpt}
+    </p><div class="rich-text mt-16 max-w-[68ch]"><Content /></div>
+  </article>
 </SiteLayout>

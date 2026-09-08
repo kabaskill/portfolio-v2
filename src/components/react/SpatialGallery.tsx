@@ -1,9 +1,4 @@
-import {
-  Image as DreiImage,
-  Grid,
-  OrbitControls,
-  useCursor,
-} from "@react-three/drei";
+import { Image as DreiImage, Grid, OrbitControls, useCursor } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
@@ -27,14 +22,23 @@ const categories: Array<{ label: string; value: Discipline }> = [
 ];
 
 export default function SpatialGallery({ projects }: { projects: Project[] }) {
-  const initialCategory = categories.find((category) => projects.some((project) => project.disciplines.includes(category.value)))?.value ?? "development";
+  const initialCategory =
+    categories.find((category) =>
+      projects.some((project) => project.disciplines.includes(category.value)),
+    )?.value ?? "development";
   const [category, setCategory] = useState<Discipline>(initialCategory);
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [isDark, setIsDark] = useState(false);
-  const visibleProjects = useMemo(() => projects.filter((project) => project.disciplines.includes(category)), [category, projects]);
+  const visibleProjects = useMemo(
+    () => projects.filter((project) => project.disciplines.includes(category)),
+    [category, projects],
+  );
   const selectedProject = visibleProjects.find((project) => project.slug === selectedSlug) ?? null;
-  const selectedIndex = selectedProject ? visibleProjects.findIndex((project) => project.slug === selectedProject.slug) : -1;
+  const selectedIndex =
+    selectedProject ?
+      visibleProjects.findIndex((project) => project.slug === selectedProject.slug)
+    : -1;
 
   useEffect(() => {
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -53,7 +57,8 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
 
   function openProject(project: Project) {
     if (!project.link) return;
-    if (/^https?:\/\//.test(project.link)) window.open(project.link, "_blank", "noopener,noreferrer");
+    if (/^https?:\/\//.test(project.link))
+      window.open(project.link, "_blank", "noopener,noreferrer");
     else window.location.assign(project.link);
   }
 
@@ -67,7 +72,13 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
         onPointerMissed={() => setSelectedSlug(null)}
       >
         <Suspense fallback={null}>
-          <GalleryWorld projects={visibleProjects} isDark={isDark} reducedMotion={reducedMotion} selectedSlug={selectedSlug} onSelect={setSelectedSlug} />
+          <GalleryWorld
+            projects={visibleProjects}
+            isDark={isDark}
+            reducedMotion={reducedMotion}
+            selectedSlug={selectedSlug}
+            onSelect={setSelectedSlug}
+          />
           <Grid
             args={[30, 30]}
             cellColor={isDark ? "#31363d" : "#bcc4cc"}
@@ -85,12 +96,25 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
       </Canvas>
 
       <div className="spatial-gallery__topbar">
-        <a className="spatial-gallery__back" href="/experiments">← Experiments</a>
+        <a className="spatial-gallery__back" href="/experiments">
+          ← Experiments
+        </a>
         <nav className="spatial-gallery__categories" aria-label="Gallery categories">
           {categories.map((item) => {
-            const count = projects.filter((project) => project.disciplines.includes(item.value)).length;
+            const count = projects.filter((project) =>
+              project.disciplines.includes(item.value),
+            ).length;
             return (
-              <button key={item.value} type="button" disabled={count === 0} aria-pressed={category === item.value} onClick={() => { setCategory(item.value); setSelectedSlug(null); }}>
+              <button
+                key={item.value}
+                type="button"
+                disabled={count === 0}
+                aria-pressed={category === item.value}
+                onClick={() => {
+                  setCategory(item.value);
+                  setSelectedSlug(null);
+                }}
+              >
                 {item.label}
               </button>
             );
@@ -106,37 +130,57 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
             document.documentElement.classList.toggle("dark", next);
             localStorage.setItem("theme", next ? "dark" : "light");
           }}
-        >{isDark ? "☀" : "☾"}</button>
+        >
+          {isDark ? "☀" : "☾"}
+        </button>
       </div>
 
-      {selectedProject && visibleProjects.length > 1 ? (
+      {selectedProject && visibleProjects.length > 1 ?
         <div className="spatial-gallery__arrows" aria-label="Focused project navigation">
-          <button type="button" aria-label="Next project" onClick={() => selectRelative(1)}>←</button>
-          <button type="button" aria-label="Previous project" onClick={() => selectRelative(-1)}>→</button>
+          <button type="button" aria-label="Next project" onClick={() => selectRelative(1)}>
+            ←
+          </button>
+          <button type="button" aria-label="Previous project" onClick={() => selectRelative(-1)}>
+            →
+          </button>
         </div>
-      ) : null}
+      : null}
 
       <div className="spatial-gallery__info">
-        {selectedProject ? (
+        {selectedProject ?
           <>
             <p className="eyebrow">{itemLabel(category)}</p>
             <h2>{selectedProject.title}</h2>
             <p>{selectedProject.summary}</p>
-            {selectedProject.link ? <button type="button" onClick={() => openProject(selectedProject)}>Open project ↗</button> : null}
+            {selectedProject.link ?
+              <button type="button" onClick={() => openProject(selectedProject)}>
+                Open project ↗
+              </button>
+            : null}
           </>
-        ) : (
-          <>
+        : <>
             <h2>Spatial portfolio</h2>
-            <p>Drag to orbit. Select a frame to focus, select it again to open, or click outside to return.</p>
+            <p>
+              Drag to orbit. Select a frame to focus, select it again to open, or click outside to
+              return.
+            </p>
           </>
-        )}
+        }
       </div>
 
-      <p className="spatial-gallery__count">{visibleProjects.length} {visibleProjects.length === 1 ? "project" : "projects"}</p>
+      <p className="spatial-gallery__count">
+        {visibleProjects.length} {visibleProjects.length === 1 ? "project" : "projects"}
+      </p>
 
       <div className="sr-only">
         <h2>Projects in this gallery</h2>
-        <ul>{visibleProjects.map((project) => <li key={project.slug}><a href={project.link ?? `/${project.slug}`}>{project.title}</a></li>)}</ul>
+        <ul>
+          {visibleProjects.map((project) => (
+            <li key={project.slug}>
+              <a href={project.link ?? `/${project.slug}`}>{project.title}</a>
+            </li>
+          ))}
+        </ul>
       </div>
     </main>
   );
@@ -146,7 +190,19 @@ function itemLabel(category: Discipline) {
   return categories.find((item) => item.value === category)?.label ?? "Development";
 }
 
-function GalleryWorld({ projects, isDark, reducedMotion, selectedSlug, onSelect }: { projects: Project[]; isDark: boolean; reducedMotion: boolean; selectedSlug: string | null; onSelect: (slug: string | null) => void }) {
+function GalleryWorld({
+  projects,
+  isDark,
+  reducedMotion,
+  selectedSlug,
+  onSelect,
+}: {
+  projects: Project[];
+  isDark: boolean;
+  reducedMotion: boolean;
+  selectedSlug: string | null;
+  onSelect: (slug: string | null) => void;
+}) {
   const radius = THREE.MathUtils.clamp(4.2 + projects.length * 0.12, 4.2, 7.5);
   const selectedFrame = useMemo(() => {
     const index = projects.findIndex((project) => project.slug === selectedSlug);
@@ -166,7 +222,19 @@ function GalleryWorld({ projects, isDark, reducedMotion, selectedSlug, onSelect 
       <group position={[0, 0.2, 0]}>
         {projects.map((project, index) => {
           const angle = getFrameAngle(index, projects.length);
-          return <GalleryFrame key={project.slug} angle={angle} index={index} isDark={isDark} project={project} radius={radius} reducedMotion={reducedMotion} selected={selectedSlug === project.slug} onSelect={onSelect} />;
+          return (
+            <GalleryFrame
+              key={project.slug}
+              angle={angle}
+              index={index}
+              isDark={isDark}
+              project={project}
+              radius={radius}
+              reducedMotion={reducedMotion}
+              selected={selectedSlug === project.slug}
+              onSelect={onSelect}
+            />
+          );
         })}
       </group>
     </>
@@ -183,24 +251,49 @@ type SelectedFrame = { angle: number; position: [number, number, number] };
 type CameraPose = { lookAt: THREE.Vector3; position: THREE.Vector3 };
 
 function getFrameAngle(index: number, projectCount: number) {
-  return projectCount <= 5 ? Math.PI / 2 + (index - (projectCount - 1) / 2) * 0.55 : (index / projectCount) * Math.PI * 2;
+  return projectCount <= 5 ?
+      Math.PI / 2 + (index - (projectCount - 1) / 2) * 0.55
+    : (index / projectCount) * Math.PI * 2;
 }
 
 function getFramePosition(angle: number, index: number, radius: number): [number, number, number] {
   return [Math.cos(angle) * radius, index % 2 === 0 ? 0.15 : 0.55, -Math.sin(angle) * radius];
 }
 
-function GalleryCameraRig({ reducedMotion, selectedFrame }: { reducedMotion: boolean; selectedFrame: SelectedFrame | null }) {
+function GalleryCameraRig({
+  reducedMotion,
+  selectedFrame,
+}: {
+  reducedMotion: boolean;
+  selectedFrame: SelectedFrame | null;
+}) {
   const controls = useRef<OrbitControlsImpl>(null);
   const homePose = useRef<CameraPose | null>(null);
-  const transition = useRef({ active: false, elapsed: 0, fromLookAt: new THREE.Vector3(), fromPosition: new THREE.Vector3(), toLookAt: new THREE.Vector3(), toPosition: new THREE.Vector3() });
+  const transition = useRef({
+    active: false,
+    elapsed: 0,
+    fromLookAt: new THREE.Vector3(),
+    fromPosition: new THREE.Vector3(),
+    toLookAt: new THREE.Vector3(),
+    toPosition: new THREE.Vector3(),
+  });
   const { camera, size } = useThree();
 
   useEffect(() => {
     const orbitControls = controls.current;
     if (!orbitControls) return;
-    if (selectedFrame && !homePose.current) homePose.current = { lookAt: orbitControls.target.clone(), position: camera.position.clone() };
-    const destination = selectedFrame ? getFocusedCameraPose(selectedFrame, getResponsiveFocusDistance(camera, size.width / size.height)) : homePose.current;
+    if (selectedFrame && !homePose.current)
+      homePose.current = {
+        lookAt: orbitControls.target.clone(),
+        position: camera.position.clone(),
+      };
+    const destination =
+      selectedFrame ?
+        getFocusedCameraPose(
+          selectedFrame,
+          getResponsiveFocusDistance(camera, size.width / size.height),
+        )
+      : homePose.current;
     if (!destination) return;
     const nextTransition = transition.current;
     nextTransition.active = !reducedMotion;
@@ -226,8 +319,16 @@ function GalleryCameraRig({ reducedMotion, selectedFrame }: { reducedMotion: boo
     currentTransition.elapsed += delta;
     const linearProgress = Math.min(currentTransition.elapsed / CAMERA_TRANSITION_DURATION, 1);
     const progress = 1 - Math.pow(1 - linearProgress, 3);
-    camera.position.lerpVectors(currentTransition.fromPosition, currentTransition.toPosition, progress);
-    orbitControls.target.lerpVectors(currentTransition.fromLookAt, currentTransition.toLookAt, progress);
+    camera.position.lerpVectors(
+      currentTransition.fromPosition,
+      currentTransition.toPosition,
+      progress,
+    );
+    orbitControls.target.lerpVectors(
+      currentTransition.fromLookAt,
+      currentTransition.toLookAt,
+      progress,
+    );
     camera.lookAt(orbitControls.target);
     if (linearProgress === 1) {
       currentTransition.active = false;
@@ -236,25 +337,62 @@ function GalleryCameraRig({ reducedMotion, selectedFrame }: { reducedMotion: boo
     }
   });
 
-  return <OrbitControls ref={controls} enableDamping={!reducedMotion} enabled={!selectedFrame} enablePan={false} makeDefault maxDistance={11} maxPolarAngle={Math.PI / 2.08} minDistance={3.8} minPolarAngle={Math.PI / 3.4} target={[0, 0.7, 0]} />;
+  return (
+    <OrbitControls
+      ref={controls}
+      enableDamping={!reducedMotion}
+      enabled={!selectedFrame}
+      enablePan={false}
+      makeDefault
+      maxDistance={11}
+      maxPolarAngle={Math.PI / 2.08}
+      minDistance={3.8}
+      minPolarAngle={Math.PI / 3.4}
+      target={[0, 0.7, 0]}
+    />
+  );
 }
 
 function getResponsiveFocusDistance(camera: THREE.Camera, aspect: number) {
   if (!(camera instanceof THREE.PerspectiveCamera)) return DESKTOP_FRAME_FOCUS_DISTANCE;
   const verticalFov = THREE.MathUtils.degToRad(camera.getEffectiveFOV());
   const horizontalFov = 2 * Math.atan(Math.tan(verticalFov / 2) * aspect);
-  const distanceToFitWidth = (FRAME_WIDTH * SELECTED_FRAME_SCALE) / (2 * Math.tan(horizontalFov / 2) * FOCUSED_FRAME_SCREEN_WIDTH);
+  const distanceToFitWidth =
+    (FRAME_WIDTH * SELECTED_FRAME_SCALE) /
+    (2 * Math.tan(horizontalFov / 2) * FOCUSED_FRAME_SCREEN_WIDTH);
   return Math.max(DESKTOP_FRAME_FOCUS_DISTANCE, distanceToFitWidth);
 }
 
 function getFocusedCameraPose(frame: SelectedFrame, focusDistance: number): CameraPose {
   const lookAt = new THREE.Vector3(...frame.position);
-  const frameRotation = new THREE.Quaternion().setFromEuler(new THREE.Euler(0, frame.angle - Math.PI / 2, 0));
-  const position = new THREE.Vector3(0, 0, focusDistance).applyQuaternion(frameRotation).add(lookAt);
+  const frameRotation = new THREE.Quaternion().setFromEuler(
+    new THREE.Euler(0, frame.angle - Math.PI / 2, 0),
+  );
+  const position = new THREE.Vector3(0, 0, focusDistance)
+    .applyQuaternion(frameRotation)
+    .add(lookAt);
   return { lookAt, position };
 }
 
-function GalleryFrame({ angle, index, isDark, project, radius, reducedMotion, selected, onSelect }: { angle: number; index: number; isDark: boolean; project: Project; radius: number; reducedMotion: boolean; selected: boolean; onSelect: (slug: string | null) => void }) {
+function GalleryFrame({
+  angle,
+  index,
+  isDark,
+  project,
+  radius,
+  reducedMotion,
+  selected,
+  onSelect,
+}: {
+  angle: number;
+  index: number;
+  isDark: boolean;
+  project: Project;
+  radius: number;
+  reducedMotion: boolean;
+  selected: boolean;
+  onSelect: (slug: string | null) => void;
+}) {
   const group = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
   useCursor(hovered, selected && project.link ? "alias" : "pointer");
@@ -262,13 +400,21 @@ function GalleryFrame({ angle, index, isDark, project, radius, reducedMotion, se
 
   useFrame((_, delta) => {
     if (!group.current || reducedMotion) return;
-    const targetScale = selected ? SELECTED_FRAME_SCALE : hovered ? 1.04 : 1;
+    const targetScale =
+      selected ? SELECTED_FRAME_SCALE
+      : hovered ? 1.04
+      : 1;
     const nextScale = THREE.MathUtils.damp(group.current.scale.x, targetScale, 8, delta);
     group.current.scale.setScalar(nextScale);
   });
 
   return (
-    <group ref={group} position={position} rotation={[0, angle - Math.PI / 2, 0]} scale={reducedMotion && selected ? SELECTED_FRAME_SCALE : 1}>
+    <group
+      ref={group}
+      position={position}
+      rotation={[0, angle - Math.PI / 2, 0]}
+      scale={reducedMotion && selected ? SELECTED_FRAME_SCALE : 1}
+    >
       <mesh
         onClick={(event) => {
           event.stopPropagation();
@@ -279,12 +425,29 @@ function GalleryFrame({ angle, index, isDark, project, radius, reducedMotion, se
           }
           onSelect(project.slug);
         }}
-        onPointerEnter={(event) => { event.stopPropagation(); setHovered(true); }}
+        onPointerEnter={(event) => {
+          event.stopPropagation();
+          setHovered(true);
+        }}
         onPointerLeave={() => setHovered(false)}
       >
         <planeGeometry args={[FRAME_WIDTH, 1.2]} />
-        <meshStandardMaterial color={selected ? "#e85d39" : isDark ? "#252a30" : "#c8d0d8"} metalness={0.2} roughness={0.68} />
-        <DreiImage position={[0, 0, 0.012]} scale={[1.64, 1.08]} url={project.cover} toneMapped={false} />
+        <meshStandardMaterial
+          color={
+            selected ? "#e85d39"
+            : isDark ?
+              "#252a30"
+            : "#c8d0d8"
+          }
+          metalness={0.2}
+          roughness={0.68}
+        />
+        <DreiImage
+          position={[0, 0, 0.012]}
+          scale={[1.64, 1.08]}
+          url={project.cover}
+          toneMapped={false}
+        />
       </mesh>
     </group>
   );

@@ -33,7 +33,8 @@ function frontmatter(project) {
   ];
 
   if (project.year !== undefined) lines.splice(7, 0, `year: ${yaml(project.year)}`);
-  if (project.role !== undefined) lines.splice(project.year === undefined ? 7 : 8, 0, `role: ${yaml(project.role)}`);
+  if (project.role !== undefined)
+    lines.splice(project.year === undefined ? 7 : 8, 0, `role: ${yaml(project.role)}`);
   return lines.join("\n");
 }
 
@@ -51,7 +52,10 @@ for (const project of seedProjects) {
     continue;
   }
 
-  const body = project.description.map((paragraph) => paragraph.trim()).filter(Boolean).join("\n\n");
+  const body = project.description
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean)
+    .join("\n\n");
   writeFileSync(destination, `---\n${frontmatter(project)}\n---\n\n${body}\n`, "utf8");
   created += 1;
 }

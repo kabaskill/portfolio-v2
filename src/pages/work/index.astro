@@ -3,16 +3,59 @@ import { getCollection } from "astro:content";
 import ProjectFilter from "../../components/ProjectFilter.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 
-const workOrder = ["unides-yawara", "naviri", "formenwerkstatt", "sound-showreel", "logo-design", "tapari-spielwelt", "con-b-podcast", "benzersiz", "caravan-travels-of-an-ancient-civilization", "mevlana-s-744th-birthday", "aksu-candy", "human-unknown", "philips-infomercials", "blof", "arpedduo", "artern-lost-generation", "an-ordinary-day", "soul-of-the-light", "gamble", "zero", "personal-music-projects", "redesign-up", "redesign-kia", "redesign-subaru", "10th-village", "odemis-yem-infomercial", "klein-verhaal-over-een-muzikant"];
+const workOrder = [
+  "unides-yawara",
+  "naviri",
+  "formenwerkstatt",
+  "sound-showreel",
+  "logo-design",
+  "tapari-spielwelt",
+  "con-b-podcast",
+  "benzersiz",
+  "caravan-travels-of-an-ancient-civilization",
+  "mevlana-s-744th-birthday",
+  "aksu-candy",
+  "human-unknown",
+  "philips-infomercials",
+  "blof",
+  "arpedduo",
+  "artern-lost-generation",
+  "an-ordinary-day",
+  "soul-of-the-light",
+  "gamble",
+  "zero",
+  "personal-music-projects",
+  "redesign-up",
+  "redesign-kia",
+  "redesign-subaru",
+  "10th-village",
+  "odemis-yem-infomercial",
+  "klein-verhaal-over-een-muzikant",
+];
 const projects = (await getCollection("projects"))
   .filter(({ data }) => data.published !== false && !data.disciplines.includes("experiment"))
   .sort((a, b) => workOrder.indexOf(a.data.slug) - workOrder.indexOf(b.data.slug));
 ---
 
 <SiteLayout title="Work | Oguz Kabasakal">
-  <section class="mx-auto w-[min(1400px,calc(100%-2rem))] py-10 max-[767px]:w-full max-[767px]:px-6 md:py-16">
-    <h1 class="max-w-[65rem] text-[clamp(2.75rem,6vw,5.8rem)] font-[550] leading-[1.05] tracking-[-.06em] text-balance">Work built from<br class="hidden max-[767px]:block" />{" "}<span class="text-primary">both sides</span> of the screen.</h1>
-    <p class="mt-5 max-w-[38rem] text-base leading-7 text-pretty text-muted-foreground">Product engineering, interface design, sound, and music selected for the decisions behind them.</p>
+  <section
+    class="mx-auto w-[min(1400px,calc(100%-2rem))] py-10 max-[767px]:w-full max-[767px]:px-6 md:py-16"
+  >
+    <h1
+      class="max-w-[65rem] text-[clamp(2.75rem,6vw,5.8rem)] font-[550] leading-[1.05] tracking-[-.06em] text-balance"
+    >
+      Work built from<br class="hidden max-[767px]:block" />{" "}<span class="text-primary"
+        >both sides</span
+      > of the screen.
+    </h1>
+    <p class="mt-5 max-w-[38rem] text-base leading-7 text-pretty text-muted-foreground">
+      Product engineering, interface design, sound, and music selected for the decisions behind
+      them.
+    </p>
   </section>
-  <section class="mx-auto w-[min(1400px,calc(100%-2rem))] pb-28 max-[767px]:w-full max-[767px]:px-6"><ProjectFilter projects={projects} /></section>
+  <section
+    class="mx-auto w-[min(1400px,calc(100%-2rem))] pb-28 max-[767px]:w-full max-[767px]:px-6"
+  >
+    <ProjectFilter projects={projects} />
+  </section>
 </SiteLayout>
