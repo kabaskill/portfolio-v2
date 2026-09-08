@@ -101,10 +101,10 @@ export default function MediaCollection({ cover, coverTitle, embeds = [], images
   const activeItem = activeIndex === null ? null : items[activeIndex];
 
   return (
-    <div className="media-collection">
+    <div>
       <button
         type="button"
-        className="media-collection__cover group relative block aspect-[4/3] w-full cursor-zoom-in overflow-hidden rounded-xl border-0 bg-card p-0"
+        className="group relative block aspect-[4/3] w-full cursor-zoom-in overflow-hidden rounded-xl border-0 bg-card p-0"
         onClick={() => setActiveIndex(coverIndex)}
         aria-label={`Open ${coverTitle} cover in media viewer`}
       >
@@ -113,7 +113,7 @@ export default function MediaCollection({ cover, coverTitle, embeds = [], images
       </button>
 
       {supportingItems.length > 0 ? (
-        <section className="media-collection__list mt-7" aria-labelledby={`${titleId}-list`}>
+        <section className="mt-7" aria-labelledby={`${titleId}-list`}>
           <h2 className="m-0 font-mono text-xs font-medium leading-snug tracking-wide" id={`${titleId}-list`}>Media</h2>
           <ol className="m-0 mt-3 list-none border-b border-border p-0">
             {supportingItems.map((item, index) => (

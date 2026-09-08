@@ -19,16 +19,16 @@ const { data } = project;
 const href = data.disciplines.includes("experiment") ? `/experiments/${data.slug}` : `/work/${data.slug}`;
 ---
 
-<a class:list={["project-card group reveal block", layoutClass]} data-reveal href={href}>
-  <div class="project-card__image relative aspect-[4/3] overflow-hidden rounded-xl bg-card" transition:name={`project-${data.slug}`}>
+<a class:list={["group reveal block", layoutClass]} data-reveal href={href}>
+  <div class="relative aspect-[4/3] overflow-hidden rounded-xl bg-card" transition:name={`project-${data.slug}`}>
     <img class="block size-full object-contain transition-transform duration-[600ms] ease-out motion-safe:group-hover:scale-[1.04]" src={data.cover} alt={data.alt} loading="lazy" />
   </div>
-  <div class="project-card__meta flex gap-4 pt-4 sm:grid sm:grid-cols-[1fr_auto] sm:items-start">
+  <div class="flex gap-4 pt-4 sm:grid sm:grid-cols-[1fr_auto] sm:items-start">
     <div>
-      <p class="project-card__discipline mb-2 font-mono text-xs text-primary">{data.disciplines.map((discipline) => discipline.charAt(0).toUpperCase() + discipline.slice(1)).join(" · ")}{data.year ? ` / ${data.year}` : ""}</p>
+      <p class="mb-2 font-mono text-xs text-primary">{data.disciplines.map((discipline) => discipline.charAt(0).toUpperCase() + discipline.slice(1)).join(" · ")}{data.year ? ` / ${data.year}` : ""}</p>
       <h3 class="m-0 text-2xl font-semibold tracking-tight transition-colors duration-200 group-hover:text-primary sm:text-3xl">{data.title}</h3>
       <p class="mt-2 max-w-xl text-sm leading-relaxed text-pretty text-muted-foreground">{data.summary}</p>
     </div>
-    <span class="project-card__arrow mt-1 hidden size-11 place-items-center rounded-full border border-border text-foreground transition duration-300 ease-out sm:grid motion-safe:group-hover:rotate-45 motion-safe:group-hover:border-primary motion-safe:group-hover:bg-primary motion-safe:group-hover:text-primary-foreground" aria-hidden="true">↗</span>
+    <span class="mt-1 hidden size-11 place-items-center rounded-full border border-border text-foreground transition duration-300 ease-out sm:grid motion-safe:group-hover:rotate-45 motion-safe:group-hover:border-primary motion-safe:group-hover:bg-primary motion-safe:group-hover:text-primary-foreground" aria-hidden="true">↗</span>
   </div>
 </a>
