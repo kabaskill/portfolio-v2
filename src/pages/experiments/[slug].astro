@@ -1,7 +1,9 @@
 ---
+import { getImage } from "astro:assets";
 import { getCollection, render } from "astro:content";
 import MediaCollection from "../../components/react/MediaCollection";
 import SiteLayout from "../../layouts/SiteLayout.astro";
+import { getProjectImage } from "../../lib/project-images";
 
 export async function getStaticPaths() {
   const projects = await getCollection("projects");
@@ -10,6 +12,9 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { Content } = await render(project);
+const coverImage = getProjectImage(project.data.cover);
+const coverThumbnail = await getImage({ src: coverImage, width: Math.min(1200, coverImage.width), format: "webp", quality: 78 });
+const coverFull = await getImage({ src: coverImage, width: Math.min(2400, coverImage.width), format: "webp", quality: 84 });
 ---
 
 <SiteLayout title={`${project.data.title} | Oguz Kabasakal`} description={project.data.summary}>
@@ -28,7 +33,7 @@ const { Content } = await render(project);
         <div transition:name={`project-${project.data.slug}`}>
         <MediaCollection
           client:load
-          cover={{ src: project.data.cover, alt: project.data.alt }}
+          cover={{ src: coverFull.src, thumbnailSrc: coverThumbnail.src, alt: project.data.alt }}
           coverTitle={project.data.title}
           embeds={project.data.embeds}
           images={project.data.gallery}

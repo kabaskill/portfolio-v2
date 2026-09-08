@@ -1,4 +1,7 @@
 ---
+import { Image } from "astro:assets";
+import { getProjectImage } from "../lib/project-images";
+
 interface Props {
   layoutClass?: string;
   project: {
@@ -16,12 +19,13 @@ interface Props {
 
 const { project, layoutClass = "" } = Astro.props;
 const { data } = project;
+const cover = getProjectImage(data.cover);
 const href = data.disciplines.includes("experiment") ? `/experiments/${data.slug}` : `/work/${data.slug}`;
 ---
 
 <a class:list={["group reveal block", layoutClass]} data-reveal href={href}>
   <div class="relative aspect-[4/3] overflow-hidden rounded-xl bg-card" transition:name={`project-${data.slug}`}>
-    <img class="block size-full object-contain transition-transform duration-[600ms] ease-out motion-safe:group-hover:scale-[1.04]" src={data.cover} alt={data.alt} loading="lazy" />
+    <Image class="block size-full object-contain transition-transform duration-[600ms] ease-out motion-safe:group-hover:scale-[1.04]" src={cover} alt={data.alt} loading="lazy" widths={[320, 480, 640, 800, 1200]} sizes="(min-width: 768px) 60vw, 100vw" />
   </div>
   <div class="flex gap-4 pt-4 sm:grid sm:grid-cols-[1fr_auto] sm:items-start">
     <div>

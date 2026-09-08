@@ -8,6 +8,7 @@ type Embed = {
 
 type GalleryImage = {
   src: string;
+  thumbnailSrc?: string;
   alt: string;
   caption?: string;
 };
@@ -108,7 +109,7 @@ export default function MediaCollection({ cover, coverTitle, embeds = [], images
         onClick={() => setActiveIndex(coverIndex)}
         aria-label={`Open ${coverTitle} cover in media viewer`}
       >
-        <img className="block size-full p-1 object-contain transition-transform duration-500 ease-out group-hover:scale-[1.025]" src={cover.src} alt={cover.alt} loading="eager" />
+        <img className="block size-full p-1 object-contain transition-transform duration-500 ease-out group-hover:scale-[1.025]" src={cover.thumbnailSrc ?? cover.src} alt={cover.alt} loading="eager" />
         <span className="absolute bottom-3 right-3 grid size-10 place-items-center rounded-full bg-[#18191dcc] text-xl text-white transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:scale-105" aria-hidden="true">⌕</span>
       </button>
 

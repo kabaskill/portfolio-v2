@@ -1,7 +1,11 @@
 ---
+import { Picture } from "astro:assets";
+import portrait from "../assets/profile/oguz-kabasakal.png";
+import soundLoop from "../assets/art/sound-loop.webp";
+
 const artwork = [
-  { src: "/profile/oguz-kabasakal.png", alt: "Illustrated portrait of Oguz Kabasakal", label: "Portrait" },
-  { src: "/art/sound-loop.webp", alt: "Orange audio cable twisted into a sculptural loop", label: "Sound in shape" },
+  { src: portrait, alt: "Illustrated portrait of Oguz Kabasakal", label: "Portrait" },
+  { src: soundLoop, alt: "Orange audio cable twisted into a sculptural loop", label: "Sound in shape" },
 ];
 ---
 
@@ -9,7 +13,7 @@ const artwork = [
   <button type="button" class="hero-art__stack relative block aspect-square w-full cursor-pointer border-0 bg-transparent p-0" data-shuffle aria-label="Shuffle portrait and sound artwork">
     {artwork.map((item, index) => (
       <span class:list={["hero-art__card absolute inset-0 block overflow-hidden rounded-xl border-[.4rem] border-background bg-card shadow-[0_16px_38px] shadow-foreground/12 transition duration-[600ms] ease-out", { "hero-art__card--active": index === 0 }]} data-art-card={index} aria-hidden={index !== 0}>
-        <img class="block size-full object-cover" src={item.src} alt={item.alt} loading={index === 0 ? "eager" : "lazy"} />
+        <Picture class="block size-full object-cover" src={item.src} formats={["avif", "webp"]} fallbackFormat="webp" alt={item.alt} loading={index === 0 ? "eager" : "lazy"} />
       </span>
     ))}
   </button>

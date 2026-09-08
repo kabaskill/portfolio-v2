@@ -1,20 +1,26 @@
 ---
+import { getImage } from "astro:assets";
 import { getCollection } from "astro:content";
 import SpatialGallery from "../components/react/SpatialGallery";
 import SpatialLayout from "../layouts/SpatialLayout.astro";
+import { getProjectImage } from "../lib/project-images";
 
 const spatialOrder = ["unides-yawara", "naviri", "droplet", "blitz-cache", "blitz-react", "doner-html-transpiler", "formenwerkstatt", "fugue-state", "gamedalf", "rubby-the-duck-tbd", "unity-demo-bedroom-guitarist", "unity-demo-angry-birds-clone", "p5-js-demo-snake-clone", "p5-js-demo-game-of-life", "p5-js-demo-clock-v2", "p5-js-demo-clock-v1"];
-const projects = (await getCollection("projects"))
+const spatialProjects = (await getCollection("projects"))
   .filter(({ data }) => data.published !== false && spatialOrder.includes(data.slug))
-  .sort((a, b) => spatialOrder.indexOf(a.data.slug) - spatialOrder.indexOf(b.data.slug))
-  .map(({ data }) => ({
+  .sort((a, b) => spatialOrder.indexOf(a.data.slug) - spatialOrder.indexOf(b.data.slug));
+const projects = await Promise.all(spatialProjects.map(async ({ data }) => {
+  const cover = getProjectImage(data.cover);
+  const optimizedCover = await getImage({ src: cover, width: Math.min(960, cover.width), format: "webp", quality: 76 });
+  return {
     title: data.title,
     slug: data.slug,
-    cover: data.cover,
+    cover: optimizedCover.src,
     summary: data.summary,
     disciplines: data.disciplines.filter((discipline) => discipline !== "experiment"),
     link: data.links[0]?.url ?? (data.disciplines.includes("experiment") ? `/experiments/${data.slug}` : `/work/${data.slug}`),
-  }));
+  };
+}));
 ---
 
 <SpatialLayout><SpatialGallery projects={projects} client:only="react" /></SpatialLayout>
