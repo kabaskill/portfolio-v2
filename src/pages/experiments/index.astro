@@ -1,7 +1,6 @@
 ---
 import { getCollection } from "astro:content";
 import ProjectCard from "../../components/ProjectCard.astro";
-import SignalStudy from "../../components/react/SignalStudy";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { sortProjects } from "../../lib/project-order";
 const projects = (await getCollection("projects"))
@@ -31,9 +30,6 @@ const gridSpans = [
       A separate space for ideas that test a tool, interaction, or medium before they become
       conventional work.
     </p>
-  </section>
-  <section class="mx-auto w-[min(1400px,calc(100%-2rem))] pb-0 max-[767px]:w-full max-[767px]:px-6">
-    <SignalStudy client:load />
   </section>
   <section
     class="mx-auto w-[min(1400px,calc(100%-2rem))] py-16 pb-28 max-[767px]:w-full max-[767px]:px-6"
