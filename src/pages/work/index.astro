@@ -4,7 +4,7 @@ import ProjectFilter from "../../components/ProjectFilter.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { sortProjects } from "../../lib/project-order";
 const projects = (await getCollection("projects"))
-  .filter(({ data }) => data.published !== false && !data.experiment);
+  .filter(({ data }) => data.published && !data.experiment);
 const orderedProjects = sortProjects(projects);
 ---
 

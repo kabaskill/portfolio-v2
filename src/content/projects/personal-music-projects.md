@@ -5,7 +5,7 @@ slug: "personal-music-projects"
 cover: "/images/pp-interstellar.jpg"
 alt: "Personal music projects artwork"
 category: "sound-music"
-experiment: false
+experiment: true
 tags: ["Music production","Performance"]
 role: "Musician"
 year: 2016

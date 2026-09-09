@@ -5,7 +5,7 @@ slug: "metanoia"
 cover: "/images/metanoia.jpg"
 alt: "Metanoia project artwork"
 category: "sound-music"
-experiment: true
+experiment: false
 tags: ["Sound design","Music production","Performance"]
 role: "Sound designer and musician"
 year: 2023

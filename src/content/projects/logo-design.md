@@ -5,7 +5,7 @@ slug: "logo-design"
 cover: "/images/logodesign.jpg"
 alt: "Logo Design project artwork"
 category: "sound-music"
-experiment: false
+experiment: true
 tags: ["Sound design","Audio production"]
 role: "Sound designer"
 year: 2022
