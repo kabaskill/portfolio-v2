@@ -5,7 +5,7 @@ slug: "tapari-spielwelt"
 cover: "/images/tapari-spielwelt.jpg"
 alt: "Tapari-Spielwelt project artwork"
 category: "sound-music"
-experiment: false
+experiment: true
 tags: ["Sound design","Audio production"]
 role: "Sound designer and writer"
 year: 2023
