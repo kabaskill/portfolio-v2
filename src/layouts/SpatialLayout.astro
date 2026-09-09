@@ -1,14 +1,15 @@
 ---
 import "../styles/global.css";
+import PageHead from "../components/PageHead.astro";
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <title>3D portfolio gallery | Oguz Kabasakal</title>
+    <PageHead
+      title="3D portfolio gallery | Oguz Kabasakal"
+      description="Explore Oguz Kabasakal’s development, design, sound, and music projects in an interactive 3D gallery."
+    />
   </head>
   <body><slot /></body>
 </html>

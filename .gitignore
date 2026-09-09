@@ -3,3 +3,8 @@ dist/
 .astro/
 .DS_Store
 *.local
+.env
+.env.*
+!.env.example
+.wrangler/
+*.log

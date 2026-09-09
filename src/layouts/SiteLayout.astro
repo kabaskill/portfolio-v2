@@ -1,11 +1,15 @@
 ---
 import "../styles/global.css";
 import SiteHeader from "../components/SiteHeader.astro";
+import PageHead from "../components/PageHead.astro";
 import { ClientRouter } from "astro:transitions";
 
 interface Props {
   title?: string;
   description?: string;
+  image?: string;
+  imageAlt?: string;
+  noindex?: boolean;
 }
 
 const {
@@ -17,12 +21,8 @@ const {
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="description" content={description} />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <PageHead {...Astro.props} title={title} description={description} />
     <ClientRouter />
-    <title>{title}</title>
   </head>
   <body>
     <a

@@ -30,7 +30,7 @@ const coverFull = await getImage({
 });
 ---
 
-<SiteLayout title={`${project.data.title} | Oguz Kabasakal`} description={project.data.summary}>
+<SiteLayout title={`${project.data.title} | Oguz Kabasakal`} description={project.data.summary} image={coverFull.src} imageAlt={project.data.alt}>
   <article
     class="mx-auto w-[min(1400px,calc(100%-2rem))] py-8 pb-20 max-[767px]:w-full max-[767px]:px-6 md:py-12 lg:pb-28"
   >
@@ -41,7 +41,7 @@ const coverFull = await getImage({
     <div
       class="mt-10 grid items-start gap-14 max-[767px]:gap-0 lg:mt-14 lg:grid-cols-[minmax(0,1.85fr)_minmax(19rem,1fr)] lg:gap-12 xl:gap-20"
     >
-      <main class="min-w-0">
+      <div class="min-w-0">
         <header>
           <p class="font-mono text-xs text-primary">
             Experiment · {getProjectCategoryLabel(project.data.category)}
@@ -60,7 +60,7 @@ const coverFull = await getImage({
             About the work
           </p><div class="rich-text max-w-[68ch]"><Content /></div>
         </section>
-      </main>
+      </div>
       <aside class="max-[767px]:mt-12 min-w-0 lg:sticky lg:top-28 lg:mt-0">
         <div transition:name={`project-${project.data.slug}`}>
           <MediaCollection

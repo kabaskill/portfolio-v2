@@ -1,35 +1,47 @@
-# Astro portfolio prototype
+# Oguz Kabasakal’s portfolio
 
-This is the first migration slice from the Next.js/Payload portfolio.
+A static Astro portfolio with Markdown content, optimized local images, and React islands for media and the 3D gallery. Cloudflare Pages serves the generated `dist/` directory. No database, CMS server, Cloudflare adapter, or runtime secrets are required.
 
-## Local development
+## Develop
 
-```bash
-bun install
+Use Node.js **22.23.1** (`.node-version`) and Bun **1.4.2** (`packageManager`).
+
+```sh
+bun install --frozen-lockfile
 bun run dev
 ```
 
-## Verification
+Development works without environment variables. To build, copy `.env.example` to `.env` and replace `your-project` with your chosen Pages project name:
 
-```bash
+```sh
+cp .env.example .env
+# Edit SITE_URL in .env, then:
+bun run build
+bun run preview
+```
+
+`SITE_URL` must be the stable public HTTPS origin, such as `https://my-portfolio.pages.dev`. Use the same value for Cloudflare Production and Preview builds. The build deliberately rejects a missing URL or the example placeholder so localhost URLs cannot accidentally be published. `CF_PAGES_URL` is not used because individual deployment URLs should not become canonical URLs.
+
+## Verify and deploy
+
+```sh
 bun run check
 bun run build
 ```
 
-## Current scope
+`build` runs `astro check` before generating the site and sitemap. Commit `bun.lock` with dependency changes. Cloudflare uses a frozen install so dependency drift fails the deployment.
 
-- Static Astro site with typed Markdown content collections
-- Work, experiments, journal, detail, 404, and spatial gallery routes
-- All 39 projects from the Payload seed and one journal entry migrated to Markdown
-- YouTube, Vimeo, and Spotify embeds migrated into reusable Astro media blocks
-- React Three Fiber island at `/threescene` with real project covers, category filtering, selection, navigation, links, and an accessible fallback list
-- Current Next.js/Payload application remains untouched
+Follow [the Cloudflare Pages deployment and dashboard guide](docs/cloudflare-pages.md) for first deployment, previews, logs, rollback, analytics, and a future custom domain.
 
-## Updating project content
+## Update content
 
-Project pages live in `src/content/projects`. Edit a Markdown file, add or replace a project image in `src/assets/images`, and keep its existing `/images/...` cover path in frontmatter. Each project uses one `category` (`development-design` or `sound-music`) and an `experiment` boolean. Astro resolves the cover path through the project image registry and generates optimized variants during the build. The shared display order lives in `src/lib/project-order.ts`. Run `bun run build` to produce the deployable static site. The one-time `bun run migrate:projects` script can fill in any missing project files from the current Payload seed without replacing existing Markdown entries.
+- Projects: `src/content/projects/*.md`. `published: false` hides a project; `experiment: true` places it under `/experiments/`, otherwise `/work/`.
+- Images: `src/assets/images/`. Keep `/images/filename.ext` in project cover frontmatter; `src/lib/project-images.ts` resolves these to imported assets and Astro optimizes them during the build.
+- Journal: `src/content/posts/*.md`. All journal entries are public; their file names determine their URLs.
+- Ordering: `src/lib/project-order.ts`.
+- Audio: replace `public/audio/win95_startup.mp3`, then run `python3 scripts/generate-waveform.py` with FFmpeg installed and commit the regenerated `src/data/win95-waveform.json`.
 
-Replace the placeholder `site` value in `astro.config.mjs` before production deployment.
+The one-time Payload migration script has been removed. This app builds independently of the old portfolio repositories. The waveform generator remains a maintenance tool and is not run during deployment.
 
 ## Styling
 

@@ -70,6 +70,7 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
   return (
     <main className="relative h-dvh min-h-dvh w-full overflow-hidden rounded-none bg-background text-foreground [&_canvas]:absolute [&_canvas]:inset-0 [&_canvas]:size-full" aria-label="Interactive spatial portfolio gallery">
       <Canvas
+        fallback={<p className="p-6 pt-28">WebGL is unavailable. <a className="underline" href="/work/">Browse the project list instead.</a></p>}
         aria-label="Interactive spatial portfolio gallery"
         camera={{ fov: 46, position: [0, 2.4, 8] }}
         dpr={[1, 1.5]}

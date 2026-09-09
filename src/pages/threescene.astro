@@ -31,4 +31,17 @@ const projects = await Promise.all(
 );
 ---
 
-<SpatialLayout><SpatialGallery projects={projects} client:only="react" /></SpatialLayout>
+<SpatialLayout>
+  <SpatialGallery projects={projects} client:only="react">
+    <main slot="fallback" class="mx-auto max-w-3xl px-6 py-12">
+      <a href="/">← Portfolio</a>
+      <h1 class="mt-8 text-3xl">3D portfolio gallery</h1>
+      <p class="mt-4">The interactive gallery needs JavaScript and WebGL. You can also browse every project below.</p>
+      <ul class="mt-6 grid gap-3">
+        {galleryProjects.map(({ data }) => (
+          <li><a class="text-primary underline" href={getProjectPath(data)}>{data.title}</a></li>
+        ))}
+      </ul>
+    </main>
+  </SpatialGallery>
+</SpatialLayout>
