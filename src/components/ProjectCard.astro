@@ -26,7 +26,7 @@ const href = getProjectPath(data);
 const label = `${data.experiment ? "Experiment · " : ""}${getProjectCategoryLabel(data.category)}`;
 ---
 
-<a class:list={["group reveal block", layoutClass]} data-reveal href={href}>
+<a class:list={["group block", layoutClass]} data-reveal href={href}>
   <div
     class="relative aspect-[4/3] overflow-hidden rounded-xl bg-card"
     transition:name={`project-${data.slug}`}

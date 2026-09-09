@@ -39,7 +39,7 @@ const spans = [
     {
       filters.map(({ value, label }, index) => (
         <button
-          class="min-h-11 rounded-full px-3.5 py-2.5 text-sm text-muted-foreground transition duration-200 hover:bg-muted active:scale-95 aria-pressed:bg-primary aria-pressed:text-primary-foreground"
+          class="min-h-11 rounded-full px-3.5 py-2.5 text-sm text-muted-foreground transition duration-200 hover:bg-card active:scale-95 aria-pressed:bg-primary aria-pressed:text-primary-foreground"
           type="button"
           data-filter={value}
           aria-pressed={index === 0}
@@ -53,7 +53,7 @@ const spans = [
     {
       projects.map((project, index) => (
         <div
-          class:list={["project-filter__item reveal", spans[index % spans.length]]}
+          class={spans[index % spans.length]}
           data-reveal
           data-project-item
           data-project-index={index}
@@ -98,7 +98,6 @@ const spans = [
           if (matches) matching += 1;
           const shown = matches && visible < visibleCount;
           item.hidden = !shown;
-          item.classList.toggle("is-filtered", !shown);
           if (matches) visible += 1;
         });
         if (empty) empty.hidden = matching !== 0;

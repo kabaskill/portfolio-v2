@@ -30,3 +30,9 @@ bun run build
 Project pages live in `src/content/projects`. Edit a Markdown file, add or replace a project image in `src/assets/images`, and keep its existing `/images/...` cover path in frontmatter. Each project uses one `category` (`development-design` or `sound-music`) and an `experiment` boolean. Astro resolves the cover path through the project image registry and generates optimized variants during the build. The shared display order lives in `src/lib/project-order.ts`. Run `bun run build` to produce the deployable static site. The one-time `bun run migrate:projects` script can fill in any missing project files from the current Payload seed without replacing existing Markdown entries.
 
 Replace the placeholder `site` value in `astro.config.mjs` before production deployment.
+
+## Styling
+
+Use Tailwind utilities in Astro and React markup for layout, typography, responsive rules, and interactive states. Reuse complete utility strings locally for repeated controls; keep JavaScript selectors on `data-*` attributes and use ARIA variants for control states.
+
+`src/styles/global.css` owns the theme tokens, fonts, document defaults, Markdown typography (`rich-text`), and shared reveal/accessibility behavior. Bespoke keyframes and native range pseudo-elements stay in scoped Astro `<style>` blocks beside their components. Add reusable design values through `@theme` rather than introducing global component classes.

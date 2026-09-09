@@ -59,13 +59,13 @@ const {
           if (element.dataset.revealBound) return;
           element.dataset.revealBound = "true";
           if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
-            element.classList.add("is-visible");
+            element.dataset.revealVisible = "true";
             return;
           }
           const observer = new IntersectionObserver(
             (entries) => {
               if (entries.some((entry) => entry.isIntersecting)) {
-                element.classList.add("is-visible");
+                element.dataset.revealVisible = "true";
                 observer.disconnect();
               }
             },

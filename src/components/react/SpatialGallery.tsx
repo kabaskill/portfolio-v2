@@ -25,6 +25,11 @@ const categories: Array<{ label: string; value: GalleryCategory }> = [
   ...projectCategories,
 ];
 
+const glassClass = "border border-border bg-background/90 backdrop-blur-md reduced-transparency:bg-background reduced-transparency:backdrop-blur-none";
+const arrowClass = `${glassClass} pointer-events-auto size-[2.6rem] cursor-pointer rounded-control text-[1.3rem]`;
+const infoHeadingClass = "mt-1 mb-[.45rem] text-[1.45rem] leading-none font-[550] tracking-[-.065em] text-foreground";
+const infoCopyClass = "m-0 text-[.85rem] leading-normal text-muted-foreground";
+
 export default function SpatialGallery({ projects }: { projects: Project[] }) {
   const [category, setCategory] = useState<GalleryCategory>("all");
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
@@ -63,7 +68,7 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
   }
 
   return (
-    <main className="spatial-gallery" aria-label="Interactive spatial portfolio gallery">
+    <main className="relative h-dvh min-h-dvh w-full overflow-hidden rounded-none bg-background text-foreground [&_canvas]:absolute [&_canvas]:inset-0 [&_canvas]:size-full" aria-label="Interactive spatial portfolio gallery">
       <Canvas
         aria-label="Interactive spatial portfolio gallery"
         camera={{ fov: 46, position: [0, 2.4, 8] }}
@@ -95,11 +100,11 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
         </Suspense>
       </Canvas>
 
-      <div className="spatial-gallery__topbar">
-        <a className="spatial-gallery__back" href="/">
+      <div className="pointer-events-none absolute inset-0 z-2 grid grid-cols-[1fr_auto_1fr] items-start p-6">
+        <a className={`${glassClass} pointer-events-auto w-fit rounded-control px-[.8rem] py-[.65rem] text-sm leading-normal font-[650] hover:text-primary`} href="/">
           ← Portfolio
         </a>
-        <nav className="spatial-gallery__categories" aria-label="Gallery categories">
+        <nav className={`${glassClass} pointer-events-auto flex justify-self-center gap-[.2rem] rounded-control p-1`} aria-label="Gallery categories">
           {categories.map((item) => {
             const count =
               item.value === "all" ?
@@ -108,6 +113,7 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
             return (
               <button
                 key={item.value}
+                className="cursor-pointer rounded-[.45rem] border-0 bg-transparent px-[.8rem] py-2 text-sm leading-normal font-semibold text-foreground hover:text-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground disabled:cursor-not-allowed disabled:opacity-35"
                 type="button"
                 disabled={count === 0}
                 aria-pressed={category === item.value}
@@ -123,7 +129,7 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
         </nav>
         <button
           type="button"
-          className="spatial-gallery__theme"
+          className={`${glassClass} pointer-events-auto grid size-11 cursor-pointer place-items-center justify-self-end rounded-full text-[1.1rem]`}
           aria-label="Toggle color theme"
           onClick={() => {
             const next = !isDark;
@@ -137,31 +143,31 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
       </div>
 
       {selectedProject && visibleProjects.length > 1 ?
-        <div className="spatial-gallery__arrows" aria-label="Focused project navigation">
-          <button type="button" aria-label="Next project" onClick={() => selectRelative(1)}>
+        <div className="pointer-events-none absolute inset-x-4 top-1/2 z-2 flex -translate-y-1/2 justify-between" aria-label="Focused project navigation">
+          <button className={arrowClass} type="button" aria-label="Next project" onClick={() => selectRelative(1)}>
             ←
           </button>
-          <button type="button" aria-label="Previous project" onClick={() => selectRelative(-1)}>
+          <button className={arrowClass} type="button" aria-label="Previous project" onClick={() => selectRelative(-1)}>
             →
           </button>
         </div>
       : null}
 
-      <div className="spatial-gallery__info">
+      <div className={`${glassClass} pointer-events-auto absolute bottom-6 left-6 z-2 w-[min(30rem,calc(100%-3rem))] rounded-xl p-5`}>
         {selectedProject ?
           <>
-            <p className="eyebrow">{projectLabel(selectedProject)}</p>
-            <h2>{selectedProject.title}</h2>
-            <p>{selectedProject.summary}</p>
+            <p className="font-mono text-[.68rem] uppercase tracking-[.12em] text-primary">{projectLabel(selectedProject)}</p>
+            <h2 className={infoHeadingClass}>{selectedProject.title}</h2>
+            <p className={infoCopyClass}>{selectedProject.summary}</p>
             {selectedProject.link ?
-              <button type="button" onClick={() => openProject(selectedProject)}>
+              <button className="mt-[.9rem] cursor-pointer rounded-[.4rem] border-0 bg-primary px-3 py-[.6rem] text-[.8rem] font-[650] text-primary-foreground" type="button" onClick={() => openProject(selectedProject)}>
                 Open project ↗
               </button>
             : null}
           </>
         : <>
-            <h2>3D portfolio gallery</h2>
-            <p>
+            <h2 className={infoHeadingClass}>3D portfolio gallery</h2>
+            <p className={infoCopyClass}>
               Drag to orbit. Select a frame to focus, select it again to open, or click outside to
               return.
             </p>
@@ -169,7 +175,7 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
         }
       </div>
 
-      <p className="spatial-gallery__count">
+      <p className={`${glassClass} absolute right-6 bottom-6 z-2 m-0 rounded-control px-[.8rem] py-[.65rem] font-mono text-xs leading-normal text-muted-foreground`}>
         {visibleProjects.length} {visibleProjects.length === 1 ? "project" : "projects"}
       </p>
 

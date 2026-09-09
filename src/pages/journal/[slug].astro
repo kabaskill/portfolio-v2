@@ -18,7 +18,7 @@ const { Content } = await render(post);
     <a
       class="inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-4 py-2 text-sm text-foreground transition-colors hover:border-foreground hover:bg-foreground hover:text-background"
       href="/journal">← All journal entries</a
-    ><p class="eyebrow mt-8">
+    ><p class="font-mono text-[.68rem] uppercase tracking-[.12em] text-primary mt-8">
       {post.data.publishedAt.toLocaleDateString("en", { dateStyle: "long" })}
     </p><h1
       class="mt-4 max-w-[13ch] text-[clamp(2.75rem,6.2vw,5.6rem)] font-[560] leading-[.96] tracking-[-.065em] text-balance"

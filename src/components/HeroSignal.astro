@@ -1,12 +1,13 @@
 ---
 import waveform from "../data/win95-waveform.json";
+const transportClass = "grid h-10 w-11 cursor-pointer place-items-center rounded-full border-0 bg-transparent p-0 text-muted-foreground hover:bg-background hover:text-foreground aria-pressed:bg-primary aria-pressed:text-primary-foreground focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-5 motion-safe:transition-transform motion-safe:duration-200 motion-safe:ease-out motion-safe:active:scale-[.92]";
 ---
 
-<div class="hero-signal" data-hero-signal>
+<div class="relative z-0 mt-2 mb-14 aspect-[1.25] w-[min(100%,26rem)] justify-self-center md:absolute md:top-1/2 md:right-0 md:m-0 md:w-[47%] md:-translate-y-1/2 lg:w-[49%]" data-hero-signal>
   <audio data-waveform-audio src={waveform.src} preload="metadata"></audio>
-  <canvas class="hero-signal__canvas" aria-hidden="true"></canvas>
+  <canvas class="block size-full" aria-hidden="true"></canvas>
   <input
-    class="hero-signal__seek"
+    data-waveform-seek class="absolute top-[13%] left-[5.5%] m-0 h-[78%] w-[89%] cursor-crosshair appearance-none rounded-none border-0 bg-transparent p-0 focus:outline-none focus-visible:rounded focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-6"
     type="range"
     min="0"
     max="100"
@@ -17,20 +18,20 @@ import waveform from "../data/win95-waveform.json";
     aria-describedby="waveform-help"
   />
   <span id="waveform-help" class="sr-only">Windows 95 startup sound. Click or use the arrow keys to seek. Space plays or pauses. Home returns to the start; End moves to the end.</span>
-  <div class="hero-signal__footer">
-    <div class="hero-signal__transport" role="group" aria-label="Waveform transport">
-      <button type="button" data-transport="play" aria-label="Play" aria-pressed="false" title="Play">
-        <span class="hero-signal__icon hero-signal__icon--play" aria-hidden="true"></span>
+  <div class="absolute inset-x-[5.5%] -bottom-10 flex items-center justify-center gap-3">
+    <div class="inline-flex gap-0.5 rounded-full border border-border bg-card p-1" role="group" aria-label="Waveform transport">
+      <button class={transportClass} type="button" data-transport="play" aria-label="Play" aria-pressed="false" title="Play">
+        <span class="ml-0.5 block size-0 border-y-[7px] border-l-[11px] border-y-transparent border-l-current" aria-hidden="true"></span>
       </button>
-      <button type="button" data-transport="pause" aria-label="Pause" aria-pressed="false" title="Pause">
-        <span class="hero-signal__icon hero-signal__icon--pause" aria-hidden="true"></span>
+      <button class={transportClass} type="button" data-transport="pause" aria-label="Pause" aria-pressed="false" title="Pause">
+        <span class="block size-3 border-x-4 border-current" aria-hidden="true"></span>
       </button>
-      <button type="button" data-transport="stop" aria-label="Stop" aria-pressed="true" title="Stop">
-        <span class="hero-signal__icon hero-signal__icon--stop" aria-hidden="true"></span>
+      <button class={transportClass} type="button" data-transport="stop" aria-label="Stop" aria-pressed="true" title="Stop">
+        <span class="block size-3 rounded-[1px] bg-current" aria-hidden="true"></span>
       </button>
     </div>
   </div>
-  <p class="hero-signal__error" data-audio-error role="alert" hidden></p>
+  <p class="absolute top-[calc(100%+3rem)] w-full text-center text-[.8rem] text-primary" data-audio-error role="alert" hidden></p>
   <span class="sr-only" role="status" data-transport-status>Stopped</span>
 </div>
 
@@ -47,7 +48,7 @@ import waveform from "../data/win95-waveform.json";
       if (!context) return;
       const audio = root.querySelector<HTMLAudioElement>('[data-waveform-audio]')!;
       const error = root.querySelector<HTMLElement>('[data-audio-error]')!;
-      const seek = root.querySelector<HTMLInputElement>('.hero-signal__seek')!;
+      const seek = root.querySelector<HTMLInputElement>('[data-waveform-seek]')!;
       const controls = [...root.querySelectorAll<HTMLButtonElement>('[data-transport]')];
       const status = root.querySelector<HTMLElement>('[data-transport-status]')!;
       const controller = new AbortController();
@@ -353,3 +354,34 @@ import waveform from "../data/win95-waveform.json";
   initSignals();
   document.addEventListener('astro:page-load', initSignals);
 </script>
+
+<style>
+  /* Browser-specific native range parts cannot be styled with ordinary utilities. */
+  input::-webkit-slider-runnable-track { height: 100%; background: transparent; }
+  input::-moz-range-track { height: 100%; background: transparent; }
+  input::-moz-range-progress { background: transparent; }
+  input::-webkit-slider-thumb {
+    appearance: none;
+    width: 1px;
+    height: 100%;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  input::-moz-range-thumb {
+    width: 1px;
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    canvas { animation: hero-signal-in 1.6s var(--ease-spring) both; }
+  }
+  @keyframes hero-signal-in {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: none; }
+  }
+</style>
