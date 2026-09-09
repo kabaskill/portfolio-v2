@@ -11,8 +11,8 @@ const projectSchema = z.object({
   category: z.enum(["development-design", "sound-music"]),
   experiment: z.boolean().default(false),
   tags: z.array(z.string()).default([]),
-  year: z.number().optional(),
-  role: z.string().optional(),
+  year: z.number().nullable().default(null),
+  role: z.string().nullable().default(null),
   featured: z.boolean().default(false),
   published: z.boolean().default(true),
   links: z.array(z.object({ label: z.string(), url: z.string() })).default([]),
@@ -34,7 +34,7 @@ const postSchema = z.object({
   title: z.string(),
   excerpt: z.string(),
   publishedAt: z.coerce.date(),
-  cover: z.string().optional(),
+  cover: z.string().nullable().default(null),
 });
 
 export const collections = {

@@ -9,7 +9,6 @@ import {
   type ProjectCategory,
 } from "../../lib/project-taxonomy";
 
-type GalleryCategory = "all" | ProjectCategory;
 type Project = {
   title: string;
   slug: string;
@@ -20,8 +19,8 @@ type Project = {
   link: string | null;
 };
 
-const categories: Array<{ label: string; value: GalleryCategory }> = [
-  { label: "All projects", value: "all" },
+const categories: Array<{ label: string; value: ProjectCategory }> = [
+  // { label: "All projects", value: "all" },
   ...projectCategories,
 ];
 
@@ -31,12 +30,12 @@ const infoHeadingClass = "mt-1 mb-[.45rem] text-[1.45rem] leading-none font-[550
 const infoCopyClass = "m-0 text-[.85rem] leading-normal text-muted-foreground";
 
 export default function SpatialGallery({ projects }: { projects: Project[] }) {
-  const [category, setCategory] = useState<GalleryCategory>("all");
+  const [category, setCategory] = useState<ProjectCategory>("development-design");
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [isDark, setIsDark] = useState(false);
   const visibleProjects = useMemo(
-    () => projects.filter((project) => category === "all" || project.category === category),
+    () => projects.filter((project) => project.category === category),
     [category, projects],
   );
   const selectedProject = visibleProjects.find((project) => project.slug === selectedSlug) ?? null;
@@ -107,10 +106,7 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
         </a>
         <nav className={`${glassClass} pointer-events-auto flex justify-self-center gap-[.2rem] rounded-control p-1`} aria-label="Gallery categories">
           {categories.map((item) => {
-            const count =
-              item.value === "all" ?
-                projects.length
-              : projects.filter((project) => project.category === item.value).length;
+            const count = projects.filter((project) => project.category === item.value).length;
             return (
               <button
                 key={item.value}

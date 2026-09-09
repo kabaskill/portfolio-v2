@@ -2,7 +2,7 @@
 title: "blitz-cache"
 summary: "A TypeScript-first data fetching and caching library with LRU storage, persistence, pagination, request cancellation, and React hooks."
 slug: "blitz-cache"
-cover: "/images/blitz-cache-cover.png"
+cover: "/images/blitz-cache-cover.jpg"
 alt: "Abstract data cache with layered tiles and request paths"
 category: "development-design"
 experiment: true
@@ -13,6 +13,7 @@ featured: false
 published: true
 links: [{"label":"View repository","url":"https://github.com/kabaskill/blitz-cache"},{"label":"View on npm","url":"https://www.npmjs.com/package/blitz-cache"}]
 embeds: []
+gallery: []
 ---
 
 blitz-cache is a TypeScript data-fetching and caching library. The core uses an LRU cache, stale-while-revalidate reads, pluggable persistence, request deduplication, and AbortController cancellation for stale requests.

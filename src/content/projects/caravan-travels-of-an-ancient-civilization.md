@@ -13,6 +13,7 @@ featured: false
 published: true
 links: []
 embeds: [{"provider":"youtube","title":"Caravan: Travels of an Ancient Civilization video","url":"https://www.youtube.com/watch?v=YtIUmmLDSOE"}]
+gallery: []
 ---
 
 Caravan: Travels of an Ancient Civilization follows a 1,920-kilometre route from Iğdır through Anatolia to the Mediterranean across twelve episodes. Erka Medya produced the documentary series for a route that moves through archaeological sites, local histories, interviews, and changing geographic conditions.

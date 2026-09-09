@@ -12,11 +12,13 @@ tags:
   - WebGL
 year: 2026
 role: "Developer and designer"
-featured: true
+featured: false
 published: true
 links:
   - label: "Explore the gallery"
     url: "/threescene"
+embeds: []
+gallery: []
 ---
 
 The 3D portfolio gallery turns the work archive into a navigable WebGL scene. The layout gives sound and music work a spatial context instead of reducing every item to a thumbnail and a short card.

@@ -10,9 +10,10 @@ tags: ["React", "TypeScript", "PostgreSQL", "Redis", "Data platform", "AI"]
 year: 2026
 role: "Creator and maintainer"
 featured: false
-published: true
+published: false
 links: [{"label":"View repository","url":"https://github.com/kabaskill/droplet"},{"label":"Planned live site","url":"https://droplet.oguzkabasakal.com/"}]
 embeds: []
+gallery: []
 ---
 
 Droplet is a German water-state platform built as an operational dashboard for regional conditions. It brings source freshness, forecast pressure, reservoir snapshots, and observations into one place. The live site is planned for droplet.oguzkabasakal.com, but the repository is the current reference for now.

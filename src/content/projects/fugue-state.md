@@ -13,6 +13,7 @@ featured: false
 published: true
 links: [{"label":"View repository","url":"https://github.com/kabaskill/fugue-state-react"}]
 embeds: []
+gallery: []
 ---
 
 Fugue State is a browser-based music theory game I built for my master thesis. Its deck-builder loop asks the player to identify the same chord through scientific notation, solfege, and chromatic note names.

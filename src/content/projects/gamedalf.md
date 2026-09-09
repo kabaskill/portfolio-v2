@@ -13,6 +13,7 @@ featured: false
 published: true
 links: [{"label":"Open project","url":"https://gamedalf.vercel.app"}]
 embeds: []
+gallery: []
 ---
 
 GameDalf is a board-game discovery app, not a game. It connects to a board-games API and lets people search for something to play instead of staring at an empty shelf or scrolling through a generic list.

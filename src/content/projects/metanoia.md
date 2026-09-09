@@ -13,6 +13,7 @@ featured: false
 published: true
 links: []
 embeds: [{"provider":"youtube","title":"Metanoia","url":"https://www.youtube.com/watch?v=Qif1lN3WjEo"},{"provider":"youtube","title":"Metanoia - Music","url":"https://www.youtube.com/watch?v=9lTTIfjbPy8"}]
+gallery: []
 ---
 
 Metanoia was part of my second-semester Expanded Media project. We built a full 360-degree audiovisual installation with six screens and a complex speaker setup, taking the ISM Hexadome format as a reference for what we could build within one semester.

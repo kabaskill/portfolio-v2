@@ -13,11 +13,15 @@ tags:
   - HTML
 role: "Developer"
 year: 2025
+featured: true
+published: true
 links:
   - label: "Open experiment"
     url: "https://doner.oguzkabasakal.com"
   - label: "View repository"
     url: "https://github.com/kabaskill/doner-html-transpiler"
+embeds: []
+gallery: []
 ---
 
 D.Ö.N.E.R, short for Deutsche Öffnung zur Normalisierten ERkennung, turns German HTML tags into standard HTML. I built the transpiler in Go while learning lexer, parser, and AST fundamentals, then connected it to a React and TypeScript interface.

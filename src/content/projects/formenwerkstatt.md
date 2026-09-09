@@ -12,10 +12,13 @@ tags:
   - Content
 year: 2024
 role: "Web developer and designer"
-featured: true
+featured: false
+published: true
 links:
   - label: "Visit website"
     url: "https://formenwerkstatt.de"
+embeds: []
+gallery: []
 ---
 
 Formenwerkstatt is a toolmaking and manufacturing company from Reichelsheim, working across mold technology, CNC production, repair, milling, turning, EDM, and laser welding. I was responsible of recreating their digital rebranding. 

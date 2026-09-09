@@ -13,6 +13,7 @@ featured: false
 published: true
 links: []
 embeds: [{"provider":"youtube","title":"Mevlana's 744th Birthday video","url":"https://www.youtube.com/watch?v=pZcudV-PUYY"}]
+gallery: []
 ---
 
 This film documents the ceremonies and performances held in Konya for Mevlana's 744th Vuslat anniversary from 7 to 17 December 2017. The programme combines stage performance, ceremony, speeches, music, and audience recordings.

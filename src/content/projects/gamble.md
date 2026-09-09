@@ -13,6 +13,7 @@ featured: false
 published: true
 links: []
 embeds: [{"provider":"vimeo","title":"Gamble video","url":"https://vimeo.com/104676877"}]
+gallery: []
 ---
 
 Gamble is a short experimental film set in the aftermath of an earthquake. It runs for little more than a minute, so the film has to establish its situation and escalation with very little screen time.

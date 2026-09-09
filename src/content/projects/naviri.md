@@ -13,6 +13,7 @@ featured: true
 published: true
 links: [{"label":"Visit website","url":"https://www.naviri.com/"},{"label":"Open app","url":"https://app.naviri.io/"}]
 embeds: []
+gallery: []
 ---
 
 Naviri is a full-stack product for startup planning and risk analysis. I worked with the team in 2025 as a full-stack developer on the public website and application. The application has four main workflows: Unify stores company information in one workspace, Detect checks claims and project data for risks or missing context, Plan generates a roadmap, and Consult provides an analysis interface for questions about the business.

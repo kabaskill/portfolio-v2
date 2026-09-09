@@ -13,6 +13,7 @@ featured: false
 published: true
 links: []
 embeds: [{"provider":"youtube","title":"Artern - Lost Generation video","url":"https://www.youtube.com/watch?v=_KtUbHRzklU"}]
+gallery: []
 ---
 
 Lost Generation is an Artern discussion series about young people's work, money, and uncertainty in Turkey. The series was published as an online conversation format, with Hazal Çakmak hosting and Umur Dağlı taking part in the episode represented here.

@@ -13,6 +13,7 @@ featured: false
 published: true
 links: []
 embeds: [{"provider":"vimeo","title":"Zero video","url":"https://vimeo.com/287928387"}]
+gallery: []
 ---
 
 Zero follows a survivor moving through the remains of an emptied world.

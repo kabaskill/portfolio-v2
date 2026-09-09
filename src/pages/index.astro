@@ -7,9 +7,8 @@ import SiteLayout from "../layouts/SiteLayout.astro";
 import { getProjectImage } from "../lib/project-images";
 
 const projects = (await getCollection("projects")).filter(({ data }) => data.published !== false);
-const featuredSlugs = ["unides-yawara", "naviri", "formenwerkstatt", "sound-showreel"];
-const featured = featuredSlugs.flatMap((slug) => projects.filter(({ data }) => data.slug === slug));
-const experiment = projects.find(({ data }) => data.slug === "droplet");
+const featured = projects.filter(({data}) => data.featured === true);
+const experiment = projects.find(({ data }) => data.slug === "p5-js-experiments");
 const experimentCover = experiment ? getProjectImage(experiment.data.cover) : null;
 const gridSpans = [
   "md:col-span-7",
@@ -37,7 +36,7 @@ const arrowClass = "grid size-9 place-items-center rounded-full text-[1.2rem] mo
       </h1>
       <div class="mt-6 md:mt-8">
         <p class="pointer-events-auto max-w-md text-base leading-[1.7] text-pretty text-muted-foreground md:max-w-92 md:text-[1.0625rem] lg:max-w-104 hero-enter" style="--hero-delay: 230ms">
-          ...and a pair of <br/> musician's ears.
+          ...and a pair of <span class="text-primary text-[1.25rem] font-bold">musician's ears.</span>
         </p>
         <div class="mt-6 flex flex-wrap gap-3 md:mt-7 hero-enter" style="--hero-delay: 310ms">
           <a class:list={[ctaClass, "border-transparent bg-primary text-primary-foreground"]} href="/work">
@@ -93,8 +92,8 @@ const arrowClass = "grid size-9 place-items-center rounded-full text-[1.2rem] mo
         class="max-w-4xl text-[clamp(2.4rem,5vw,4.5rem)] leading-[1.08] tracking-[-.06em] text-balance font-[550]"
         data-reveal
       >
-        Technical decisions should be visible in <span class="text-primary"
-          >how a product feels.</span>
+        What's happening on<span class="text-primary"
+          > both sides of the screen</span> is important.
       </h2>
       <div
         class="mt-10 grid gap-8 md:mt-16 md:grid-cols-[1.2fr_1fr] md:gap-x-20 md:gap-y-10 max-[767px]:grid-cols-1 max-[767px]:gap-8"
@@ -104,7 +103,7 @@ const arrowClass = "grid size-9 place-items-center rounded-full text-[1.2rem] mo
           data-reveal
         >
           <svg
-            class="mb-5 block size-11 text-primary md:mb-8 md:size-20"
+            class="mb-5 block row-span-2 size-11 text-primary md:mb-8 md:size-20"
             viewBox="0 0 256 256"
             aria-hidden="true"
             ><path d="M240,128l-48,40H64L16,128,64,88H192Z" opacity=".2" fill="currentColor"
@@ -115,8 +114,7 @@ const arrowClass = "grid size-9 place-items-center rounded-full text-[1.2rem] mo
           <h3 class="text-[clamp(1.4rem,2.6vw,2.2rem)] font-[550] leading-tight tracking-[-.045em]">
             Engineering
           </h3><p class="max-w-md text-[.95rem] leading-7 text-muted-foreground">
-            Type-safe React systems, deliberate server boundaries, and performance treated as a
-            feature.
+            Most of my work is in React and TypeScript. I like clear data flow, boring state management, and APIs that stay in charge of the data.
           </p>
         </article>
         <article
@@ -134,8 +132,7 @@ const arrowClass = "grid size-9 place-items-center rounded-full text-[1.2rem] mo
           <h3 class="text-[clamp(1.4rem,2.6vw,2.2rem)] font-[550] leading-tight tracking-[-.045em]">
             Visual design
           </h3><p class="max-w-md text-[.95rem] leading-7 text-muted-foreground">
-            Typography, interaction, and responsive composition built together instead of handed off
-            in layers.
+            I design while I build. Layout, typography, motion, responsive behavior. I would rather fix those things in the browser than treat them as a separate handoff.
           </p>
         </article>
         <article
@@ -149,10 +146,9 @@ const arrowClass = "grid size-9 place-items-center rounded-full text-[1.2rem] mo
               fill="currentColor"></path></svg
           >
           <h3 class="text-[clamp(1.4rem,2.6vw,2.2rem)] font-[550] leading-tight tracking-[-.045em]">
-            Sound thinking
+            Media
           </h3><p class="max-w-md text-[.95rem] leading-7 text-muted-foreground">
-            A production background that brings timing, pacing, and attention to detail into
-            interface work.
+            I worked in media production for years before moving into web development. That background still shows up in how I think about timing, rhythm, transitions, and sound.
           </p>
         </article>
       </div>

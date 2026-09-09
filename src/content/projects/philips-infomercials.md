@@ -13,6 +13,7 @@ featured: false
 published: true
 links: []
 embeds: [{"provider":"youtube","title":"Philips Infomercials video","url":"https://youtu.be/WdwXRmtowxA?t=301"}]
+gallery: []
 ---
 
 I handled sound post for these Philips Turkey infomercial spots, including dialogue, effects, transitions, and the final mix. The work had to keep product information intelligible while the picture moved through short demonstrations and cutaways.

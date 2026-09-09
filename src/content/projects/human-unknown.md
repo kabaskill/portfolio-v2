@@ -13,6 +13,7 @@ featured: false
 published: true
 links: []
 embeds: [{"provider":"youtube","title":"Human: Unknown video","url":"https://www.youtube.com/watch?v=Qmc0SBNCqVA"}]
+gallery: []
 ---
 
 Human: Unknown is a documentary produced by Erka Medya. It follows a Dutch traveler who crosses the world on foot, then places their journey beside the daily walk of a man who has never left the city where he was born. Both people move through the world, but from very different distances.

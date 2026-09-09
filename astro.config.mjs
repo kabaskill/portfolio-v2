@@ -35,5 +35,5 @@ export default defineConfig({
   vite: { plugins: [tailwindcss()] },
   output: "static",
   site: site.href,
-  trailingSlash: "always",
+  trailingSlash: "ignore",
 });

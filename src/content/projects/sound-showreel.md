@@ -13,6 +13,7 @@ featured: true
 published: true
 links: []
 embeds: [{"provider":"youtube","title":"Sound design showreel","url":"https://www.youtube.com/watch?v=WdwXRmtowxA"}]
+gallery: []
 ---
 
 I created this reel from sound design, field and studio recording, dialogue editing, foley, effects, and mixing work for moving-image projects. It covers work for films, documentaries, commercials, and event pieces.

@@ -18,6 +18,9 @@ links:
     url: "https://www.npmjs.com/package/blitz-react?activeTab=readme"
   - label: "GitHub Repository"
     url: "https://github.com/kabaskill/blitz-react"
+published: true
+embeds: []
+gallery: []
 ---
 
 blitz-react is a small command-line tool for starting React projects without a pile of setup files. I built the command to create a project directory, choose a JavaScript or TypeScript template, install dependencies, and optionally initialize Git. It also has an interactive mode for people who do not want to remember the flags.

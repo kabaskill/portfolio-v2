@@ -13,6 +13,7 @@ year: 2015
 published: true
 links: []
 embeds: [{"provider":"vimeo","title":"Soul of the Light video","url":"https://vimeo.com/242382390"}]
+gallery: []
 ---
 
 Soul of the Light is a short documentary about India and Diwali.

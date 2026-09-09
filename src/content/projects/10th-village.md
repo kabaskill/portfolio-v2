@@ -13,6 +13,7 @@ published: true
 year: 2014
 links: []
 embeds: [{"provider":"youtube","title":"10th Village video","url":"https://www.youtube.com/watch?v=epgUqTY49Is"}]
+gallery: []
 ---
 
 10th Village, or 10. Köy Teyatora, is a Turkish feature film set in a village where nobody knows how to lie. A teacher arrives at the village school while a travelling theatre troupe stages a performance for the locals. The film was directed by Bahadır Abşin, written by Neslihan Yalman, and produced by Bülent Aydoslu.

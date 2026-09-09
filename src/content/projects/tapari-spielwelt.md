@@ -13,6 +13,7 @@ featured: false
 published: true
 links: []
 embeds: [{"provider":"youtube","title":"Tapari-Spielwelt video","url":"https://www.youtube.com/watch?v=VWLYl_1PPBI"}]
+gallery: []
 ---
 
 Tapari is an interactive play mat that lets children move physical figures through a story. Each choice opens a different audio path.
