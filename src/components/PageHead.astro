@@ -21,6 +21,15 @@ const socialImage = new URL(image ?? defaultImage!.src, Astro.site);
 
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width" />
+<script is:inline>
+  (() => {
+    let preference = null;
+    try { preference = localStorage.getItem("theme"); } catch { /* Use the system theme. */ }
+    const dark = preference === "dark" ||
+      (preference !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+    document.documentElement.classList.toggle("dark", dark);
+  })();
+</script>
 <meta name="description" content={description} />
 {noindex ? <meta name="robots" content="noindex, follow" /> : <link rel="canonical" href={canonical} />}
 <link rel="icon" type="image/x-icon" href="/favicon.ico" />

@@ -1,6 +1,6 @@
 import { Image as DreiImage, Grid, OrbitControls, useCursor } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import {
@@ -33,7 +33,11 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
   const [category, setCategory] = useState<ProjectCategory>("development-design");
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(() =>
+    typeof document !== "undefined" && document.documentElement.classList.contains("dark"),
+  );
+  const [galleryReady, setGalleryReady] = useState(false);
+  const markGalleryReady = useCallback(() => setGalleryReady(true), []);
   const visibleProjects = useMemo(
     () => projects.filter((project) => project.category === category),
     [category, projects],
@@ -49,8 +53,15 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
     const update = () => setReducedMotion(query.matches);
     update();
     setIsDark(document.documentElement.classList.contains("dark"));
+    const theme = new MutationObserver(() =>
+      setIsDark(document.documentElement.classList.contains("dark")),
+    );
+    theme.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
     query.addEventListener("change", update);
-    return () => query.removeEventListener("change", update);
+    return () => {
+      query.removeEventListener("change", update);
+      theme.disconnect();
+    };
   }, []);
 
   function selectRelative(offset: -1 | 1) {
@@ -78,11 +89,13 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
       >
         <Suspense fallback={null}>
           <GalleryWorld
+            key={category}
             projects={visibleProjects}
             isDark={isDark}
             reducedMotion={reducedMotion}
             selectedSlug={selectedSlug}
             onSelect={setSelectedSlug}
+            onReady={markGalleryReady}
           />
           <Grid
             args={[30, 30]}
@@ -100,9 +113,11 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
         </Suspense>
       </Canvas>
 
+      {!galleryReady ? <GalleryLoadingState /> : null}
+
       <div className="pointer-events-none absolute inset-0 z-2 grid grid-cols-[1fr_auto_1fr] items-start p-6">
         <a className={`${glassClass} pointer-events-auto w-fit rounded-control px-[.8rem] py-[.65rem] text-sm leading-normal font-[650] hover:text-primary`} href="/">
-          ← Portfolio
+          ← <span className="hidden md:inline-block">Portfolio</span>
         </a>
         <nav className={`${glassClass} pointer-events-auto flex justify-self-center gap-[.2rem] rounded-control p-1`} aria-label="Gallery categories">
           {categories.map((item) => {
@@ -115,6 +130,8 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
                 disabled={count === 0}
                 aria-pressed={category === item.value}
                 onClick={() => {
+                  if (item.value === category) return;
+                  setGalleryReady(false);
                   setCategory(item.value);
                   setSelectedSlug(null);
                 }}
@@ -132,7 +149,11 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
             const next = !isDark;
             setIsDark(next);
             document.documentElement.classList.toggle("dark", next);
-            localStorage.setItem("theme", next ? "dark" : "light");
+            try {
+              localStorage.setItem("theme", next ? "dark" : "light");
+            } catch {
+              // Theme still works when storage is unavailable.
+            }
           }}
         >
           {isDark ? "☀" : "☾"}
@@ -155,7 +176,7 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
           <>
             <p className="font-mono text-[.68rem] uppercase tracking-[.12em] text-primary">{projectLabel(selectedProject)}</p>
             <h2 className={infoHeadingClass}>{selectedProject.title}</h2>
-            <p className={infoCopyClass}>{selectedProject.summary}</p>
+            {/*<p className={infoCopyClass}>{selectedProject.summary}</p>*/}
             {selectedProject.link ?
               <button className="mt-[.9rem] cursor-pointer rounded-[.4rem] border-0 bg-primary px-3 py-[.6rem] text-[.8rem] font-[650] text-primary-foreground" type="button" onClick={() => openProject(selectedProject)}>
                 Open project ↗
@@ -172,10 +193,6 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
         }
       </div>
 
-      <p className={`${glassClass} absolute right-6 bottom-6 z-2 m-0 rounded-control px-[.8rem] py-[.65rem] font-mono text-xs leading-normal text-muted-foreground`}>
-        {visibleProjects.length} {visibleProjects.length === 1 ? "project" : "projects"}
-      </p>
-
       <div className="sr-only">
         <h2>Projects in this gallery</h2>
         <ul>
@@ -190,6 +207,30 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
   );
 }
 
+function GalleryLoadingState() {
+  return (
+    <div
+      className="absolute inset-0 z-4 grid place-items-center bg-background px-6 text-foreground"
+      role="status"
+      aria-label="Preparing 3D gallery"
+      aria-busy="true"
+    >
+      <div className="grid w-full max-w-sm justify-items-center text-center">
+        <span
+          className="block size-10 animate-spin rounded-full border-2 border-border border-t-primary"
+          aria-hidden="true"
+        />
+        <p className="mt-5 font-mono text-xs uppercase tracking-[.14em] text-primary">
+          Preparing gallery
+        </p>
+        <div className="mt-4 h-1 w-full overflow-hidden rounded-full bg-card" aria-hidden="true">
+          <div className="h-full w-1/2 animate-pulse rounded-full bg-primary" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function projectLabel(project: Project) {
   return `${project.experiment ? "Experiment · " : ""}${getProjectCategoryLabel(project.category)}`;
 }
@@ -200,12 +241,14 @@ function GalleryWorld({
   reducedMotion,
   selectedSlug,
   onSelect,
+  onReady,
 }: {
   projects: Project[];
   isDark: boolean;
   reducedMotion: boolean;
   selectedSlug: string | null;
   onSelect: (slug: string | null) => void;
+  onReady: () => void;
 }) {
   const radius = THREE.MathUtils.clamp(4.2 + projects.length * 0.12, 4.2, 7.5);
   const selectedFrame = useMemo(() => {
@@ -215,6 +258,8 @@ function GalleryWorld({
     const [x, y, z] = getFramePosition(angle, index, radius);
     return { angle, position: [x, y + 0.2, z] as [number, number, number] };
   }, [projects, radius, selectedSlug]);
+
+  useEffect(() => onReady(), [onReady]);
 
   return (
     <>
@@ -399,7 +444,7 @@ function GalleryFrame({
 }) {
   const group = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
-  useCursor(hovered, selected && project.link ? "alias" : "pointer");
+  useCursor(hovered, selected && project.link ? "grab" : "pointer");
   const position = useMemo(() => getFramePosition(angle, index, radius), [angle, index, radius]);
 
   useFrame((_, delta) => {
@@ -422,11 +467,11 @@ function GalleryFrame({
       <mesh
         onClick={(event) => {
           event.stopPropagation();
-          if (selected) {
-            if (project.link) openProject(project.link);
-            else onSelect(null);
-            return;
-          }
+          // if (selected) {
+          //   if (project.link) openProject(project.link);
+          //   else onSelect(null);
+          //   return;
+          // }
           onSelect(project.slug);
         }}
         onPointerEnter={(event) => {

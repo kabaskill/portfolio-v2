@@ -1,45 +1,123 @@
 ---
+import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
-import ProjectCard from "../../components/ProjectCard.astro";
+import LabFlask from "../../components/LabFlask.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
+import { getProjectImage } from "../../lib/project-images";
 import { sortProjects } from "../../lib/project-order";
+import { getProjectCategoryLabel, getProjectPath } from "../../lib/project-taxonomy";
+
 const projects = (await getCollection("projects"))
   .filter(({ data }) => data.published && data.experiment);
 const orderedProjects = sortProjects(projects);
-const gridSpans = [
-  "md:col-span-7 xl:col-span-4",
-  "md:col-span-5 md:pt-20 xl:col-span-4",
-  "md:col-span-5 xl:col-span-4",
-  "md:col-span-7 md:pt-12 xl:col-span-4",
-];
 ---
 
 <SiteLayout title="Experiments | Oguz Kabasakal">
-  <section
-    class="mx-auto w-[min(1400px,calc(100%-2rem))] py-10 max-[767px]:w-full max-[767px]:px-6 md:py-16"
-  >
-    <h1
-      class="max-w-[65rem] text-[clamp(2.75rem,6vw,5.8rem)] font-[550] leading-[1.05] tracking-[-.06em] text-balance"
+  <section class="relative mt-4 overflow-hidden border-y border-foreground bg-foreground text-background">
+    <div
+      class="relative mx-auto grid min-h-[32rem] w-[min(1400px,calc(100%-2rem))] content-between gap-12 py-8 max-[767px]:w-full max-[767px]:px-6 md:min-h-[38rem] md:py-12"
     >
-      Prototypes, spatial<br class="hidden max-[767px]:block" />{" "}interfaces,<span
-        class="text-primary"
+      <h1
+        class="lab-title max-w-[11ch] text-[clamp(4rem,10vw,9.5rem)] font-[560] leading-[.78] tracking-[-.085em]"
       >
-        useful detours.</span>
-    </h1>
-    <p class="mt-5 max-w-[38rem] text-base leading-7 text-pretty text-muted-foreground">
-      A separate space for ideas that test a tool, interaction, or medium before they become
-      conventional work.
-    </p>
+        <span>Useful</span><br/><span class="text-primary"> detours.</span>
+      </h1>
+
+      <div class="justify-self-center md:absolute md:right-0 md:bottom-2 md:w-[40%] md:max-w-[28rem] lg:w-[38%] xl:w-[36%]">
+        <LabFlask />
+      </div>
+
+      <p class="max-w-[45rem] text-base leading-7 text-background/70 md:max-w-[52%] md:text-lg lg:max-w-[48%]">
+        Prototypes, spatial interfaces, unfinished questions <br/><span class="text-primary font-bold">and more...</span>
+      </p>
+    </div>
   </section>
+
   <section
-    class="mx-auto w-[min(1400px,calc(100%-2rem))] py-16 pb-28 max-[767px]:w-full max-[767px]:px-6"
+    class="mx-auto w-[min(1400px,calc(100%-2rem))] py-20 pb-32 max-[767px]:w-full max-[767px]:px-6 md:py-28"
+    aria-label="Experiment index"
   >
-    <div class="grid grid-cols-1 gap-x-6 gap-y-14 md:grid-cols-12 md:gap-y-20">
+    <div class="mb-8 flex items-end justify-between gap-8 border-b border-border pb-4">
+      <h2 class="font-mono text-xs uppercase tracking-[.14em] text-muted-foreground">Study index</h2>
+    </div>
+
+    <div>
       {
-        orderedProjects.map((project, index) => (
-          <ProjectCard project={project} layoutClass={gridSpans[index % gridSpans.length]} />
-        ))
+        orderedProjects.map((project, index) => {
+          const cover = getProjectImage(project.data.cover);
+          const reverse = index % 2 === 1;
+          return (
+            <a
+              class="group grid gap-5 border-b border-border py-8 md:grid-cols-[4rem_minmax(18rem,.85fr)_minmax(0,1.15fr)] md:items-center md:gap-8 md:py-10 lg:grid-cols-[5rem_minmax(22rem,.9fr)_minmax(0,1.1fr)] lg:gap-12"
+              data-reveal
+              data-experiment-row
+              href={getProjectPath(project.data)}
+              style={`--row-index:${index};--row-direction:${reverse ? -1 : 1};--image-tilt:${reverse ? "-1.5deg" : "1.5deg"}`}
+            >
+              <span class="self-start font-mono text-xs text-muted-foreground md:self-center">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <div
+                class:list={[
+                  "relative aspect-[16/10] overflow-hidden rounded-xl bg-card transition-transform duration-500 ease-spring group-hover:scale-[1.015]",
+                  reverse && "md:order-3",
+                ]}
+                transition:name={`project-${project.data.slug}`}
+              >
+                <Image
+                  class="block size-full object-contain transition-transform duration-700 ease-spring motion-safe:group-hover:scale-[1.06] motion-safe:group-hover:rotate-[var(--image-tilt)]"
+                  src={cover}
+                  alt={project.data.alt}
+                  loading="lazy"
+                  widths={[420, 640, 900, 1200]}
+                  sizes="(min-width: 768px) 42vw, 100vw"
+                />
+                <span class="absolute top-3 right-3 grid size-9 place-items-center rounded-full bg-foreground text-background transition-transform duration-500 ease-spring motion-safe:group-hover:rotate-45" aria-hidden="true">↗</span>
+              </div>
+              <div class:list={[reverse && "md:order-2"]}>
+                <p class="font-mono text-[.68rem] uppercase tracking-[.12em] text-primary">
+                  {getProjectCategoryLabel(project.data.category)}{project.data.year ? ` / ${project.data.year}` : ""}
+                </p>
+                <h3 class="mt-3 text-[clamp(2rem,4vw,4.6rem)] font-[550] leading-[.92] tracking-[-.065em] transition-colors duration-300 group-hover:text-primary">
+                  {project.data.title}
+                </h3>
+                <p class="mt-5 max-w-[52ch] text-sm leading-6 text-muted-foreground md:text-base md:leading-7">
+                  {project.data.summary}
+                </p>
+              </div>
+            </a>
+          );
+        })
       }
     </div>
   </section>
 </SiteLayout>
+
+<style>
+  .lab-title span { display: inline-block; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .lab-title span {
+      animation: lab-title-in 1s var(--ease-spring) both;
+      transform-origin: left bottom;
+    }
+    .lab-title span:nth-child(2) { animation-delay: 120ms; }
+    :global(.motion-ready) [data-experiment-row] {
+      opacity: 0;
+      transform: translateX(calc(var(--row-direction) * 2.5rem));
+    }
+    :global(.motion-ready) [data-experiment-row][data-reveal-visible="true"] {
+      animation: lab-row-in .8s var(--ease-spring) both;
+      animation-delay: calc(var(--row-index) * 35ms);
+    }
+  }
+
+  @keyframes lab-title-in {
+    from { opacity: 0; transform: translateY(70%) rotate(4deg); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes lab-row-in {
+    from { opacity: 0; transform: translateX(calc(var(--row-direction) * 2.5rem)); }
+    to { opacity: 1; transform: none; }
+  }
+</style>
