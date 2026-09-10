@@ -19,7 +19,7 @@ if (siteUrl && (
 export default defineConfig({
   integrations: [
     {
-      name: "production-site-url",
+      name: "portfolio-v2",
       hooks: {
         "astro:config:setup": ({ command }) => {
           if (command === "build" && !siteUrl) {
