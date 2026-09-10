@@ -1,13 +1,21 @@
 ---
+import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
 import SiteLayout from "../layouts/SiteLayout.astro";
+import { cn } from "../lib/cn";
 ---
 
 <SiteLayout title="Not found | Oguz Kabasakal" noindex
   ><section
-    class="mx-auto w-[min(1400px,calc(100%-2rem))] py-10 max-[767px]:w-full max-[767px]:px-6 md:py-16"
+    class={cn(
+      "mx-auto w-[min(1400px,calc(100%-2rem))] py-10 md:py-16",
+      "max-[767px]:w-full max-[767px]:px-6",
+    )}
   >
     <p class="font-mono text-[.68rem] uppercase tracking-[.12em] text-primary">404</p><h1>This page wandered <span>off.</span></h1><a
-      class="mt-6 inline-flex min-h-13 items-center justify-center gap-4 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground"
-      href="/">Return home ↗</a>
+      class={cn(
+        "mt-6 inline-flex min-h-13 items-center justify-center gap-4 rounded-full",
+        "bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground",
+      )}
+      href="/">Return home <ArrowUpRightIcon size={18} weight="bold" aria-hidden="true" /></a>
   </section></SiteLayout
 >

@@ -1,4 +1,13 @@
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  ArrowsOutSimpleIcon,
+  MagnifyingGlassPlusIcon,
+  PlayIcon,
+  XIcon,
+} from "@phosphor-icons/react";
 import { useEffect, useId, useRef, useState } from "react";
+import { cn } from "../../lib/cn";
 
 type Embed = {
   provider: "youtube" | "vimeo" | "spotify";
@@ -55,8 +64,6 @@ function getEmbedUrl(embed: Embed) {
   }
 }
 
-const viewerControlClass = "pointer-events-auto grid size-11 cursor-pointer place-items-center rounded-control border-0 bg-background/88 text-[1.45rem] text-foreground shadow-viewer-control motion-safe:transition-transform motion-safe:duration-250 motion-safe:ease-spring motion-safe:hover:scale-105";
-
 export default function MediaCollection({ cover, coverTitle, embeds = [], images = [] }: Props) {
   const items: MediaItem[] = [
     ...embeds.flatMap((embed) => {
@@ -107,12 +114,24 @@ export default function MediaCollection({ cover, coverTitle, embeds = [], images
     <div>
       <button
         type="button"
-        className="group relative block aspect-[4/3] w-full cursor-zoom-in overflow-hidden rounded-xl border-0 bg-card p-0"
+        className={cn(
+          "group relative block aspect-[4/3] w-full cursor-zoom-in overflow-hidden",
+          "rounded-xl border-0 bg-card p-0",
+        )}
         onClick={() => setActiveIndex(coverIndex)}
         aria-label={`Open ${coverTitle} cover in media viewer`}
       >
-        <img className="block size-full p-1 object-contain transition-transform duration-500 ease-out group-hover:scale-[1.025]" src={cover.thumbnailSrc ?? cover.src} alt={cover.alt} loading="eager" />
-        <span className="absolute bottom-3 right-3 grid size-10 place-items-center rounded-full bg-[#18191dcc] text-xl text-white transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:scale-105" aria-hidden="true">⌕</span>
+        <img className={cn(
+          "block size-full p-1 object-contain transition-transform duration-500 ease-out",
+          "group-hover:scale-[1.025]",
+        )} src={cover.thumbnailSrc ?? cover.src} alt={cover.alt} loading="eager" />
+        <span className={cn(
+          "absolute right-3 bottom-3 grid size-10 place-items-center rounded-full",
+          "bg-[#18191dcc] text-white transition-transform duration-300 ease-out",
+          "group-hover:-translate-y-0.5 group-hover:scale-105",
+        )} aria-hidden="true">
+          <MagnifyingGlassPlusIcon size={20} weight="bold" />
+        </span>
       </button>
 
       {supportingItems.length > 0 ? (
@@ -121,12 +140,20 @@ export default function MediaCollection({ cover, coverTitle, embeds = [], images
           <ol className="m-0 mt-3 list-none border-b border-border p-0">
             {supportingItems.map((item, index) => (
               <li className="border-t border-border" key={`${item.type}-${item.title}-${index}`}>
-                <button className="grid w-full grid-cols-[1fr_auto] items-center gap-3 border-0 bg-transparent py-3.5 text-left transition-colors hover:text-primary" type="button" onClick={() => setActiveIndex(index)} aria-label={`Open ${item.title}`}>
+                <button className={cn(
+                  "grid w-full grid-cols-[1fr_auto] items-center gap-3 border-0 bg-transparent py-3.5",
+                  "text-left transition-colors hover:text-primary",
+                )} type="button" onClick={() => setActiveIndex(index)} aria-label={`Open ${item.title}`}>
                   <span>
                     <strong className="block overflow-hidden text-ellipsis whitespace-nowrap text-sm font-[550]">{item.title}</strong>
-                    <small className="mt-0.5 block overflow-hidden text-ellipsis whitespace-nowrap font-mono text-[.62rem] uppercase tracking-[.1em] text-muted-foreground">{item.type === "image" ? "Image" : item.provider}</small>
+                    <small className={cn(
+                      "mt-0.5 block overflow-hidden text-ellipsis whitespace-nowrap font-mono",
+                      "text-[.62rem] uppercase tracking-[.1em] text-muted-foreground",
+                    )}>{item.type === "image" ? "Image" : item.provider}</small>
                   </span>
-                  <span aria-hidden="true">{item.type === "image" ? "⤢" : "▶"}</span>
+                  <span aria-hidden="true">
+                    {item.type === "image" ? <ArrowsOutSimpleIcon size={18} weight="bold" /> : <PlayIcon size={18} weight="fill" />}
+                  </span>
                 </button>
               </li>
             ))}
@@ -136,25 +163,43 @@ export default function MediaCollection({ cover, coverTitle, embeds = [], images
 
       <dialog
         ref={dialogRef}
-        className="m-0 h-dvh max-h-none w-screen max-w-none overflow-hidden border-0 bg-overlay p-0 text-overlay-text backdrop:bg-overlay backdrop:backdrop-blur-[10px] reduced-transparency:backdrop:bg-overlay-solid reduced-transparency:backdrop:backdrop-blur-none"
+        className={cn(
+          "m-0 h-dvh max-h-none w-screen max-w-none overflow-hidden border-0 bg-overlay p-0 text-overlay-text",
+          "backdrop:bg-overlay backdrop:backdrop-blur-[10px]",
+          "reduced-transparency:backdrop:bg-overlay-solid reduced-transparency:backdrop:backdrop-blur-none",
+        )}
         aria-labelledby={titleId}
         onCancel={(event) => { event.preventDefault(); setActiveIndex(null); }}
         onClick={(event) => { if (event.target === event.currentTarget) setActiveIndex(null); }}
       >
         {activeItem ? (
           <div className="absolute inset-0 motion-safe:animate-fade-in">
-            <header className="pointer-events-none absolute inset-x-0 top-0 z-2 flex items-start justify-between gap-4 bg-linear-to-b from-overlay-solid to-transparent p-4 pb-14">
+            <header className={cn(
+              "pointer-events-none absolute inset-x-0 top-0 z-2 flex items-start justify-between gap-4",
+              "bg-linear-to-b from-overlay-solid to-transparent p-4 pb-14",
+            )}>
               <div className="min-w-0">
                 <small className="font-mono text-[.68rem] leading-normal uppercase tracking-[.1em] text-overlay-text/60">{activeItem.type === "image" ? "Image" : activeItem.provider}</small>
                 <h2 className="mt-1 truncate text-base leading-none tracking-[-.02em] text-overlay-text font-[550]" id={titleId}>{activeItem.title}</h2>
               </div>
-              <button type="button" className={viewerControlClass} onClick={() => setActiveIndex(null)} aria-label="Close media viewer">×</button>
+              <button type="button" className={cn(
+                "pointer-events-auto grid size-11 cursor-pointer place-items-center rounded-control border-0",
+                "bg-background/88 text-foreground shadow-viewer-control",
+                "motion-safe:transition-transform motion-safe:duration-250 motion-safe:ease-spring motion-safe:hover:scale-105",
+              )} onClick={() => setActiveIndex(null)} aria-label="Close media viewer">
+                <XIcon size={20} weight="bold" />
+              </button>
             </header>
             <div className="absolute inset-0 grid place-items-center px-12 pt-20 pb-16">
               {activeItem.type === "image" ? (
                 <img className="block size-full min-h-0 min-w-0 object-contain motion-safe:animate-slide-in" key={activeIndex} src={activeItem.src} alt={activeItem.alt} />
               ) : (
-                <div className={`overflow-hidden bg-overlay-solid shadow-viewer motion-safe:animate-slide-in ${activeItem.provider === "spotify" ? "h-[min(352px,60dvh)] w-[min(42rem,94vw)] rounded-xl" : "aspect-video w-[min(94vw,1150px)]"}`}>
+                <div className={cn(
+                  "overflow-hidden bg-overlay-solid shadow-viewer motion-safe:animate-slide-in",
+                  activeItem.provider === "spotify"
+                    ? "h-[min(352px,60dvh)] w-[min(42rem,94vw)] rounded-xl"
+                    : "aspect-video w-[min(94vw,1150px)]",
+                )}>
                   <iframe
                     className="block size-full border-0"
                     key={activeIndex}
@@ -169,8 +214,20 @@ export default function MediaCollection({ cover, coverTitle, embeds = [], images
             </div>
             {items.length > 1 ? (
               <nav className="pointer-events-none absolute inset-x-4 top-1/2 z-2 flex -translate-y-1/2 justify-between" aria-label="Media navigation">
-                <button className={viewerControlClass} type="button" onClick={() => setActiveIndex((index) => index === null ? null : (index - 1 + items.length) % items.length)} aria-label="Previous media">←</button>
-                <button className={viewerControlClass} type="button" onClick={() => setActiveIndex((index) => index === null ? null : (index + 1) % items.length)} aria-label="Next media">→</button>
+                <button className={cn(
+                  "pointer-events-auto grid size-11 cursor-pointer place-items-center rounded-control border-0",
+                  "bg-background/88 text-foreground shadow-viewer-control",
+                  "motion-safe:transition-transform motion-safe:duration-250 motion-safe:ease-spring motion-safe:hover:scale-105",
+                )} type="button" onClick={() => setActiveIndex((index) => index === null ? null : (index - 1 + items.length) % items.length)} aria-label="Previous media">
+                  <ArrowLeftIcon size={20} weight="bold" />
+                </button>
+                <button className={cn(
+                  "pointer-events-auto grid size-11 cursor-pointer place-items-center rounded-control border-0",
+                  "bg-background/88 text-foreground shadow-viewer-control",
+                  "motion-safe:transition-transform motion-safe:duration-250 motion-safe:ease-spring motion-safe:hover:scale-105",
+                )} type="button" onClick={() => setActiveIndex((index) => index === null ? null : (index + 1) % items.length)} aria-label="Next media">
+                  <ArrowRightIcon size={20} weight="bold" />
+                </button>
               </nav>
             ) : null}
           </div>

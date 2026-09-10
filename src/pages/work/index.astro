@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import ProjectFilter from "../../components/ProjectFilter.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
+import { cn } from "../../lib/cn";
 import { sortProjects } from "../../lib/project-order";
 const projects = (await getCollection("projects"))
   .filter(({ data }) => data.published && !data.experiment);
@@ -10,21 +11,33 @@ const orderedProjects = sortProjects(projects);
 
 <SiteLayout title="Work | Oguz Kabasakal">
   <section
-    class="mx-auto w-[min(1400px,calc(100%-2rem))] py-10 max-[767px]:w-full max-[767px]:px-6 md:py-16 xl:w-[min(1600px,calc(100%-6rem))] 2xl:w-[min(1680px,calc(100%-10rem))]"
+    class={cn(
+      "mx-auto w-[min(1400px,calc(100%-2rem))] py-10 md:py-16",
+      "max-[767px]:w-full max-[767px]:px-6",
+      "xl:w-[min(1600px,calc(100%-6rem))] 2xl:w-[min(1680px,calc(100%-10rem))]",
+    )}
   >
-    <h1
-      class="max-w-[65rem] text-[clamp(2.75rem,6vw,5.8rem)] font-[550] leading-[1.05] tracking-[-.06em] text-balance"
-    >
+    <h1 class={cn(
+      "max-w-[65rem] text-[clamp(2.75rem,6vw,5.8rem)]",
+      "font-[550] leading-[1.05] tracking-[-.06em] text-balance",
+    )}>
       Built from<br class="hidden max-[767px]:block" />{" "}<span class="text-primary"
         >both sides</span
       > of the screen.
     </h1>
-    <p class="mt-5 max-w-[38rem] text-base leading-7 text-pretty text-muted-foreground">
+    <p class={cn(
+      "mt-5 max-w-[38rem] text-base leading-7",
+      "text-pretty text-muted-foreground",
+    )}>
       Projects from over a decade of building, designing and experience.
     </p>
   </section>
   <section
-    class="mx-auto w-[min(1400px,calc(100%-2rem))] pb-28 max-[767px]:w-full max-[767px]:px-6 xl:w-[min(1600px,calc(100%-6rem))] 2xl:w-[min(1680px,calc(100%-10rem))]"
+    class={cn(
+      "mx-auto w-[min(1400px,calc(100%-2rem))] pb-28",
+      "max-[767px]:w-full max-[767px]:px-6",
+      "xl:w-[min(1600px,calc(100%-6rem))] 2xl:w-[min(1680px,calc(100%-10rem))]",
+    )}
   >
     <ProjectFilter projects={orderedProjects} />
   </section>

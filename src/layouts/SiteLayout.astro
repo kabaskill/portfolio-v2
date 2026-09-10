@@ -1,8 +1,10 @@
 ---
 import "../styles/global.css";
+import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
 import SiteHeader from "../components/SiteHeader.astro";
 import PageHead from "../components/PageHead.astro";
 import { ClientRouter } from "astro:transitions";
+import { cn } from "../lib/cn";
 
 interface Props {
   title?: string;
@@ -26,7 +28,10 @@ const {
   </head>
   <body>
     <a
-      class="fixed top-0 left-4 z-50 -translate-y-16 rounded-md bg-primary px-4 py-3 text-sm font-semibold text-white transition-transform focus:translate-y-4"
+      class={cn(
+        "fixed top-0 left-4 z-50 -translate-y-16 rounded-md bg-primary",
+        "px-4 py-3 text-sm font-semibold text-white transition-transform focus:translate-y-4",
+      )}
       href="#main-content">Skip to content</a
     >
     <SiteHeader />
@@ -34,21 +39,25 @@ const {
       <slot />
     </main>
     <footer
-      class="mx-auto flex w-[min(1400px,calc(100%-2rem))] justify-between gap-8 border-t border-border py-8 text-sm text-muted-foreground max-[767px]:w-full max-[767px]:flex-col max-[767px]:gap-4 max-[767px]:px-6"
+      class={cn(
+        "mx-auto flex w-[min(1400px,calc(100%-2rem))] justify-between gap-8",
+        "border-t border-border py-8 text-sm text-muted-foreground",
+        "max-[767px]:w-full max-[767px]:flex-col max-[767px]:gap-4 max-[767px]:px-6",
+      )}
     >
       <span>© {new Date().getFullYear()} Oguz Kabasakal</span>
       <div class="flex gap-4">
         <a
-          class="text-primary transition-colors hover:text-foreground"
+          class="inline-flex items-center gap-1 text-primary transition-colors hover:text-foreground"
           href="https://github.com/kabaskill"
           target="_blank"
-          rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a
+          rel="noreferrer">GitHub <ArrowUpRightIcon size={14} weight="bold" aria-hidden="true" /></a
         >
         <a
-          class="text-primary transition-colors hover:text-foreground"
+          class="inline-flex items-center gap-1 text-primary transition-colors hover:text-foreground"
           href="https://linkedin.com/in/oguzkabasakal"
           target="_blank"
-          rel="noreferrer">LinkedIn <span aria-hidden="true">↗</span></a
+          rel="noreferrer">LinkedIn <ArrowUpRightIcon size={14} weight="bold" aria-hidden="true" /></a
         >
       </div>
     </footer>

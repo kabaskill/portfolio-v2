@@ -1,5 +1,6 @@
 ---
 import ProjectCard from "./ProjectCard.astro";
+import { cn } from "../lib/cn";
 import { projectCategories } from "../lib/project-taxonomy";
 
 interface Project {
@@ -22,14 +23,6 @@ interface Props {
 
 const { projects } = Astro.props;
 const filters = [{ value: "all", label: "All work" }, ...projectCategories];
-const spans = [
-  "md:col-span-7 xl:col-span-4 xl:pt-0",
-  "md:col-span-5 md:pt-20 xl:col-span-4 xl:pt-12",
-  "md:col-span-5 xl:col-span-4 xl:pt-0",
-  "md:col-span-7 md:pt-12 xl:col-span-4 xl:pt-12",
-  "md:col-span-7 xl:col-span-4 xl:pt-0",
-  "md:col-span-5 md:pt-20 xl:col-span-4 xl:pt-12",
-];
 ---
 
 <div data-project-filter>
@@ -41,7 +34,11 @@ const spans = [
     {
       filters.map(({ value, label }, index) => (
         <button
-          class="min-h-11 rounded-full px-3.5 py-2.5 text-sm text-muted-foreground transition duration-200 hover:bg-card active:scale-95 aria-pressed:bg-primary aria-pressed:text-primary-foreground"
+          class={cn(
+            "min-h-11 rounded-full px-3.5 py-2.5 text-sm text-muted-foreground",
+            "transition duration-200 hover:bg-card active:scale-95",
+            "aria-pressed:bg-primary aria-pressed:text-primary-foreground",
+          )}
           type="button"
           data-filter={value}
           aria-pressed={index === 0}
@@ -55,7 +52,13 @@ const spans = [
     {
       projects.map((project, index) => (
         <div
-          class={spans[index % spans.length]}
+          class={cn(
+            [0, 3, 4].includes(index % 6) ? "md:col-span-7" : "md:col-span-5",
+            [1, 5].includes(index % 6) && "md:pt-20",
+            index % 6 === 3 && "md:pt-12",
+            "xl:col-span-4",
+            index % 2 === 0 ? "xl:pt-0" : "xl:pt-12",
+          )}
           data-reveal
           data-project-item
           data-project-index={index}
@@ -68,7 +71,11 @@ const spans = [
   </div>
   <div class="flex justify-center" data-load-more-wrap>
     <button
-      class="mt-14 inline-flex min-h-13 items-center justify-center gap-4 rounded-full border border-border bg-transparent px-6 py-3.5 text-sm font-semibold text-foreground transition duration-200 hover:border-foreground hover:bg-foreground hover:text-background"
+      class={cn(
+        "mt-14 inline-flex min-h-13 items-center justify-center gap-4 rounded-full border border-border",
+        "bg-transparent px-6 py-3.5 text-sm font-semibold text-foreground",
+        "transition duration-200 hover:border-foreground hover:bg-foreground hover:text-background",
+      )}
       type="button"
       data-load-more>Load more work</button
     >

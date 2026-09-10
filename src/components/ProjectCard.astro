@@ -1,10 +1,11 @@
 ---
 import { Image } from "astro:assets";
+import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
+import { cn } from "../lib/cn";
 import { getProjectImage } from "../lib/project-images";
 import { getProjectCategoryLabel, getProjectPath } from "../lib/project-taxonomy";
 
 interface Props {
-  layoutClass?: string;
   project: {
     data: {
       title: string;
@@ -19,20 +20,23 @@ interface Props {
   };
 }
 
-const { project, layoutClass = "" } = Astro.props;
+const { project } = Astro.props;
 const { data } = project;
 const cover = getProjectImage(data.cover);
 const href = getProjectPath(data);
 const label = `${data.experiment ? "Experiment · " : ""}${getProjectCategoryLabel(data.category)}`;
 ---
 
-<a class:list={["group block", layoutClass]} data-reveal href={href}>
+<a class={cn("group block")} data-reveal href={href}>
   <div
     class="relative aspect-[4/3] overflow-hidden rounded-xl bg-card"
     transition:name={`project-${data.slug}`}
   >
     <Image
-      class="block size-full object-contain transition-transform duration-[600ms] ease-out motion-safe:group-hover:scale-[1.04]"
+      class={cn(
+        "block size-full object-contain transition-transform duration-[600ms] ease-out",
+        "motion-safe:group-hover:scale-[1.04]",
+      )}
       src={cover}
       alt={data.alt}
       loading="lazy"
@@ -46,7 +50,10 @@ const label = `${data.experiment ? "Experiment · " : ""}${getProjectCategoryLab
         {label}{data.year ? ` / ${data.year}` : ""}
       </p>
       <h3
-        class="m-0 text-2xl font-semibold tracking-tight transition-colors duration-200 group-hover:text-primary sm:text-3xl"
+        class={cn(
+          "m-0 text-2xl font-semibold tracking-tight transition-colors duration-200",
+          "group-hover:text-primary sm:text-3xl",
+        )}
       >
         {data.title}
       </h3>
@@ -55,8 +62,13 @@ const label = `${data.experiment ? "Experiment · " : ""}${getProjectCategoryLab
       </p>
     </div>
     <span
-      class="mt-1 hidden size-11 place-items-center rounded-full border border-border text-foreground transition duration-300 ease-out sm:grid motion-safe:group-hover:rotate-45 motion-safe:group-hover:border-primary motion-safe:group-hover:bg-primary motion-safe:group-hover:text-primary-foreground"
-      aria-hidden="true">↗</span
+      class={cn(
+        "mt-1 hidden size-11 place-items-center rounded-full border border-border text-foreground",
+        "transition duration-300 ease-out sm:grid",
+        "motion-safe:group-hover:rotate-45 motion-safe:group-hover:border-primary",
+        "motion-safe:group-hover:bg-primary motion-safe:group-hover:text-primary-foreground",
+      )}
+      aria-hidden="true"><ArrowUpRightIcon size={20} weight="bold" /></span
     >
   </div>
 </a>

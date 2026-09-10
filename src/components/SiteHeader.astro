@@ -1,53 +1,121 @@
 ---
+import {
+  ArrowUpRightIcon,
+  ListIcon,
+  MoonIcon,
+  SunIcon,
+  XIcon,
+} from "@phosphor-icons/react/dist/ssr";
+import { cn } from "../lib/cn";
+
 const navigation = [
   { label: "Work", href: "/work" },
   { label: "Experiments", href: "/experiments" },
   { label: "Journal", href: "/journal" },
 ];
 const activeIndex = navigation.findIndex(({ href }) => Astro.url.pathname.startsWith(href));
-const controlClass = "group size-[46px] shrink-0 place-items-center rounded-full border border-border bg-background p-0 text-foreground cursor-pointer hover:border-primary hover:text-primary motion-safe:active:scale-[.96] max-[480px]:size-11";
-const mobileLinkClass = "flex min-h-16 items-center justify-between gap-4 px-4 py-[.65rem] text-[clamp(1.65rem,5vw,2.5rem)] leading-[1.1] font-[550] tracking-[-.05em] hover:bg-background hover:text-primary focus-visible:bg-background focus-visible:text-primary aria-[current=page]:bg-background aria-[current=page]:text-primary";
 ---
 
-<header class="relative z-3 mx-auto mt-4 grid min-h-20 w-[min(1400px,calc(100%-2rem))] grid-cols-[minmax(0,1fr)_auto] items-center gap-4 rounded-xl border border-border bg-card py-3 pr-4 pl-5 lg:grid-cols-[1fr_auto_1fr] lg:gap-6 max-[480px]:min-h-18 max-[480px]:gap-2 max-[480px]:p-[.65rem]" data-site-header>
-  <a class="relative w-fit justify-self-start py-2 text-[1.2rem] leading-[1.1] font-[650] tracking-[-.065em] after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:origin-left after:scale-x-0 after:bg-primary hover:after:scale-x-100 focus-visible:after:scale-x-100 motion-safe:after:transition-transform motion-safe:after:duration-400 motion-safe:after:ease-spring max-[480px]:max-w-32 max-[480px]:text-[1.1rem]" href="/">Oguz Kabasakal</a>
+<header class={cn(
+  "relative z-3 mx-auto mt-4 grid min-h-20 w-[min(1400px,calc(100%-2rem))]",
+  "grid-cols-[minmax(0,1fr)_auto] items-center gap-4 rounded-xl border border-border bg-card py-3 pr-4 pl-5",
+  "lg:grid-cols-[1fr_auto_1fr] lg:gap-6 max-[480px]:min-h-18 max-[480px]:gap-2 max-[480px]:p-[.65rem]",
+)} data-site-header>
+  <a class={cn(
+    "relative w-fit justify-self-start py-2 text-[1.2rem] leading-[1.1] font-[650] tracking-[-.065em]",
+    "after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:origin-left after:scale-x-0 after:bg-primary",
+    "hover:after:scale-x-100 focus-visible:after:scale-x-100 motion-safe:after:transition-transform",
+    "motion-safe:after:duration-400 motion-safe:after:ease-spring max-[480px]:max-w-32 max-[480px]:text-[1.1rem]",
+  )} href="/">Oguz Kabasakal</a>
   <nav
-    data-site-nav class="group/nav relative isolate hidden w-[350px] grid-cols-3 rounded-full border border-border bg-background p-1 lg:grid"
+    data-site-nav class={cn(
+      "group/nav relative isolate hidden w-[350px] grid-cols-3 rounded-full",
+      "border border-border bg-background p-1 lg:grid",
+    )}
     aria-label="Primary navigation"
     data-active-index={activeIndex}
     data-highlight={activeIndex >= 0}
     style={`--nav-index: ${Math.max(0, activeIndex)}`}
   >
-    <span class="pointer-events-none absolute inset-y-1 left-1 z-0 w-[calc((100%-8px)/3)] translate-x-[calc(var(--nav-index,0)*100%)] rounded-full bg-card opacity-0 inset-ring-1 inset-ring-border group-data-[highlight=true]/nav:opacity-100 motion-safe:transition-[translate,opacity] motion-safe:duration-[450ms,200ms] motion-safe:ease-nav" aria-hidden="true"></span>
+    <span class={cn(
+      "pointer-events-none absolute inset-y-1 left-1 z-0 w-[calc((100%-8px)/3)]",
+      "translate-x-[calc(var(--nav-index,0)*100%)] rounded-full bg-card opacity-0 inset-ring-1 inset-ring-border",
+      "group-data-[highlight=true]/nav:opacity-100 motion-safe:transition-[translate,opacity]",
+      "motion-safe:duration-[450ms,200ms] motion-safe:ease-nav",
+    )} aria-hidden="true"></span>
     {navigation.map(({ label, href }, index) => (
-      <a class="group/link relative z-1 grid min-h-[42px] place-items-center rounded-full px-[.8rem] text-sm leading-normal font-[550] text-muted-foreground hover:text-primary focus-visible:text-primary aria-[current=page]:text-primary" href={href} aria-current={index === activeIndex ? "page" : undefined}>
+      <a class={cn(
+        "group/link relative z-1 grid min-h-[42px] place-items-center rounded-full px-[.8rem]",
+        "text-sm leading-normal font-[550] text-muted-foreground hover:text-primary",
+        "focus-visible:text-primary aria-[current=page]:text-primary",
+      )} href={href} aria-current={index === activeIndex ? "page" : undefined}>
         <span class="relative block h-[1.4em] overflow-hidden leading-[1.4]">
-          <span class="block motion-safe:transition-transform motion-safe:duration-400 motion-safe:ease-spring motion-safe:group-hover/link:-translate-y-full motion-safe:group-focus-visible/link:-translate-y-full">{label}</span>
-          <span class="absolute top-full left-0 block motion-safe:transition-transform motion-safe:duration-400 motion-safe:ease-spring motion-safe:group-hover/link:-translate-y-full motion-safe:group-focus-visible/link:-translate-y-full" aria-hidden="true">{label}</span>
+          <span class={cn(
+            "block motion-safe:transition-transform motion-safe:duration-400 motion-safe:ease-spring",
+            "motion-safe:group-hover/link:-translate-y-full motion-safe:group-focus-visible/link:-translate-y-full",
+          )}>{label}</span>
+          <span class={cn(
+            "absolute top-full left-0 block motion-safe:transition-transform motion-safe:duration-400 motion-safe:ease-spring",
+            "motion-safe:group-hover/link:-translate-y-full motion-safe:group-focus-visible/link:-translate-y-full",
+          )} aria-hidden="true">{label}</span>
         </span>
       </a>
     ))}
   </nav>
   <div class="flex items-center justify-self-end gap-[.6rem] max-[480px]:gap-[.35rem]">
-    <a class="group/contact inline-flex min-h-[46px] items-center justify-between gap-[1.35rem] rounded-full border border-transparent bg-primary p-[5px] pl-[1.1rem] text-sm leading-normal font-semibold text-primary-foreground motion-safe:transition-transform motion-safe:duration-400 motion-safe:ease-spring motion-safe:hover:-translate-y-0.5 motion-safe:active:scale-[.96] max-[480px]:min-h-11 max-[480px]:gap-0 max-[480px]:p-1" href="mailto:oguzkabasakal@gmail.com" aria-label="Contact">
+    <a class={cn(
+      "group/contact inline-flex min-h-[46px] items-center justify-between gap-[1.35rem] rounded-full",
+      "border border-transparent bg-primary p-[5px] pl-[1.1rem] text-sm leading-normal font-semibold text-primary-foreground",
+      "motion-safe:transition-transform motion-safe:duration-400 motion-safe:ease-spring",
+      "motion-safe:hover:-translate-y-0.5 motion-safe:active:scale-[.96]",
+      "max-[480px]:min-h-11 max-[480px]:gap-0 max-[480px]:p-1",
+    )} href="mailto:oguzkabasakal@gmail.com" aria-label="Contact">
       <span class="max-[480px]:hidden">Contact</span>
-      <span class="grid size-[34px] place-items-center rounded-full bg-primary-foreground text-[1.2rem] text-primary motion-safe:transition-transform motion-safe:duration-400 motion-safe:ease-spring motion-safe:group-hover/contact:rotate-45" aria-hidden="true">↗</span>
+      <span class={cn(
+        "grid size-[34px] place-items-center rounded-full bg-primary-foreground text-primary",
+        "motion-safe:transition-transform motion-safe:duration-400 motion-safe:ease-spring",
+        "motion-safe:group-hover/contact:rotate-45",
+      )} aria-hidden="true">
+        <ArrowUpRightIcon size={18} weight="bold" />
+      </span>
     </a>
-    <button data-theme-toggle class:list={[controlClass, "grid"]} type="button" aria-label="Switch to dark theme" aria-pressed="false">
-      <span class="block size-[18px] -rotate-35 rounded-full border-[1.5px] border-current bg-[linear-gradient(90deg,currentColor_50%,transparent_50%)] group-aria-pressed:rotate-145 motion-safe:transition-transform motion-safe:duration-400 motion-safe:ease-spring" aria-hidden="true"></span>
+    <button data-theme-toggle class={cn(
+      "group grid size-[46px] shrink-0 place-items-center rounded-full border border-border",
+      "cursor-pointer bg-background p-0 text-foreground hover:border-primary hover:text-primary",
+      "motion-safe:active:scale-[.96] max-[480px]:size-11",
+    )} type="button" aria-label="Switch to dark theme" aria-pressed="false">
+      <MoonIcon className="block dark:hidden" size={20} weight="bold" aria-hidden="true" />
+      <SunIcon className="hidden dark:block" size={20} weight="bold" aria-hidden="true" />
     </button>
-    <button data-menu-toggle class:list={[controlClass, "grid lg:hidden"]} type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-navigation">
-      <span class="relative h-3 w-[18px] before:absolute before:top-0.5 before:left-0 before:h-[1.5px] before:w-[18px] before:bg-current after:absolute after:top-[9px] after:left-0 after:h-[1.5px] after:w-[18px] after:bg-current group-aria-expanded:before:translate-y-[3.5px] group-aria-expanded:before:rotate-45 group-aria-expanded:after:-translate-y-[3.5px] group-aria-expanded:after:-rotate-45 motion-safe:before:transition-transform motion-safe:before:duration-400 motion-safe:before:ease-spring motion-safe:after:transition-transform motion-safe:after:duration-400 motion-safe:after:ease-spring" aria-hidden="true"></span>
+    <button data-menu-toggle class={cn(
+      "group grid size-[46px] shrink-0 place-items-center rounded-full border border-border",
+      "cursor-pointer bg-background p-0 text-foreground hover:border-primary hover:text-primary",
+      "motion-safe:active:scale-[.96] max-[480px]:size-11 lg:hidden",
+    )} type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-navigation">
+      <ListIcon className="block group-aria-expanded:hidden" size={22} weight="bold" aria-hidden="true" />
+      <XIcon className="hidden group-aria-expanded:block" size={22} weight="bold" aria-hidden="true" />
     </button>
   </div>
-  <nav id="mobile-navigation" data-mobile-nav class="absolute inset-x-[-1px] top-[calc(100%+.5rem)] grid gap-1 rounded-xl border border-border bg-card p-4 shadow-nav lg:hidden" aria-label="Mobile navigation" hidden>
+  <nav id="mobile-navigation" data-mobile-nav class={cn(
+    "absolute inset-x-[-1px] top-[calc(100%+.5rem)] grid gap-1 rounded-xl",
+    "border border-border bg-card p-4 shadow-nav lg:hidden",
+  )} aria-label="Mobile navigation" hidden>
     {navigation.map(({ label, href }, index) => (
-      <a class:list={[mobileLinkClass, "rounded-lg"]} href={href} aria-current={index === activeIndex ? "page" : undefined} style={`--link-index: ${index}`}>
-        <span>{label}</span><span class="text-primary" aria-hidden="true">↗</span>
+      <a class={cn(
+        "flex min-h-16 items-center justify-between gap-4 rounded-lg px-4 py-[.65rem]",
+        "text-[clamp(1.65rem,5vw,2.5rem)] leading-[1.1] font-[550] tracking-[-.05em]",
+        "hover:bg-background hover:text-primary focus-visible:bg-background focus-visible:text-primary",
+        "aria-[current=page]:bg-background aria-[current=page]:text-primary",
+      )} href={href} aria-current={index === activeIndex ? "page" : undefined} style={`--link-index: ${index}`}>
+        <span>{label}</span><ArrowUpRightIcon className="text-primary" size={24} weight="bold" aria-hidden="true" />
       </a>
     ))}
-    <a class:list={[mobileLinkClass, "mt-2 rounded-none border-t border-border text-primary"]} href="mailto:oguzkabasakal@gmail.com" style="--link-index: 3">
-      <span>Contact</span><span class="text-primary" aria-hidden="true">↗</span>
+    <a class={cn(
+      "mt-2 flex min-h-16 items-center justify-between gap-4 rounded-none border-t border-border px-4 py-[.65rem]",
+      "text-[clamp(1.65rem,5vw,2.5rem)] leading-[1.1] font-[550] tracking-[-.05em] text-primary",
+      "hover:bg-background focus-visible:bg-background",
+    )} href="mailto:oguzkabasakal@gmail.com" style="--link-index: 3">
+      <span>Contact</span><ArrowUpRightIcon size={24} weight="bold" aria-hidden="true" />
     </a>
   </nav>
 </header>

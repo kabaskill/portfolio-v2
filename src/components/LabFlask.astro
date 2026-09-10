@@ -1,5 +1,12 @@
+---
+import { cn } from "../lib/cn";
+---
+
 <div
-  class="relative aspect-square w-[min(78vw,19rem)] justify-self-center md:w-full md:max-w-[48rem] md:justify-self-end"
+  class={cn(
+    "relative aspect-square w-[min(78vw,19rem)] justify-self-center",
+    "md:w-full md:max-w-[48rem] md:justify-self-end",
+  )}
   data-lab-flask
   aria-hidden="true"
 >

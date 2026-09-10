@@ -1,8 +1,10 @@
 ---
 import { getImage } from "astro:assets";
 import { getCollection, render } from "astro:content";
+import { ArrowLeftIcon, ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
 import MediaCollection from "../../components/react/MediaCollection";
 import SiteLayout from "../../layouts/SiteLayout.astro";
+import { cn } from "../../lib/cn";
 import { getProjectImage } from "../../lib/project-images";
 import { getProjectCategoryLabel } from "../../lib/project-taxonomy";
 
@@ -32,23 +34,34 @@ const coverFull = await getImage({
 
 <SiteLayout title={`${project.data.title} | Oguz Kabasakal`} description={project.data.summary} image={coverFull.src} imageAlt={project.data.alt}>
   <article
-    class="mx-auto w-[min(1400px,calc(100%-2rem))] py-8 pb-20 max-[767px]:w-full max-[767px]:px-6 md:py-12 lg:pb-28"
+    class={cn(
+      "mx-auto w-[min(1400px,calc(100%-2rem))] py-8 pb-20 md:py-12 lg:pb-28",
+      "max-[767px]:w-full max-[767px]:px-6",
+    )}
   >
     <a
-      class="inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-4 py-2 text-sm text-foreground transition-colors hover:border-foreground hover:bg-foreground hover:text-background"
-      href="/experiments"><span aria-hidden="true">←</span> <span>All experiments</span></a
+      class={cn(
+        "inline-flex min-h-11 items-center gap-2 rounded-full border border-border",
+        "px-4 py-2 text-sm text-foreground transition-colors",
+        "hover:border-foreground hover:bg-foreground hover:text-background",
+      )}
+      href="/experiments"><ArrowLeftIcon size={17} weight="bold" aria-hidden="true" /> <span>All experiments</span></a
     >
     <div
-      class="mt-10 grid items-start gap-14 max-[767px]:gap-0 lg:mt-14 lg:grid-cols-[minmax(0,1.85fr)_minmax(19rem,1fr)] lg:gap-12 xl:gap-20"
+      class={cn(
+        "mt-10 grid items-start gap-14 max-[767px]:gap-0",
+        "lg:mt-14 lg:grid-cols-[minmax(0,1.85fr)_minmax(19rem,1fr)] lg:gap-12 xl:gap-20",
+      )}
     >
       <div class="min-w-0">
         <header>
           <p class="font-mono text-xs text-primary">
             Experiment · {getProjectCategoryLabel(project.data.category)}
           </p>
-          <h1
-            class="mt-4 max-w-[13ch] text-[clamp(2.75rem,6.2vw,5.6rem)] font-[560] leading-[.96] tracking-[-.065em] text-balance"
-          >
+          <h1 class={cn(
+            "mt-4 max-w-[13ch] text-[clamp(2.75rem,6.2vw,5.6rem)]",
+            "font-[560] leading-[.96] tracking-[-.065em] text-balance",
+          )}>
             {project.data.title}
           </h1>
           <p class="mt-7 max-w-[58ch] text-lg leading-8 text-pretty text-muted-foreground">
@@ -107,12 +120,16 @@ const coverFull = await getImage({
               </h2>
               {project.data.links.map((link) => (
                 <a
-                  class="inline-flex min-h-12 items-center justify-between gap-3 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+                  class={cn(
+                    "inline-flex min-h-12 items-center justify-between gap-3 rounded-xl bg-primary",
+                    "px-4 py-3 text-sm font-semibold text-primary-foreground shadow-sm",
+                    "transition duration-200 hover:-translate-y-0.5 hover:shadow-lg",
+                  )}
                   href={link.url}
                   target={link.url.startsWith("http") ? "_blank" : undefined}
                   rel={link.url.startsWith("http") ? "noreferrer" : undefined}
                 >
-                  {link.label} <span aria-hidden="true">↗</span>
+                  {link.label} <ArrowUpRightIcon size={18} weight="bold" aria-hidden="true" />
                 </a>
               ))}
             </section>

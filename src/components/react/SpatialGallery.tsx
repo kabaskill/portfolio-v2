@@ -1,8 +1,16 @@
 import { Image as DreiImage, Grid, OrbitControls, useCursor } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  ArrowUpRightIcon,
+  MoonIcon,
+  SunIcon,
+} from "@phosphor-icons/react";
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
+import { cn } from "../../lib/cn";
 import {
   getProjectCategoryLabel,
   projectCategories,
@@ -23,11 +31,6 @@ const categories: Array<{ label: string; value: ProjectCategory }> = [
   // { label: "All projects", value: "all" },
   ...projectCategories,
 ];
-
-const glassClass = "border border-border bg-background/90 backdrop-blur-md reduced-transparency:bg-background reduced-transparency:backdrop-blur-none";
-const arrowClass = `${glassClass} pointer-events-auto size-[2.6rem] cursor-pointer rounded-control text-[1.3rem]`;
-const infoHeadingClass = "mt-1 mb-[.45rem] text-[1.45rem] leading-none font-[550] tracking-[-.065em] text-foreground";
-const infoCopyClass = "m-0 text-[.85rem] leading-normal text-muted-foreground";
 
 export default function SpatialGallery({ projects }: { projects: Project[] }) {
   const [category, setCategory] = useState<ProjectCategory>("development-design");
@@ -78,7 +81,10 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
   }
 
   return (
-    <main className="relative h-dvh min-h-dvh w-full overflow-hidden rounded-none bg-background text-foreground [&_canvas]:absolute [&_canvas]:inset-0 [&_canvas]:size-full" aria-label="Interactive spatial portfolio gallery">
+    <main className={cn(
+      "relative h-dvh min-h-dvh w-full overflow-hidden rounded-none bg-background text-foreground",
+      "[&_canvas]:absolute [&_canvas]:inset-0 [&_canvas]:size-full",
+    )} aria-label="Interactive spatial portfolio gallery">
       <Canvas
         fallback={<p className="p-6 pt-28">WebGL is unavailable. <a className="underline" href="/work/">Browse the project list instead.</a></p>}
         aria-label="Interactive spatial portfolio gallery"
@@ -116,16 +122,29 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
       {!galleryReady ? <GalleryLoadingState /> : null}
 
       <div className="pointer-events-none absolute inset-0 z-2 grid grid-cols-[1fr_auto_1fr] items-start p-6">
-        <a className={`${glassClass} pointer-events-auto w-fit rounded-control px-[.8rem] py-[.65rem] text-sm leading-normal font-[650] hover:text-primary`} href="/">
-          ← <span className="hidden md:inline-block">Portfolio</span>
+        <a className={cn(
+          "pointer-events-auto inline-flex w-fit items-center gap-2 rounded-control border border-border",
+          "bg-background/90 px-[.8rem] py-[.65rem] text-sm leading-normal font-[650] backdrop-blur-md hover:text-primary",
+          "reduced-transparency:bg-background reduced-transparency:backdrop-blur-none",
+        )} href="/">
+          <ArrowLeftIcon size={17} weight="bold" aria-hidden="true" /> <span className="hidden md:inline-block">Portfolio</span>
         </a>
-        <nav className={`${glassClass} pointer-events-auto flex justify-self-center gap-[.2rem] rounded-control p-1`} aria-label="Gallery categories">
+        <nav className={cn(
+          "pointer-events-auto flex justify-self-center gap-[.2rem] rounded-control border border-border",
+          "bg-background/90 p-1 backdrop-blur-md",
+          "reduced-transparency:bg-background reduced-transparency:backdrop-blur-none",
+        )} aria-label="Gallery categories">
           {categories.map((item) => {
             const count = projects.filter((project) => project.category === item.value).length;
             return (
               <button
                 key={item.value}
-                className="cursor-pointer rounded-[.45rem] border-0 bg-transparent px-[.8rem] py-2 text-sm leading-normal font-semibold text-foreground hover:text-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground disabled:cursor-not-allowed disabled:opacity-35"
+                className={cn(
+                  "cursor-pointer rounded-[.45rem] border-0 bg-transparent px-[.8rem] py-2",
+                  "text-sm leading-normal font-semibold text-foreground hover:text-primary",
+                  "aria-pressed:bg-primary aria-pressed:text-primary-foreground",
+                  "disabled:cursor-not-allowed disabled:opacity-35",
+                )}
                 type="button"
                 disabled={count === 0}
                 aria-pressed={category === item.value}
@@ -143,7 +162,11 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
         </nav>
         <button
           type="button"
-          className={`${glassClass} pointer-events-auto grid size-11 cursor-pointer place-items-center justify-self-end rounded-full text-[1.1rem]`}
+          className={cn(
+            "pointer-events-auto grid size-11 cursor-pointer place-items-center justify-self-end rounded-full border border-border",
+            "bg-background/90 backdrop-blur-md",
+            "reduced-transparency:bg-background reduced-transparency:backdrop-blur-none",
+          )}
           aria-label="Toggle color theme"
           onClick={() => {
             const next = !isDark;
@@ -156,36 +179,51 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
             }
           }}
         >
-          {isDark ? "☀" : "☾"}
+          {isDark ? <SunIcon size={20} weight="bold" /> : <MoonIcon size={20} weight="bold" />}
         </button>
       </div>
 
       {selectedProject && visibleProjects.length > 1 ?
         <div className="pointer-events-none absolute inset-x-4 top-1/2 z-2 flex -translate-y-1/2 justify-between" aria-label="Focused project navigation">
-          <button className={arrowClass} type="button" aria-label="Next project" onClick={() => selectRelative(1)}>
-            ←
+          <button className={cn(
+            "pointer-events-auto grid size-[2.6rem] cursor-pointer place-items-center rounded-control border border-border",
+            "bg-background/90 backdrop-blur-md",
+            "reduced-transparency:bg-background reduced-transparency:backdrop-blur-none",
+          )} type="button" aria-label="Previous project" onClick={() => selectRelative(-1)}>
+            <ArrowLeftIcon size={20} weight="bold" />
           </button>
-          <button className={arrowClass} type="button" aria-label="Previous project" onClick={() => selectRelative(-1)}>
-            →
+          <button className={cn(
+            "pointer-events-auto grid size-[2.6rem] cursor-pointer place-items-center rounded-control border border-border",
+            "bg-background/90 backdrop-blur-md",
+            "reduced-transparency:bg-background reduced-transparency:backdrop-blur-none",
+          )} type="button" aria-label="Next project" onClick={() => selectRelative(1)}>
+            <ArrowRightIcon size={20} weight="bold" />
           </button>
         </div>
       : null}
 
-      <div className={`${glassClass} pointer-events-auto absolute bottom-6 left-6 z-2 w-[min(30rem,calc(100%-3rem))] rounded-xl p-5`}>
+      <div className={cn(
+        "pointer-events-auto absolute bottom-6 left-6 z-2 w-[min(30rem,calc(100%-3rem))] rounded-xl border border-border",
+        "bg-background/90 p-5 backdrop-blur-md",
+        "reduced-transparency:bg-background reduced-transparency:backdrop-blur-none",
+      )}>
         {selectedProject ?
           <>
             <p className="font-mono text-[.68rem] uppercase tracking-[.12em] text-primary">{projectLabel(selectedProject)}</p>
-            <h2 className={infoHeadingClass}>{selectedProject.title}</h2>
-            {/*<p className={infoCopyClass}>{selectedProject.summary}</p>*/}
+            <h2 className={cn("mt-1 mb-[.45rem] text-[1.45rem] leading-none font-[550] tracking-[-.065em] text-foreground")}>{selectedProject.title}</h2>
+            {/*<p className={cn("m-0 text-[.85rem] leading-normal text-muted-foreground")}>{selectedProject.summary}</p>*/}
             {selectedProject.link ?
-              <button className="mt-[.9rem] cursor-pointer rounded-[.4rem] border-0 bg-primary px-3 py-[.6rem] text-[.8rem] font-[650] text-primary-foreground" type="button" onClick={() => openProject(selectedProject)}>
-                Open project ↗
+              <button className={cn(
+                "mt-[.9rem] cursor-pointer rounded-[.4rem] border-0 bg-primary px-3 py-[.6rem]",
+                "text-[.8rem] font-[650] text-primary-foreground",
+              )} type="button" onClick={() => openProject(selectedProject)}>
+                Open project <ArrowUpRightIcon className="ml-1 inline-block align-[-.15em]" size={15} weight="bold" aria-hidden="true" />
               </button>
             : null}
           </>
         : <>
-            <h2 className={infoHeadingClass}>3D portfolio gallery</h2>
-            <p className={infoCopyClass}>
+            <h2 className={cn("mt-1 mb-[.45rem] text-[1.45rem] leading-none font-[550] tracking-[-.065em] text-foreground")}>3D portfolio gallery</h2>
+            <p className={cn("m-0 text-[.85rem] leading-normal text-muted-foreground")}>
               Drag to orbit. Select a frame to focus, select it again to open, or click outside to
               return.
             </p>
@@ -500,9 +538,4 @@ function GalleryFrame({
       </mesh>
     </group>
   );
-}
-
-function openProject(href: string) {
-  if (/^https?:\/\//.test(href)) window.open(href, "_blank", "noopener,noreferrer");
-  else window.location.assign(href);
 }
