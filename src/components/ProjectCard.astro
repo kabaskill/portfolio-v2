@@ -1,30 +1,18 @@
 ---
 import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
 import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
+import ProjectCategories from "./ProjectCategories.astro";
 import { cn } from "../lib/cn";
-import { getProjectImage } from "../lib/project-images";
-import { getProjectCategoryLabel, getProjectPath } from "../lib/project-taxonomy";
 
 interface Props {
-  project: {
-    data: {
-      title: string;
-      summary: string;
-      slug: string;
-      cover: string;
-      alt: string;
-      category: "development-design" | "sound-music";
-      experiment: boolean;
-      year: number | null;
-    };
-  };
+  project: CollectionEntry<"projects">;
 }
 
 const { project } = Astro.props;
 const { data } = project;
-const cover = getProjectImage(data.cover);
-const href = getProjectPath(data);
-const label = `${data.experiment ? "Experiment · " : ""}${getProjectCategoryLabel(data.category)}`;
+const href =
+  data.categories.includes("experiment") ? `/experiments/${data.slug}` : `/work/${data.slug}`;
 ---
 
 <a class={cn("group block")} data-reveal href={href}>
@@ -37,7 +25,7 @@ const label = `${data.experiment ? "Experiment · " : ""}${getProjectCategoryLab
         "block size-full object-contain transition-transform duration-[600ms] ease-out",
         "motion-safe:group-hover:scale-[1.04]",
       )}
-      src={cover}
+      src={data.cover}
       alt={data.alt}
       loading="lazy"
       widths={[320, 480, 640, 800, 1200]}
@@ -47,7 +35,7 @@ const label = `${data.experiment ? "Experiment · " : ""}${getProjectCategoryLab
   <div class="flex gap-4 pt-4 sm:grid sm:grid-cols-[1fr_auto] sm:items-start">
     <div>
       <p class="mb-2 font-mono text-xs text-primary">
-        {label}{data.year ? ` / ${data.year}` : ""}
+        <ProjectCategories categories={data.categories} />{data.year ? ` / ${data.year}` : ""}
       </p>
       <h3
         class={cn(

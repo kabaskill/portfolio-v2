@@ -3,10 +3,11 @@ import { getCollection } from "astro:content";
 import ProjectFilter from "../../components/ProjectFilter.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { cn } from "../../lib/cn";
-import { sortProjects } from "../../lib/project-order";
 const projects = (await getCollection("projects"))
-  .filter(({ data }) => data.published && !data.experiment);
-const orderedProjects = sortProjects(projects);
+  .filter(
+    ({ data }) =>
+      data.published && (!data.categories.includes("experiment") || data.showInWork),
+  );
 ---
 
 <SiteLayout title="Work | Oguz Kabasakal">
@@ -39,6 +40,6 @@ const orderedProjects = sortProjects(projects);
       "xl:w-[min(1600px,calc(100%-6rem))] 2xl:w-[min(1680px,calc(100%-10rem))]",
     )}
   >
-    <ProjectFilter projects={orderedProjects} />
+    <ProjectFilter projects={projects} />
   </section>
 </SiteLayout>

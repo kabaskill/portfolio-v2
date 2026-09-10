@@ -2,10 +2,10 @@
 title: "SAYA"
 summary: "A 360-degree audiovisual installation made for a second-semester Expanded Media project."
 slug: "saya"
-cover: "/images/saya.jpg"
+cover: "../../assets/images/saya.jpg"
 alt: "SAYA project artwork"
-category: "sound-music"
-experiment: false
+categories: ["development-design", "sound-music", "experiment"]
+showInWork: true
 tags: ["Sound design","Music production","Performance"]
 role: "Sound designer and musician"
 year: 2023

@@ -2,17 +2,16 @@
 title: "3D portfolio gallery"
 summary: "A navigable WebGL gallery that turns portfolio browsing into a spatial interface with audio-reactive details."
 slug: "3d-portfolio"
-cover: "/images/3d-portfolio.png"
+cover: "../../assets/images/3d-portfolio.png"
 alt: "Dark 3D portfolio gallery with project panels arranged around a player"
-category: "development-design"
-experiment: true
+categories: ["development-design", "experiment"]
 tags:
   - Three.js
   - React Three Fiber
   - WebGL
 year: 2026
 role: "Developer and designer"
-featured: false
+featured: true
 published: true
 links:
   - label: "Explore the gallery"

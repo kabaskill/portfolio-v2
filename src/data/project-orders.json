@@ -1,0 +1,134 @@
+[
+  {
+    "id": "featured",
+    "slugs": [
+      "droplet",
+      "3d-portfolio",
+      "sound-showreel",
+      "doner-html-transpiler"
+    ]
+  },
+  {
+    "id": "work-all",
+    "slugs": [
+      "unides-yawara",
+      "naviri",
+      "formenwerkstatt",
+      "metanoia",
+      "saya",
+      "con-b-podcast",
+      "benzersiz",
+      "caravan-travels-of-an-ancient-civilization",
+      "mevlana-s-744th-birthday",
+      "aksu-candy",
+      "human-unknown",
+      "philips-infomercials",
+      "blof",
+      "arpedduo",
+      "artern-lost-generation",
+      "an-ordinary-day",
+      "soul-of-the-light",
+      "gamble",
+      "zero",
+      "sound-redesigns",
+      "10th-village",
+      "odemis-yem-infomercial",
+      "klein-verhaal-over-een-muzikant"
+    ]
+  },
+  {
+    "id": "work-development-design",
+    "slugs": ["unides-yawara", "naviri", "formenwerkstatt", "metanoia", "saya"]
+  },
+  {
+    "id": "work-sound-music",
+    "slugs": [
+      "metanoia",
+      "saya",
+      "con-b-podcast",
+      "benzersiz",
+      "caravan-travels-of-an-ancient-civilization",
+      "mevlana-s-744th-birthday",
+      "aksu-candy",
+      "human-unknown",
+      "philips-infomercials",
+      "blof",
+      "arpedduo",
+      "artern-lost-generation",
+      "an-ordinary-day",
+      "soul-of-the-light",
+      "gamble",
+      "zero",
+      "sound-redesigns",
+      "10th-village",
+      "odemis-yem-infomercial",
+      "klein-verhaal-over-een-muzikant"
+    ]
+  },
+  {
+    "id": "work-experiment",
+    "slugs": ["metanoia", "saya"]
+  },
+  {
+    "id": "experiments-all",
+    "slugs": [
+      "metanoia",
+      "saya",
+      "sound-showreel",
+      "logo-design",
+      "tapari-spielwelt",
+      "personal-music-projects",
+      "blitz-cache",
+      "blitz-react",
+      "doner-html-transpiler",
+      "3d-portfolio",
+      "fugue-state",
+      "gamedalf",
+      "rubby-the-duck-tbd",
+      "unity-demos",
+      "p5-js-experiments"
+    ]
+  },
+  {
+    "id": "spatial-all",
+    "slugs": [
+      "unides-yawara",
+      "naviri",
+      "formenwerkstatt",
+      "sound-showreel",
+      "logo-design",
+      "tapari-spielwelt",
+      "con-b-podcast",
+      "benzersiz",
+      "caravan-travels-of-an-ancient-civilization",
+      "mevlana-s-744th-birthday",
+      "aksu-candy",
+      "human-unknown",
+      "philips-infomercials",
+      "blof",
+      "arpedduo",
+      "artern-lost-generation",
+      "an-ordinary-day",
+      "soul-of-the-light",
+      "gamble",
+      "zero",
+      "personal-music-projects",
+      "sound-redesigns",
+      "10th-village",
+      "odemis-yem-infomercial",
+      "klein-verhaal-over-een-muzikant",
+      "droplet",
+      "blitz-cache",
+      "blitz-react",
+      "doner-html-transpiler",
+      "3d-portfolio",
+      "fugue-state",
+      "gamedalf",
+      "metanoia",
+      "saya",
+      "rubby-the-duck-tbd",
+      "unity-demos",
+      "p5-js-experiments"
+    ]
+  }
+]

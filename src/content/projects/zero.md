@@ -2,10 +2,9 @@
 title: "Zero"
 summary: "Sound design for Zero, a short film about an apocalypse survivor."
 slug: "zero"
-cover: "/images/zero.jpg"
+cover: "../../assets/images/zero.jpg"
 alt: "Zero project artwork"
-category: "sound-music"
-experiment: false
+categories: ["sound-music"]
 tags: ["Sound design","Audio production"]
 year: 2014
 role: "Sound designer"

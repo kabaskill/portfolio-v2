@@ -1,31 +1,29 @@
 ---
 import ProjectCard from "./ProjectCard.astro";
 import { cn } from "../lib/cn";
-import { projectCategories } from "../lib/project-taxonomy";
-
-interface Project {
-  id: string;
-  data: {
-    title: string;
-    summary: string;
-    slug: string;
-    cover: string;
-    alt: string;
-    category: "development-design" | "sound-music";
-    experiment: boolean;
-    year: number | null;
-  };
-}
+import type { CollectionEntry } from "astro:content";
+import { sortProjects } from "../data/project-orders";
 
 interface Props {
-  projects: Project[];
+  projects: CollectionEntry<"projects">[];
 }
 
 const { projects } = Astro.props;
-const filters = [{ value: "all", label: "All work" }, ...projectCategories];
+const filters = [
+  { value: "all", label: "All work" },
+  { value: "development-design", label: "Development & Design" },
+  { value: "sound-music", label: "Sound & Music" },
+];
+const projectsByFilter = Object.fromEntries(
+  filters.map(({ value }) => [
+    value,
+    sortProjects(projects, `work-${value}`).map(({ data }) => data.slug),
+  ]),
+);
+const orderedProjects = sortProjects(projects, "work-all");
 ---
 
-<div data-project-filter>
+<div data-project-filter data-project-orders={JSON.stringify(projectsByFilter)}>
   <div
     class="flex flex-wrap gap-2 border-t border-border py-4"
     role="group"
@@ -50,7 +48,7 @@ const filters = [{ value: "all", label: "All work" }, ...projectCategories];
   </div>
   <div class="grid grid-cols-1 gap-x-6 gap-y-14 md:grid-cols-12 md:gap-y-20">
     {
-      projects.map((project, index) => (
+      orderedProjects.map((project, index) => (
         <div
           class={cn(
             [0, 3, 4].includes(index % 6) ? "md:col-span-7" : "md:col-span-5",
@@ -62,7 +60,8 @@ const filters = [{ value: "all", label: "All work" }, ...projectCategories];
           data-reveal
           data-project-item
           data-project-index={index}
-          data-category={project.data.category}
+          data-project-slug={project.data.slug}
+          data-categories={project.data.categories.join(" ")}
         >
           <ProjectCard project={project} />
         </div>
@@ -94,6 +93,11 @@ const filters = [{ value: "all", label: "All work" }, ...projectCategories];
       root.dataset.enhanced = "true";
       const buttons = [...root.querySelectorAll<HTMLButtonElement>("[data-filter]")];
       const items = [...root.querySelectorAll<HTMLElement>("[data-project-item]")];
+      const grid = root.querySelector<HTMLElement>("[data-project-item]")?.parentElement;
+      const projectsByFilter = JSON.parse(root.dataset.projectOrders ?? "{}") as Record<
+        string,
+        string[]
+      >;
       const empty = root.querySelector<HTMLElement>("[data-filter-empty]");
       const loadMoreWrap = root.querySelector<HTMLElement>("[data-load-more-wrap]");
       const loadMore = root.querySelector<HTMLButtonElement>("[data-load-more]");
@@ -110,12 +114,24 @@ const filters = [{ value: "all", label: "All work" }, ...projectCategories];
       let currentFilter = "all";
       let matchingCount = 0;
 
+      const applyOrder = (filter: string) => {
+        const order = new Map(
+          (projectsByFilter[filter] ?? []).map((slug, index) => [slug, index]),
+        );
+        items.sort(
+          (a, b) =>
+            (order.get(a.dataset.projectSlug ?? "") ?? 0) -
+            (order.get(b.dataset.projectSlug ?? "") ?? 0),
+        );
+        items.forEach((item) => grid?.append(item));
+      };
+
       const update = (filter: string) => {
         let visible = 0;
         let matching = 0;
         items.forEach((item) => {
-          const category = item.dataset.category;
-          const matches = filter === "all" || category === filter;
+          const categories = item.dataset.categories?.split(" ") ?? [];
+          const matches = filter === "all" || categories.includes(filter);
           if (matches) matching += 1;
           const shown = matches && visible < visibleCount;
           item.hidden = !shown;
@@ -149,6 +165,7 @@ const filters = [{ value: "all", label: "All work" }, ...projectCategories];
           buttons.forEach((candidate) =>
             candidate.setAttribute("aria-pressed", String(candidate === button)),
           );
+          applyOrder(filter);
           update(filter);
         }, { signal });
       });

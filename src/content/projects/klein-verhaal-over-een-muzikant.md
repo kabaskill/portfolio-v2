@@ -2,10 +2,9 @@
 title: "Klein Verhaal Over Een Muzikant"
 summary: "Sound work for Klein Verhaal Over Een Muzikant, a short portrait of a musician."
 slug: "klein-verhaal-over-een-muzikant"
-cover: "/images/kleinverhaalovereenmuzikant.jpg"
+cover: "../../assets/images/kleinverhaalovereenmuzikant.jpg"
 alt: "Klein Verhaal Over Een Muzikant project artwork"
-category: "sound-music"
-experiment: false
+categories: ["sound-music"]
 tags: ["Sound design","Audio production"]
 role: "Sound designer"
 year: 2010

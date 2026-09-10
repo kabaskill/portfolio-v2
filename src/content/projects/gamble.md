@@ -2,10 +2,9 @@
 title: "Gamble"
 summary: "Sound design for Gamble, an experimental short film about life after disaster."
 slug: "gamble"
-cover: "/images/gamble.jpg"
+cover: "../../assets/images/gamble.jpg"
 alt: "Gamble project artwork"
-category: "sound-music"
-experiment: false
+categories: ["sound-music"]
 tags: ["Sound design","Audio production"]
 year: 2015
 role: "Sound designer"

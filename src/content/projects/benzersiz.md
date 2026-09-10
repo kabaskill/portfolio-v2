@@ -2,10 +2,9 @@
 title: "Benzersiz"
 summary: "Sound mix for Benzersiz, a Turkish thriller about a pharmacist's life falling apart."
 slug: "benzersiz"
-cover: "/images/benzersiz.jpg"
+cover: "../../assets/images/benzersiz.jpg"
 alt: "Benzersiz project artwork"
-category: "sound-music"
-experiment: false
+categories: ["sound-music"]
 tags: ["Sound design","Audio production"]
 year: 2016
 role: "Sound designer"

@@ -2,10 +2,9 @@
 title: "blitz-react"
 summary: "A compact command-line tool for starting React projects with a small setup."
 slug: "blitz-react"
-cover: "/images/blitz-react.png"
+cover: "../../assets/images/blitz-react.png"
 alt: "Blitz React lightning mark and project wordmark"
-category: "development-design"
-experiment: true
+categories: ["development-design", "experiment"]
 year: 2025
 tags:
   - React

@@ -2,10 +2,9 @@
 title: "Caravan: Travels of an Ancient Civilization"
 summary: "Sound work for a 12-part documentary journey across Anatolia."
 slug: "caravan-travels-of-an-ancient-civilization"
-cover: "/images/caravan.jpg"
+cover: "../../assets/images/caravan.jpg"
 alt: "Caravan: Travels of an Ancient Civilization project artwork"
-category: "sound-music"
-experiment: false
+categories: ["sound-music"]
 tags: ["Sound design","Audio production"]
 role: "Sound designer"
 year: 2019

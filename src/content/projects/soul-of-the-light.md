@@ -2,10 +2,9 @@
 title: "Soul of the Light"
 summary: "Sound design for Soul of the Light, a short documentary about India and Diwali."
 slug: "soul-of-the-light"
-cover: "/images/soulofthelight.jpg"
+cover: "../../assets/images/soulofthelight.jpg"
 alt: "Soul of the Light project artwork"
-category: "sound-music"
-experiment: false
+categories: ["sound-music"]
 tags: ["Sound design","Audio production"]
 role: "Sound designer"
 featured: false

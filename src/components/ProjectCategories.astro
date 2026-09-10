@@ -1,0 +1,18 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+type Categories = CollectionEntry<"projects">["data"]["categories"];
+
+interface Props {
+  categories: Categories;
+}
+
+const { categories } = Astro.props;
+const labels: Record<Categories[number], string> = {
+  "development-design": "Development & Design",
+  "sound-music": "Sound & Music",
+  experiment: "Experiment",
+};
+---
+
+{categories.map((category) => labels[category]).join(" · ")}

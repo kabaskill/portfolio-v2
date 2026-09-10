@@ -2,10 +2,9 @@
 title: "Logo Design"
 summary: "A short logo animation with original sound design."
 slug: "logo-design"
-cover: "/images/logodesign.jpg"
+cover: "../../assets/images/logodesign.jpg"
 alt: "Logo Design project artwork"
-category: "sound-music"
-experiment: true
+categories: ["sound-music", "experiment"]
 tags: ["Sound design","Audio production"]
 role: "Sound designer"
 year: 2022

@@ -2,10 +2,9 @@
 title: "blitz-cache"
 summary: "A TypeScript-first data fetching and caching library with LRU storage, persistence, pagination, request cancellation, and React hooks."
 slug: "blitz-cache"
-cover: "/images/blitz-cache-cover.jpg"
+cover: "../../assets/images/blitz-cache-cover.jpg"
 alt: "Abstract data cache with layered tiles and request paths"
-category: "development-design"
-experiment: true
+categories: ["development-design", "experiment"]
 tags: ["TypeScript", "React", "Caching", "NPM", "Open source"]
 year: 2026
 role: "Creator and maintainer"

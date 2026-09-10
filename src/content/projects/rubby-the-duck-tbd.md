@@ -2,10 +2,9 @@
 title: "Rubby the Duck - TBD"
 summary: "An in-progress game project presented through a recorded demo."
 slug: "rubby-the-duck-tbd"
-cover: "/images/rubby-the-duck-min.png"
+cover: "../../assets/images/rubby-the-duck-min.png"
 alt: "Rubby the Duck - TBD project artwork"
-category: "development-design"
-experiment: true
+categories: ["development-design", "experiment"]
 tags: ["Creative coding"]
 role: "Developer"
 year: 2023

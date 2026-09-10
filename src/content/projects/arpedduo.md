@@ -2,10 +2,9 @@
 title: "Arpedduo"
 summary: "Eight Arpedduo performances, from film themes to Turkish standards."
 slug: "arpedduo"
-cover: "/images/arpedduo-clubbedtodeath.jpg"
+cover: "../../assets/images/arpedduo-clubbedtodeath.jpg"
 alt: "Arpedduo music project artwork"
-category: "sound-music"
-experiment: false
+categories: ["sound-music"]
 tags: ["Music production","Performance"]
 year: 2019
 role: "Musician"

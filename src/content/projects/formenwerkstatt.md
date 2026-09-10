@@ -2,10 +2,9 @@
 title: "Formenwerkstatt"
 summary: "A digital rebrand and website for Formenwerkstatt, a toolmaking company from Odenwald."
 slug: "formenwerkstatt"
-cover: "/images/fw-banner.png"
+cover: "../../assets/images/fw-banner.png"
 alt: "Formenwerkstatt visual identity on a blue and white field"
-category: "development-design"
-experiment: false
+categories: ["development-design"]
 tags:
   - Web design
   - Frontend

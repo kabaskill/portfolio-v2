@@ -2,10 +2,9 @@
 title: "10th Village"
 summary: "Sound design and mix for the Turkish feature film 10th Village."
 slug: "10th-village"
-cover: "/images/10thvillage.jpg"
+cover: "../../assets/images/10thvillage.jpg"
 alt: "10th Village project artwork"
-category: "sound-music"
-experiment: false
+categories: ["sound-music"]
 tags: ["Sound design","Audio production"]
 role: "Sound designer"
 featured: false

@@ -2,10 +2,9 @@
 title: "Aksu Candy"
 summary: "Sound design for an Aksu Candy commercial."
 slug: "aksu-candy"
-cover: "/images/aksucandy.jpg"
+cover: "../../assets/images/aksucandy.jpg"
 alt: "Aksu Candy project artwork"
-category: "sound-music"
-experiment: false
+categories: ["sound-music"]
 tags: ["Sound design","Audio production"]
 role: "Sound designer"
 year : 2016

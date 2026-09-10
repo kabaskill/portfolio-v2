@@ -12,12 +12,12 @@ import HeroSignal from "../components/HeroSignal.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import SiteLayout from "../layouts/SiteLayout.astro";
 import { cn } from "../lib/cn";
-import { getProjectImage } from "../lib/project-images";
+import { sortProjects } from "../data/project-orders";
 
 const projects = (await getCollection("projects")).filter(({ data }) => data.published !== false);
-const featured = projects.filter(({data}) => data.featured === true);
+const featured = sortProjects(projects.filter(({data}) => data.featured === true), "featured")
 const experiment = projects.find(({ data }) => data.slug === "p5-js-experiments");
-const experimentCover = experiment ? getProjectImage(experiment.data.cover) : null;
+const experimentCover = experiment?.data.cover;
 ---
 
 <SiteLayout>

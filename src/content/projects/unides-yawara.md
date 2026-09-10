@@ -2,14 +2,13 @@
 title: "Unides / Yawara"
 summary: "A shared full-stack platform for a Berlin talent agency and a Latin American events agenda, built for profiles, event discovery, and community connections."
 slug: "unides-yawara"
-cover: "/images/unides-yawara-cover.png"
+cover: "../../assets/images/unides-yawara-cover.png"
 alt: "Abstract Berlin nightlife and Latin American creative events collage"
-category: "development-design"
-experiment: false
+categories: ["development-design"]
 tags: ["Full-stack development", "Talent platform", "Events", "Berlin", "Community"]
 role: "Full-stack developer"
 year: 2026
-featured: true
+featured: false
 published: true
 links: [{"label":"Unides website","url":"https://www.unides-agency.com/"},{"label":"Yawara events platform","url":"https://yawara.live/"}]
 embeds: []

@@ -3,15 +3,14 @@ import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
 import LabFlask from "../../components/LabFlask.astro";
+import ProjectCategories from "../../components/ProjectCategories.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { cn } from "../../lib/cn";
-import { getProjectImage } from "../../lib/project-images";
-import { sortProjects } from "../../lib/project-order";
-import { getProjectCategoryLabel, getProjectPath } from "../../lib/project-taxonomy";
+import { sortProjects } from "../../data/project-orders";
 
 const projects = (await getCollection("projects"))
-  .filter(({ data }) => data.published && data.experiment);
-const orderedProjects = sortProjects(projects);
+  .filter(({ data }) => data.published && data.categories.includes("experiment"));
+const orderedProjects = sortProjects(projects, "experiments-all");
 ---
 
 <SiteLayout title="Experiments | Oguz Kabasakal">
@@ -55,7 +54,6 @@ const orderedProjects = sortProjects(projects);
     <div>
       {
         orderedProjects.map((project, index) => {
-          const cover = getProjectImage(project.data.cover);
           const reverse = index % 2 === 1;
           return (
             <a
@@ -66,7 +64,7 @@ const orderedProjects = sortProjects(projects);
               )}
               data-reveal
               data-experiment-row
-              href={getProjectPath(project.data)}
+              href={`/experiments/${project.data.slug}`}
               style={`--row-index:${index};--row-direction:${reverse ? -1 : 1};--image-tilt:${reverse ? "-1.5deg" : "1.5deg"}`}
             >
               <span class="self-start font-mono text-xs text-muted-foreground md:self-center">
@@ -84,7 +82,7 @@ const orderedProjects = sortProjects(projects);
                     "block size-full object-contain transition-transform duration-700 ease-spring",
                     "motion-safe:group-hover:scale-[1.06] motion-safe:group-hover:rotate-[var(--image-tilt)]",
                   )}
-                  src={cover}
+                  src={project.data.cover}
                   alt={project.data.alt}
                   loading="lazy"
                   widths={[420, 640, 900, 1200]}
@@ -98,7 +96,7 @@ const orderedProjects = sortProjects(projects);
               </div>
               <div class={cn(reverse && "md:order-2")}>
                 <p class="font-mono text-[.68rem] uppercase tracking-[.12em] text-primary">
-                  {getProjectCategoryLabel(project.data.category)}{project.data.year ? ` / ${project.data.year}` : ""}
+                  <ProjectCategories categories={project.data.categories} />{project.data.year ? ` / ${project.data.year}` : ""}
                 </p>
                 <h3 class={cn(
                   "mt-3 text-[clamp(2rem,4vw,4.6rem)] font-[550] leading-[.92] tracking-[-.065em]",

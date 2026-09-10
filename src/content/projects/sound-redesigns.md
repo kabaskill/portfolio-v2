@@ -2,10 +2,9 @@
 title: "Sound redesigns"
 summary: "Three portfolio sound redesigns for car commercials and a film trailer."
 slug: "sound-redesigns"
-cover: "/images/redesignkia.jpg"
+cover: "../../assets/images/redesignkia.jpg"
 alt: "Sound redesign project for a car commercial"
-category: "sound-music"
-experiment: false
+categories: ["sound-music"]
 tags: ["Sound design", "Audio production", "Redesign"]
 role: "Sound designer"
 year: 2014

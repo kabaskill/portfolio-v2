@@ -2,10 +2,9 @@
 title: "Blof"
 summary: "Four Blof recordings, including Deli Gibi Sevdim, Huysuz, Olmaz, and Saklambac."
 slug: "blof"
-cover: "/images/blof-deligibisevdim.jpg"
+cover: "../../assets/images/blof-deligibisevdim.jpg"
 alt: "Blof music project artwork"
-category: "sound-music"
-experiment: false
+categories: ["sound-music"]
 tags: ["Music production","Performance"]
 role: "Musician"
 year: 2018

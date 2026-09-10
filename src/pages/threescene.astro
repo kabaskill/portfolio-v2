@@ -3,18 +3,16 @@ import { getImage } from "astro:assets";
 import { getCollection } from "astro:content";
 import SpatialGallery from "../components/react/SpatialGallery";
 import SpatialLayout from "../layouts/SpatialLayout.astro";
-import { getProjectImage } from "../lib/project-images";
-import { getProjectPath } from "../lib/project-taxonomy";
-import { sortProjects } from "../lib/project-order";
+import { sortProjects } from "../data/project-orders";
 const galleryProjects = sortProjects(
-  (await getCollection("projects")).filter(({ data }) => data.published !== false),
+  (await getCollection("projects")).filter(({ data }) => data.published) ,
+  "spatial-all",
 );
 const projects = await Promise.all(
   galleryProjects.map(async ({ data }) => {
-    const cover = getProjectImage(data.cover);
     const optimizedCover = await getImage({
-      src: cover,
-      width: Math.min(960, cover.width),
+      src: data.cover,
+      width: Math.min(960, data.cover.width),
       format: "webp",
       quality: 76,
     });
@@ -23,9 +21,12 @@ const projects = await Promise.all(
       slug: data.slug,
       cover: optimizedCover.src,
       summary: data.summary,
-      category: data.category,
-      experiment: data.experiment,
-      link: data.links[0]?.url ?? getProjectPath(data),
+      categories: data.categories,
+      link:
+        data.links[0]?.url ??
+        (data.categories.includes("experiment") ?
+          `/experiments/${data.slug}`
+        : `/work/${data.slug}`),
     };
   }),
 );

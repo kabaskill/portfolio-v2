@@ -2,14 +2,13 @@
 title: "Naviri"
 summary: "A startup operating system that brings founder data, risk detection, planning, and AI consultation into one full-stack product."
 slug: "naviri"
-cover: "/images/naviri-cover.png"
+cover: "../../assets/images/naviri-cover.png"
 alt: "Abstract connected startup operating system cover with planning and risk signals"
-category: "development-design"
-experiment: false
+categories: ["development-design"]
 tags: ["Remix", "TypeScript", "Firebase", "Tailwind CSS", "AI", "Startup platform"]
 year: 2025
 role: "Full-stack developer"
-featured: true
+featured: false
 published: true
 links: [{"label":"Visit website","url":"https://www.naviri.com/"},{"label":"Open app","url":"https://app.naviri.io/"}]
 embeds: []

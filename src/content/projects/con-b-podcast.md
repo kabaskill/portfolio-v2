@@ -2,10 +2,9 @@
 title: "CON-B Podcast"
 summary: "Sound design for a Turkish podcast about games and game music."
 slug: "con-b-podcast"
-cover: "/images/Podcast.jpg"
+cover: "../../assets/images/Podcast.jpg"
 alt: "CON-B Podcast project artwork"
-category: "sound-music"
-experiment: false
+categories: ["sound-music"]
 tags: ["Sound design","Audio production"]
 role: "Sound designer"
 year: 2020

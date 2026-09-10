@@ -2,10 +2,10 @@
 title: "Metanoia"
 summary: "A 360-degree audiovisual installation made for a second-semester Expanded Media project."
 slug: "metanoia"
-cover: "/images/metanoia.jpg"
+cover: "../../assets/images/metanoia.jpg"
 alt: "Metanoia project artwork"
-category: "sound-music"
-experiment: false
+categories: ["development-design", "sound-music", "experiment"]
+showInWork: true
 tags: ["Sound design","Music production","Performance"]
 role: "Sound designer and musician"
 year: 2023

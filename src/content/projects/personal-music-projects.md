@@ -2,10 +2,9 @@
 title: "Personal music projects"
 summary: "Ten music projects I produced between 2011 and 2016, mostly made as a hobby."
 slug: "personal-music-projects"
-cover: "/images/pp-interstellar.jpg"
+cover: "../../assets/images/pp-interstellar.jpg"
 alt: "Personal music projects artwork"
-category: "sound-music"
-experiment: true
+categories: ["sound-music", "experiment"]
 tags: ["Music production","Performance"]
 role: "Musician"
 year: 2016

@@ -2,10 +2,9 @@
 title: "Philips Infomercials"
 summary: "Sound work for Philips Turkey infomercial spots."
 slug: "philips-infomercials"
-cover: "/images/philips.png"
+cover: "../../assets/images/philips.png"
 alt: "Philips Infomercials project artwork"
-category: "sound-music"
-experiment: false
+categories: ["sound-music"]
 tags: ["Sound design","Audio production"]
 year: 2016
 role: "Sound designer"

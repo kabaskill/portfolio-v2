@@ -2,10 +2,9 @@
 title: "Tapari-Spielwelt"
 summary: "Sound design for Tapari, an interactive, screen-free story mat for children."
 slug: "tapari-spielwelt"
-cover: "/images/tapari-spielwelt.jpg"
+cover: "../../assets/images/tapari-spielwelt.jpg"
 alt: "Tapari-Spielwelt project artwork"
-category: "sound-music"
-experiment: true
+categories: ["sound-music", "experiment"]
 tags: ["Sound design","Audio production"]
 role: "Sound designer and writer"
 year: 2023

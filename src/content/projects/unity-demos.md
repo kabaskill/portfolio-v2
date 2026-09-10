@@ -2,10 +2,9 @@
 title: "Unity demos"
 summary: "Two small Unity game experiments, one about guitar practice and one about physics-based aiming."
 slug: "unity-demos"
-cover: "/images/made-with-unity.jpg"
+cover: "../../assets/images/made-with-unity.jpg"
 alt: "Unity game demo project artwork"
-category: "development-design"
-experiment: true
+categories: ["development-design", "experiment"]
 tags: ["Unity", "Game development"]
 role: "Developer"
 year: 2020

@@ -2,10 +2,9 @@
 title: "Fugue State"
 summary: "A gamified music-theory application that turns listening, notation, and repetition into an approachable learning loop."
 slug: "fugue-state"
-cover: "/images/FugueState-1.png"
+cover: "../../assets/images/FugueState-1.png"
 alt: "Fugue State music theory application title artwork"
-category: "development-design"
-experiment: true
+categories: ["development-design", "experiment"]
 year: 2024
 tags: ["React","Game design","Music theory"]
 role: "Developer"

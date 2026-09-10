@@ -2,10 +2,9 @@
 title: "D.Ö.N.E.R"
 summary: "A German-to-English HTML transpiler built with Go, React, and TypeScript."
 slug: "doner-html-transpiler"
-cover: "/images/doner.png"
+cover: "../../assets/images/doner.png"
 alt: "DÖNER transpiler project artwork with code brackets and a döner illustration"
-category: "development-design"
-experiment: true
+categories: ["development-design", "experiment"]
 tags:
   - Go
   - React

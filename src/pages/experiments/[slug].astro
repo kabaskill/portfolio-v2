@@ -2,22 +2,21 @@
 import { getImage } from "astro:assets";
 import { getCollection, render } from "astro:content";
 import { ArrowLeftIcon, ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
+import ProjectCategories from "../../components/ProjectCategories.astro";
 import MediaCollection from "../../components/react/MediaCollection";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { cn } from "../../lib/cn";
-import { getProjectImage } from "../../lib/project-images";
-import { getProjectCategoryLabel } from "../../lib/project-taxonomy";
 
 export async function getStaticPaths() {
   const projects = await getCollection("projects");
   return projects
-    .filter(({ data }) => data.published !== false && data.experiment)
+    .filter(({ data }) => data.published !== false && data.categories.includes("experiment"))
     .map((project) => ({ params: { slug: project.data.slug }, props: { project } }));
 }
 
 const { project } = Astro.props;
 const { Content } = await render(project);
-const coverImage = getProjectImage(project.data.cover);
+const coverImage = project.data.cover;
 const coverThumbnail = await getImage({
   src: coverImage,
   width: Math.min(1200, coverImage.width),
@@ -30,6 +29,12 @@ const coverFull = await getImage({
   format: "webp",
   quality: 84,
 });
+const gallery = await Promise.all(
+  project.data.gallery.map(async (image) => ({
+    ...image,
+    src: (await getImage({ src: image.src, width: Math.min(2400, image.src.width) })).src,
+  })),
+);
 ---
 
 <SiteLayout title={`${project.data.title} | Oguz Kabasakal`} description={project.data.summary} image={coverFull.src} imageAlt={project.data.alt}>
@@ -56,7 +61,7 @@ const coverFull = await getImage({
       <div class="min-w-0">
         <header>
           <p class="font-mono text-xs text-primary">
-            Experiment · {getProjectCategoryLabel(project.data.category)}
+            <ProjectCategories categories={project.data.categories} />
           </p>
           <h1 class={cn(
             "mt-4 max-w-[13ch] text-[clamp(2.75rem,6.2vw,5.6rem)]",
@@ -81,7 +86,7 @@ const coverFull = await getImage({
             cover={{ src: coverFull.src, thumbnailSrc: coverThumbnail.src, alt: project.data.alt }}
             coverTitle={project.data.title}
             embeds={project.data.embeds}
-            images={project.data.gallery}
+            images={gallery}
           />
         </div>
         {

@@ -8,28 +8,25 @@ import {
   SunIcon,
 } from "@phosphor-icons/react";
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { CollectionEntry } from "astro:content";
 import * as THREE from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { cn } from "../../lib/cn";
-import {
-  getProjectCategoryLabel,
-  projectCategories,
-  type ProjectCategory,
-} from "../../lib/project-taxonomy";
+type ProjectCategory = CollectionEntry<"projects">["data"]["categories"][number];
 
 type Project = {
   title: string;
   slug: string;
   cover: string;
   summary: string;
-  category: ProjectCategory;
-  experiment: boolean;
+  categories: ProjectCategory[];
   link: string | null;
 };
 
 const categories: Array<{ label: string; value: ProjectCategory }> = [
-  // { label: "All projects", value: "all" },
-  ...projectCategories,
+  { value: "development-design", label: "Development & Design" },
+  { value: "sound-music", label: "Sound & Music" },
+  { value: "experiment", label: "Experiment" },
 ];
 
 export default function SpatialGallery({ projects }: { projects: Project[] }) {
@@ -42,7 +39,7 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
   const [galleryReady, setGalleryReady] = useState(false);
   const markGalleryReady = useCallback(() => setGalleryReady(true), []);
   const visibleProjects = useMemo(
-    () => projects.filter((project) => project.category === category),
+    () => projects.filter((project) => project.categories.includes(category)),
     [category, projects],
   );
   const selectedProject = visibleProjects.find((project) => project.slug === selectedSlug) ?? null;
@@ -135,7 +132,7 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
           "reduced-transparency:bg-background reduced-transparency:backdrop-blur-none",
         )} aria-label="Gallery categories">
           {categories.map((item) => {
-            const count = projects.filter((project) => project.category === item.value).length;
+            const count = projects.filter((project) => project.categories.includes(item.value)).length;
             return (
               <button
                 key={item.value}
@@ -270,7 +267,9 @@ function GalleryLoadingState() {
 }
 
 function projectLabel(project: Project) {
-  return `${project.experiment ? "Experiment · " : ""}${getProjectCategoryLabel(project.category)}`;
+  return project.categories
+    .map((category) => categories.find(({ value }) => value === category)?.label ?? category)
+    .join(" · ");
 }
 
 function GalleryWorld({

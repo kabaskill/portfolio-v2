@@ -2,10 +2,9 @@
 title: "GameDalf"
 summary: "A board-game discovery app built as my Neuefische bootcamp graduation project."
 slug: "gamedalf"
-cover: "/images/gamedalf.png"
+cover: "../../assets/images/gamedalf.png"
 alt: "GameDalf project artwork"
-category: "development-design"
-experiment: true
+categories: ["development-design", "experiment"]
 tags: ["Web app", "API", "Neuefische"]
 role: "Developer"
 year: 2023

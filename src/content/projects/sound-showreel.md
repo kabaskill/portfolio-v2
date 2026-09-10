@@ -2,10 +2,9 @@
 title: "Sound design showreel"
 summary: "Selected sound design, recording, editing, and mixing work created for moving-image projects."
 slug: "sound-showreel"
-cover: "/images/showreel.jpg"
+cover: "../../assets/images/showreel.jpg"
 alt: "Oguz Kabasakal sound design showreel artwork"
-category: "sound-music"
-experiment: true
+categories: ["sound-music", "experiment"]
 tags: ["Sound design","Recording","Mixing"]
 role: "Sound designer"
 year: 2023
