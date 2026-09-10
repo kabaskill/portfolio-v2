@@ -16,6 +16,6 @@ embeds: []
 gallery: []
 ---
 
-Droplet is a German water-state platform built as an operational dashboard for regional conditions. It brings source freshness, forecast pressure, reservoir snapshots, and observations into one place. The live site is planned for droplet.oguzkabasakal.com, but the repository is the current reference for now.
+Droplet is a German water-state platform built as an operational dashboard for regional conditions. It brings source freshness, forecast pressure, reservoir snapshots, and observations into one place. 
 
 I worked across the backend, frontend, data flow, documentation, and deployment. I built source normalization, PostgreSQL snapshots, Redis caching, authenticated API endpoints, and the React dashboard. The interface covers current conditions, trends, source health, and regional comparisons while keeping source freshness visible. The repository is the current reference; the live site is planned for later.
