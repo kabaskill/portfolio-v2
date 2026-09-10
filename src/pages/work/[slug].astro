@@ -1,5 +1,4 @@
 ---
-import { getImage } from "astro:assets";
 import { getCollection, render } from "astro:content";
 import { ArrowLeftIcon, ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
 import ProjectCategories from "../../components/ProjectCategories.astro";
@@ -17,27 +16,10 @@ export async function getStaticPaths() {
 const { project } = Astro.props;
 const { Content } = await render(project);
 const coverImage = project.data.cover;
-const coverThumbnail = await getImage({
-  src: coverImage,
-  width: Math.min(1200, coverImage.width),
-  format: "webp",
-  quality: 78,
-});
-const coverFull = await getImage({
-  src: coverImage,
-  width: Math.min(2400, coverImage.width),
-  format: "webp",
-  quality: 84,
-});
-const gallery = await Promise.all(
-  project.data.gallery.map(async (image) => ({
-    ...image,
-    src: (await getImage({ src: image.src, width: Math.min(2400, image.src.width) })).src,
-  })),
-);
+const gallery = project.data.gallery.map((image) => ({ ...image, src: image.src.src }));
 ---
 
-<SiteLayout title={`${project.data.title} | Oguz Kabasakal`} description={project.data.summary} image={coverFull.src} imageAlt={project.data.alt}>
+<SiteLayout title={`${project.data.title} | Oguz Kabasakal`} description={project.data.summary} image={coverImage.src} imageAlt={project.data.alt}>
   <article
     class={cn(
       "mx-auto w-[min(1400px,calc(100%-2rem))] py-8 pb-20 md:py-12 lg:pb-28",
@@ -83,7 +65,7 @@ const gallery = await Promise.all(
         <div transition:name={`project-${project.data.slug}`}>
           <MediaCollection
             client:load
-            cover={{ src: coverFull.src, thumbnailSrc: coverThumbnail.src, alt: project.data.alt }}
+            cover={{ src: coverImage.src, alt: project.data.alt }}
             coverTitle={project.data.title}
             embeds={project.data.embeds}
             images={gallery}

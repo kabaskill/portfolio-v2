@@ -1,5 +1,4 @@
 ---
-import { getImage } from "astro:assets";
 import { getCollection } from "astro:content";
 import SpatialGallery from "../components/react/SpatialGallery";
 import SpatialLayout from "../layouts/SpatialLayout.astro";
@@ -8,28 +7,20 @@ const galleryProjects = sortProjects(
   (await getCollection("projects")).filter(({ data }) => data.published) ,
   "spatial-all",
 );
-const projects = await Promise.all(
-  galleryProjects.map(async ({ data }) => {
-    const optimizedCover = await getImage({
-      src: data.cover,
-      width: Math.min(960, data.cover.width),
-      format: "webp",
-      quality: 76,
-    });
-    return {
-      title: data.title,
-      slug: data.slug,
-      cover: optimizedCover.src,
-      summary: data.summary,
-      categories: data.categories,
-      link:
-        data.links[0]?.url ??
-        (data.categories.includes("experiment") ?
-          `/experiments/${data.slug}`
-        : `/work/${data.slug}`),
-    };
-  }),
-);
+const projects = galleryProjects.map(({ data }) => ({
+  title: data.title,
+  slug: data.slug,
+  // Use the static hashed asset directly. The Worker deployment does not
+  // provide Astro's runtime `/_image` transformation endpoint.
+  cover: data.cover.src,
+  summary: data.summary,
+  categories: data.categories,
+  link:
+    data.links[0]?.url ??
+    (data.categories.includes("experiment") ?
+      `/experiments/${data.slug}`
+    : `/work/${data.slug}`),
+}));
 ---
 
 <SpatialLayout>

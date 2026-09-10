@@ -1,5 +1,4 @@
 ---
-import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
 import LabFlask from "../../components/LabFlask.astro";
@@ -77,16 +76,14 @@ const orderedProjects = sortProjects(projects, "experiments-all");
                 )}
                 transition:name={`project-${project.data.slug}`}
               >
-                <Image
+                <img
                   class={cn(
                     "block size-full object-contain transition-transform duration-700 ease-spring",
                     "motion-safe:group-hover:scale-[1.06] motion-safe:group-hover:rotate-[var(--image-tilt)]",
                   )}
-                  src={project.data.cover}
+                  src={project.data.cover.src}
                   alt={project.data.alt}
                   loading="lazy"
-                  widths={[420, 640, 900, 1200]}
-                  sizes="(min-width: 768px) 42vw, 100vw"
                 />
                 <span class={cn(
                   "absolute top-3 right-3 grid size-9 place-items-center rounded-full",

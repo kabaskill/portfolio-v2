@@ -1,5 +1,4 @@
 ---
-import { Picture } from "astro:assets";
 import { getCollection } from "astro:content";
 import {
   ArrowDownRightIcon,
@@ -229,18 +228,14 @@ const experimentCover = experiment?.data.cover;
           </span>
         </div>
         {experimentCover && (
-          <Picture
+          <img
             class={cn(
-              "aspect-[1.2] rounded-xl object-cover transition-transform duration-500 ease-out",
+              "block aspect-[1.2] w-full rounded-xl object-cover transition-transform duration-500 ease-out",
               "motion-safe:hover:rotate-0 md:rotate-3",
             )}
-            src={experimentCover}
-            formats={["avif", "webp"]}
-            fallbackFormat="webp"
+            src={experimentCover.src}
             alt={experiment.data.alt}
             loading="lazy"
-            widths={[480, 640, 960, 1200]}
-            sizes="(min-width: 768px) 50vw, 100vw"
           />
         )}
       </a>

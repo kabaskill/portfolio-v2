@@ -1,5 +1,4 @@
 ---
-import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
 import ProjectCategories from "./ProjectCategories.astro";
@@ -20,16 +19,14 @@ const href =
     class="relative aspect-[4/3] overflow-hidden rounded-xl bg-card"
     transition:name={`project-${data.slug}`}
   >
-    <Image
+    <img
       class={cn(
         "block size-full object-contain transition-transform duration-[600ms] ease-out",
         "motion-safe:group-hover:scale-[1.04]",
       )}
-      src={data.cover}
+      src={data.cover.src}
       alt={data.alt}
       loading="lazy"
-      widths={[320, 480, 640, 800, 1200]}
-      sizes="(min-width: 768px) 60vw, 100vw"
     />
   </div>
   <div class="flex gap-4 pt-4 sm:grid sm:grid-cols-[1fr_auto] sm:items-start">

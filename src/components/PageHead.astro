@@ -1,5 +1,4 @@
 ---
-import { getImage } from "astro:assets";
 import portrait from "../assets/profile/oguz-kabasakal.png";
 
 interface Props {
@@ -15,8 +14,7 @@ const canonicalPath = Astro.url.pathname.endsWith("/")
   ? Astro.url.pathname
   : `${Astro.url.pathname}/`;
 const canonical = new URL(canonicalPath, Astro.site);
-const defaultImage = image ? undefined : await getImage({ src: portrait, width: 800, format: "png" });
-const socialImage = new URL(image ?? defaultImage!.src, Astro.site);
+const socialImage = new URL(image ?? portrait.src, Astro.site);
 ---
 
 <meta charset="UTF-8" />

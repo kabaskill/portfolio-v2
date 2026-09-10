@@ -36,6 +36,7 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
   const [isDark, setIsDark] = useState(() =>
     typeof document !== "undefined" && document.documentElement.classList.contains("dark"),
   );
+  const [webglAvailable, setWebglAvailable] = useState<boolean | null>(null);
   const [galleryReady, setGalleryReady] = useState(false);
   const markGalleryReady = useCallback(() => setGalleryReady(true), []);
   const visibleProjects = useMemo(
@@ -49,6 +50,15 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
     : -1;
 
   useEffect(() => {
+    const probe = document.createElement("canvas");
+    const context =
+      probe.getContext("webgl2", { failIfMajorPerformanceCaveat: false }) ??
+      probe.getContext("webgl", { failIfMajorPerformanceCaveat: false }) ??
+      probe.getContext("experimental-webgl", { failIfMajorPerformanceCaveat: false });
+    setWebglAvailable(Boolean(context));
+    if (context && "getExtension" in context)
+      context.getExtension("WEBGL_lose_context")?.loseContext();
+
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
     const update = () => setReducedMotion(query.matches);
     update();
@@ -83,7 +93,7 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
       "[&_canvas]:absolute [&_canvas]:inset-0 [&_canvas]:size-full",
     )} aria-label="Interactive spatial portfolio gallery">
       <Canvas
-        fallback={<p className="p-6 pt-28">WebGL is unavailable. <a className="underline" href="/work/">Browse the project list instead.</a></p>}
+        fallback={null}
         aria-label="Interactive spatial portfolio gallery"
         camera={{ fov: 46, position: [0, 2.4, 8] }}
         dpr={[1, 1.5]}
@@ -116,7 +126,8 @@ export default function SpatialGallery({ projects }: { projects: Project[] }) {
         </Suspense>
       </Canvas>
 
-      {!galleryReady ? <GalleryLoadingState /> : null}
+      {webglAvailable === false ? <WebGLUnavailableState /> : null}
+      {webglAvailable !== false && !galleryReady ? <GalleryLoadingState /> : null}
 
       <div className="pointer-events-none absolute inset-0 z-2 grid grid-cols-[1fr_auto_1fr] items-start p-6">
         <a className={cn(
@@ -261,6 +272,22 @@ function GalleryLoadingState() {
         <div className="mt-4 h-1 w-full overflow-hidden rounded-full bg-card" aria-hidden="true">
           <div className="h-full w-1/2 animate-pulse rounded-full bg-primary" />
         </div>
+      </div>
+    </div>
+  );
+}
+
+function WebGLUnavailableState() {
+  return (
+    <div className="absolute inset-0 z-4 grid place-items-center bg-background px-6 text-foreground">
+      <div className="grid w-full max-w-sm justify-items-center text-center">
+        <p className="font-mono text-xs uppercase tracking-[.14em] text-primary">WebGL unavailable</p>
+        <p className="mt-4 text-sm leading-6 text-muted-foreground">
+          This browser or device cannot render the 3D gallery.
+        </p>
+        <a className="mt-6 text-sm text-foreground underline underline-offset-4 hover:text-primary" href="/work/">
+          Browse the project list instead
+        </a>
       </div>
     </div>
   );
