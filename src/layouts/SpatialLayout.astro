@@ -7,9 +7,14 @@ import PageHead from "../components/PageHead.astro";
 <html lang="en">
   <head>
     <PageHead
-      title="3D portfolio gallery | Oguz Kabasakal"
-      description="Explore Oguz Kabasakal’s development, design, sound, and music projects in an interactive 3D gallery."
+      title="The Spatial Archive — 3D gallery | Oguz Kabasakal"
+      description="Work, in orbit. Explore Oguz Kabasakal’s design, development, sound, and music in an interactive universe of floating exhibits."
     />
   </head>
   <body><slot /></body>
 </html>
+
+<style is:global>
+  html { scrollbar-gutter: auto; }
+  body { margin: 0; }
+</style>

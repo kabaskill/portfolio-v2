@@ -4,7 +4,7 @@ import SpatialGallery from "../components/react/SpatialGallery";
 import SpatialLayout from "../layouts/SpatialLayout.astro";
 import { sortProjects } from "../data/project-orders";
 const galleryProjects = sortProjects(
-  (await getCollection("projects")).filter(({ data }) => data.published) ,
+  (await getCollection("projects")).filter(({ data }) => data.published),
   "spatial-all",
 );
 const projects = galleryProjects.map(({ data }) => ({
@@ -27,14 +27,14 @@ const projects = galleryProjects.map(({ data }) => ({
   <SpatialGallery projects={projects} client:only="react">
     <main
       slot="fallback"
-      class="grid min-h-dvh place-items-center bg-background px-6 text-foreground"
+      class="spatial-boot"
       role="status"
       aria-label="Preparing 3D gallery"
       aria-busy="true"
     >
       <div class="grid w-full max-w-sm justify-items-center text-center">
-        <span class="block size-10 animate-spin rounded-full border-2 border-border border-t-primary" aria-hidden="true"></span>
-        <p class="mt-5 font-mono text-xs uppercase tracking-[.14em] text-primary">Preparing gallery</p>
+        <span class="spatial-boot-orbit" aria-hidden="true"></span>
+        <p class="mt-5 font-mono text-xs uppercase tracking-[.14em]">Setting things in motion</p>
         <div class="mt-4 h-1 w-full overflow-hidden rounded-full bg-card" aria-hidden="true">
           <div class="h-full w-1/2 animate-pulse rounded-full bg-primary"></div>
         </div>
@@ -45,3 +45,9 @@ const projects = galleryProjects.map(({ data }) => ({
     </main>
   </SpatialGallery>
 </SpatialLayout>
+
+<style>
+  .spatial-boot { display: grid; min-height: 100dvh; place-items: center; padding: 24px; background: var(--background); color: var(--accent); }
+  .spatial-boot-orbit { width: 48px; height: 48px; border: 1px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: boot-orbit 1.8s linear infinite; }
+  @keyframes boot-orbit { to { transform: rotate(360deg); } }
+</style>

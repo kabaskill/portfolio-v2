@@ -1,567 +1,557 @@
-import { Image as DreiImage, Grid, OrbitControls, useCursor } from "@react-three/drei";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
   ArrowUpRightIcon,
+  ArrowsOutIcon,
+  CircleNotchIcon,
+  DotsNineIcon,
   MoonIcon,
+  PauseIcon,
+  PlayIcon,
+  ShuffleIcon,
+  SpeakerHighIcon,
+  SpeakerSlashIcon,
   SunIcon,
 } from "@phosphor-icons/react";
-import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { CollectionEntry } from "astro:content";
-import * as THREE from "three";
-import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
-import { cn } from "../../lib/cn";
-type ProjectCategory = CollectionEntry<"projects">["data"]["categories"][number];
+import {
+  Component,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+  type ReactNode,
+} from "react";
+import GalleryWorld from "./spatial/GalleryWorld";
+import {
+  categories,
+  type Arrangement,
+  type Project,
+  type ProjectCategory,
+  type ScenePalette,
+} from "./spatial/types";
+import "./spatial/spatial-gallery.css";
 
-type Project = {
-  title: string;
-  slug: string;
-  cover: string;
-  summary: string;
-  categories: ProjectCategory[];
-  link: string | null;
-};
-
-const categories: Array<{ label: string; value: ProjectCategory }> = [
-  { value: "development-design", label: "Development & Design" },
-  { value: "sound-music", label: "Sound & Music" },
-  { value: "experiment", label: "Experiment" },
-];
+class SceneBoundary extends Component<
+  { children: ReactNode; onError: () => void },
+  { failed: boolean }
+> {
+  state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  componentDidCatch() {
+    this.props.onError();
+  }
+  render() {
+    return this.state.failed ? null : this.props.children;
+  }
+}
 
 export default function SpatialGallery({ projects }: { projects: Project[] }) {
-  const [category, setCategory] = useState<ProjectCategory>("development-design");
+  const [category, setCategory] =
+    useState<ProjectCategory>("development-design");
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
-  const [reducedMotion, setReducedMotion] = useState(false);
-  const [isDark, setIsDark] = useState(() =>
-    typeof document !== "undefined" && document.documentElement.classList.contains("dark"),
+  const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
+  const [arrangement, setArrangement] = useState<Arrangement>("orbit");
+  const [dark, setDark] = useState(() => typeof document !== "undefined" && document.documentElement.classList.contains("dark"));
+  const [palette, setPalette] = useState<ScenePalette>({ background: "#0b0f12", foreground: "#e9edf1", muted: "#a0aab4", surface: "#20262c", border: "#38414a", accent: "#e89565" });
+  const [reducedMotion, setReducedMotion] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
-  const [webglAvailable, setWebglAvailable] = useState<boolean | null>(null);
-  const [galleryReady, setGalleryReady] = useState(false);
-  const markGalleryReady = useCallback(() => setGalleryReady(true), []);
+  const [moving, setMoving] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+  const [webgl, setWebgl] = useState<boolean | null>(null);
+  const [ready, setReady] = useState(false);
+  const [pulse, setPulse] = useState(0);
+  const [reset, setReset] = useState(0);
+  const [sound, setSound] = useState(false);
+  const [notice, setNotice] = useState("");
+  const root = useRef<HTMLElement>(null);
+  const startup = useRef<HTMLAudioElement | null>(null);
+  const filmstrip = useRef<HTMLDivElement>(null);
+  const audio = useRef<AudioContext | null>(null);
+  const soundEnabled = useRef(false);
   const visibleProjects = useMemo(
     () => projects.filter((project) => project.categories.includes(category)),
-    [category, projects],
+    [projects, category],
   );
-  const selectedProject = visibleProjects.find((project) => project.slug === selectedSlug) ?? null;
-  const selectedIndex =
-    selectedProject ?
-      visibleProjects.findIndex((project) => project.slug === selectedProject.slug)
-    : -1;
+  const selectedIndex = visibleProjects.findIndex(
+    (project) => project.slug === selectedSlug,
+  );
+  const selectedProject = visibleProjects[selectedIndex] ?? null;
+  const hoveredProject = visibleProjects.find(
+    (project) => project.slug === hoveredSlug,
+  );
+  const markReady = useCallback(() => setReady(true), []);
+  const markFailed = useCallback(() => setWebgl(false), []);
 
   useEffect(() => {
-    const probe = document.createElement("canvas");
-    const context =
-      probe.getContext("webgl2", { failIfMajorPerformanceCaveat: false }) ??
-      probe.getContext("webgl", { failIfMajorPerformanceCaveat: false }) ??
-      probe.getContext("experimental-webgl", { failIfMajorPerformanceCaveat: false });
-    setWebglAvailable(Boolean(context));
-    if (context && "getExtension" in context)
-      context.getExtension("WEBGL_lose_context")?.loseContext();
-
-    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setReducedMotion(query.matches);
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("webgl2");
+    setWebgl(Boolean(context));
+    context?.getExtension("WEBGL_lose_context")?.loseContext();
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => {
+      setReducedMotion(media.matches);
+      if (media.matches) setMoving(false);
+    };
     update();
-    setIsDark(document.documentElement.classList.contains("dark"));
-    const theme = new MutationObserver(() =>
-      setIsDark(document.documentElement.classList.contains("dark")),
-    );
-    theme.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
-    query.addEventListener("change", update);
+    media.addEventListener("change", update);
+    const syncTheme = () => {
+      setDark(document.documentElement.classList.contains("dark"));
+      const styles = getComputedStyle(document.documentElement);
+      // Canvas resolves the site's OKLCH tokens into sRGB for Three.js.
+      const probe = document.createElement("canvas");
+      probe.width = probe.height = 1;
+      const context = probe.getContext("2d");
+      if (!context) return;
+      const resolve = (token: string) => {
+        context.fillStyle = styles.getPropertyValue(token).trim();
+        context.fillRect(0, 0, 1, 1);
+        const [r, g, b] = context.getImageData(0, 0, 1, 1).data;
+        return `rgb(${r}, ${g}, ${b})`;
+      };
+      setPalette({ background: resolve("--background"), foreground: resolve("--foreground"), muted: resolve("--muted"), surface: resolve("--surface"), border: resolve("--border"), accent: resolve("--accent") });
+    };
+    syncTheme();
+    const themeObserver = new MutationObserver(syncTheme);
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
     return () => {
-      query.removeEventListener("change", update);
-      theme.disconnect();
+      media.removeEventListener("change", update);
+      themeObserver.disconnect();
+      startup.current?.pause();
+      void audio.current?.close();
     };
   }, []);
 
-  function selectRelative(offset: -1 | 1) {
-    if (selectedIndex < 0 || visibleProjects.length < 2) return;
-    const next = (selectedIndex + offset + visibleProjects.length) % visibleProjects.length;
-    setSelectedSlug(visibleProjects[next].slug);
-  }
-
-  function openProject(project: Project) {
-    if (!project.link) return;
-    if (/^https?:\/\//.test(project.link))
-      window.open(project.link, "_blank", "noopener,noreferrer");
-    else window.location.assign(project.link);
-  }
-
-  return (
-    <main className={cn(
-      "relative h-dvh min-h-dvh w-full overflow-hidden rounded-none bg-background text-foreground",
-      "[&_canvas]:absolute [&_canvas]:inset-0 [&_canvas]:size-full",
-    )} aria-label="Interactive spatial portfolio gallery">
-      <Canvas
-        fallback={null}
-        aria-label="Interactive spatial portfolio gallery"
-        camera={{ fov: 46, position: [0, 2.4, 8] }}
-        dpr={[1, 1.5]}
-        gl={{ antialias: true, powerPreference: "high-performance" }}
-        onPointerMissed={() => setSelectedSlug(null)}
-      >
-        <Suspense fallback={null}>
-          <GalleryWorld
-            key={category}
-            projects={visibleProjects}
-            isDark={isDark}
-            reducedMotion={reducedMotion}
-            selectedSlug={selectedSlug}
-            onSelect={setSelectedSlug}
-            onReady={markGalleryReady}
-          />
-          <Grid
-            args={[30, 30]}
-            cellColor={isDark ? "#31363d" : "#bcc4cc"}
-            cellSize={0.75}
-            cellThickness={0.45}
-            fadeDistance={15}
-            fadeStrength={1.5}
-            infiniteGrid
-            position={[0, -0.85, 0]}
-            sectionColor="#e85d39"
-            sectionSize={3}
-            sectionThickness={0.8}
-          />
-        </Suspense>
-      </Canvas>
-
-      {webglAvailable === false ? <WebGLUnavailableState /> : null}
-      {webglAvailable !== false && !galleryReady ? <GalleryLoadingState /> : null}
-
-      <div className="pointer-events-none absolute inset-0 z-2 grid grid-cols-[1fr_auto_1fr] items-start p-6">
-        <a className={cn(
-          "pointer-events-auto inline-flex w-fit items-center gap-2 rounded-control border border-border",
-          "bg-background/90 px-[.8rem] py-[.65rem] text-sm leading-normal font-[650] backdrop-blur-md hover:text-primary",
-          "reduced-transparency:bg-background reduced-transparency:backdrop-blur-none",
-        )} href="/">
-          <ArrowLeftIcon size={17} weight="bold" aria-hidden="true" /> <span className="hidden md:inline-block">Portfolio</span>
-        </a>
-        <nav className={cn(
-          "pointer-events-auto flex justify-self-center gap-[.2rem] rounded-control border border-border",
-          "bg-background/90 p-1 backdrop-blur-md",
-          "reduced-transparency:bg-background reduced-transparency:backdrop-blur-none",
-        )} aria-label="Gallery categories">
-          {categories.map((item) => {
-            const count = projects.filter((project) => project.categories.includes(item.value)).length;
-            return (
-              <button
-                key={item.value}
-                className={cn(
-                  "cursor-pointer rounded-[.45rem] border-0 bg-transparent px-[.8rem] py-2",
-                  "text-sm leading-normal font-semibold text-foreground hover:text-primary",
-                  "aria-pressed:bg-primary aria-pressed:text-primary-foreground",
-                  "disabled:cursor-not-allowed disabled:opacity-35",
-                )}
-                type="button"
-                disabled={count === 0}
-                aria-pressed={category === item.value}
-                onClick={() => {
-                  if (item.value === category) return;
-                  setGalleryReady(false);
-                  setCategory(item.value);
-                  setSelectedSlug(null);
-                }}
-              >
-                {item.label}
-              </button>
-            );
-          })}
-        </nav>
-        <button
-          type="button"
-          className={cn(
-            "pointer-events-auto grid size-11 cursor-pointer place-items-center justify-self-end rounded-full border border-border",
-            "bg-background/90 backdrop-blur-md",
-            "reduced-transparency:bg-background reduced-transparency:backdrop-blur-none",
-          )}
-          aria-label="Toggle color theme"
-          onClick={() => {
-            const next = !isDark;
-            setIsDark(next);
-            document.documentElement.classList.toggle("dark", next);
-            try {
-              localStorage.setItem("theme", next ? "dark" : "light");
-            } catch {
-              // Theme still works when storage is unavailable.
-            }
-          }}
-        >
-          {isDark ? <SunIcon size={20} weight="bold" /> : <MoonIcon size={20} weight="bold" />}
-        </button>
-      </div>
-
-      {selectedProject && visibleProjects.length > 1 ?
-        <div className="pointer-events-none absolute inset-x-4 top-1/2 z-2 flex -translate-y-1/2 justify-between" aria-label="Focused project navigation">
-          <button className={cn(
-            "pointer-events-auto grid size-[2.6rem] cursor-pointer place-items-center rounded-control border border-border",
-            "bg-background/90 backdrop-blur-md",
-            "reduced-transparency:bg-background reduced-transparency:backdrop-blur-none",
-          )} type="button" aria-label="Previous project" onClick={() => selectRelative(-1)}>
-            <ArrowLeftIcon size={20} weight="bold" />
-          </button>
-          <button className={cn(
-            "pointer-events-auto grid size-[2.6rem] cursor-pointer place-items-center rounded-control border border-border",
-            "bg-background/90 backdrop-blur-md",
-            "reduced-transparency:bg-background reduced-transparency:backdrop-blur-none",
-          )} type="button" aria-label="Next project" onClick={() => selectRelative(1)}>
-            <ArrowRightIcon size={20} weight="bold" />
-          </button>
-        </div>
-      : null}
-
-      <div className={cn(
-        "pointer-events-auto absolute bottom-6 left-6 z-2 w-[min(30rem,calc(100%-3rem))] rounded-xl border border-border",
-        "bg-background/90 p-5 backdrop-blur-md",
-        "reduced-transparency:bg-background reduced-transparency:backdrop-blur-none",
-      )}>
-        {selectedProject ?
-          <>
-            <p className="font-mono text-[.68rem] uppercase tracking-[.12em] text-primary">{projectLabel(selectedProject)}</p>
-            <h2 className={cn("mt-1 mb-[.45rem] text-[1.45rem] leading-none font-[550] tracking-[-.065em] text-foreground")}>{selectedProject.title}</h2>
-            {/*<p className={cn("m-0 text-[.85rem] leading-normal text-muted-foreground")}>{selectedProject.summary}</p>*/}
-            {selectedProject.link ?
-              <button className={cn(
-                "mt-[.9rem] cursor-pointer rounded-[.4rem] border-0 bg-primary px-3 py-[.6rem]",
-                "text-[.8rem] font-[650] text-primary-foreground",
-              )} type="button" onClick={() => openProject(selectedProject)}>
-                Open project <ArrowUpRightIcon className="ml-1 inline-block align-[-.15em]" size={15} weight="bold" aria-hidden="true" />
-              </button>
-            : null}
-          </>
-        : <>
-            <h2 className={cn("mt-1 mb-[.45rem] text-[1.45rem] leading-none font-[550] tracking-[-.065em] text-foreground")}>3D portfolio gallery</h2>
-            <p className={cn("m-0 text-[.85rem] leading-normal text-muted-foreground")}>
-              Drag to orbit. Select a frame to focus, select it again to open, or click outside to
-              return.
-            </p>
-          </>
-        }
-      </div>
-
-      <div className="sr-only">
-        <h2>Projects in this gallery</h2>
-        <ul>
-          {visibleProjects.map((project) => (
-            <li key={project.slug}>
-              <a href={project.link ?? `/${project.slug}`}>{project.title}</a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </main>
+  const chime = useCallback((note = 0) => {
+    if (!soundEnabled.current || !audio.current) return;
+    const context = audio.current;
+    if (context.state !== "running") return;
+    const now = context.currentTime;
+    [0, 7, 12].forEach((interval, i) => {
+      const oscillator = context.createOscillator();
+      const envelope = context.createGain();
+      oscillator.type = "sine";
+      oscillator.frequency.value =
+        174.61 * 2 ** ((interval + (note % 12)) / 12);
+      envelope.gain.setValueAtTime(0, now);
+      envelope.gain.linearRampToValueAtTime(0.035, now + 0.025 + i * 0.025);
+      envelope.gain.exponentialRampToValueAtTime(0.001, now + 0.85);
+      oscillator.connect(envelope).connect(context.destination);
+      oscillator.start(now);
+      oscillator.stop(now + 0.9);
+      oscillator.onended = () => {
+        oscillator.disconnect();
+        envelope.disconnect();
+      };
+    });
+  }, []);
+  const select = useCallback(
+    (slug: string | null) => {
+      setSelectedSlug(slug);
+      setHoveredSlug(null);
+      if (slug)
+        chime(
+          visibleProjects.findIndex((project) => project.slug === slug) * 2,
+        );
+    },
+    [chime, visibleProjects],
   );
-}
-
-function GalleryLoadingState() {
-  return (
-    <div
-      className="absolute inset-0 z-4 grid place-items-center bg-background px-6 text-foreground"
-      role="status"
-      aria-label="Preparing 3D gallery"
-      aria-busy="true"
-    >
-      <div className="grid w-full max-w-sm justify-items-center text-center">
-        <span
-          className="block size-10 animate-spin rounded-full border-2 border-border border-t-primary"
-          aria-hidden="true"
-        />
-        <p className="mt-5 font-mono text-xs uppercase tracking-[.14em] text-primary">
-          Preparing gallery
-        </p>
-        <div className="mt-4 h-1 w-full overflow-hidden rounded-full bg-card" aria-hidden="true">
-          <div className="h-full w-1/2 animate-pulse rounded-full bg-primary" />
-        </div>
-      </div>
-    </div>
+  const overview = useCallback(() => {
+    select(null);
+    setReset((value) => value + 1);
+  }, [select]);
+  const step = useCallback(
+    (direction: number) => {
+      if (!visibleProjects.length) return;
+      const next =
+        selectedIndex === -1
+          ? direction > 0
+            ? 0
+            : visibleProjects.length - 1
+          : (selectedIndex + direction + visibleProjects.length) %
+            visibleProjects.length;
+      select(visibleProjects[next].slug);
+    },
+    [selectedIndex, visibleProjects, select],
   );
-}
-
-function WebGLUnavailableState() {
-  return (
-    <div className="absolute inset-0 z-4 grid place-items-center bg-background px-6 text-foreground">
-      <div className="grid w-full max-w-sm justify-items-center text-center">
-        <p className="font-mono text-xs uppercase tracking-[.14em] text-primary">WebGL unavailable</p>
-        <p className="mt-4 text-sm leading-6 text-muted-foreground">
-          This browser or device cannot render the 3D gallery.
-        </p>
-        <a className="mt-6 text-sm text-foreground underline underline-offset-4 hover:text-primary" href="/work/">
-          Browse the project list instead
-        </a>
-      </div>
-    </div>
-  );
-}
-
-function projectLabel(project: Project) {
-  return project.categories
-    .map((category) => categories.find(({ value }) => value === category)?.label ?? category)
-    .join(" · ");
-}
-
-function GalleryWorld({
-  projects,
-  isDark,
-  reducedMotion,
-  selectedSlug,
-  onSelect,
-  onReady,
-}: {
-  projects: Project[];
-  isDark: boolean;
-  reducedMotion: boolean;
-  selectedSlug: string | null;
-  onSelect: (slug: string | null) => void;
-  onReady: () => void;
-}) {
-  const radius = THREE.MathUtils.clamp(4.2 + projects.length * 0.12, 4.2, 7.5);
-  const selectedFrame = useMemo(() => {
-    const index = projects.findIndex((project) => project.slug === selectedSlug);
-    if (index === -1) return null;
-    const angle = getFrameAngle(index, projects.length);
-    const [x, y, z] = getFramePosition(angle, index, radius);
-    return { angle, position: [x, y + 0.2, z] as [number, number, number] };
-  }, [projects, radius, selectedSlug]);
-
-  useEffect(() => onReady(), [onReady]);
-
-  return (
-    <>
-      <GalleryCameraRig reducedMotion={reducedMotion} selectedFrame={selectedFrame} />
-      <color attach="background" args={[isDark ? "#0b0f12" : "#e9edf1"]} />
-      <fog attach="fog" args={[isDark ? "#0b0f12" : "#e9edf1", 9, 19]} />
-      <ambientLight intensity={isDark ? 1.3 : 2.2} />
-      <directionalLight position={[4, 8, 4]} intensity={isDark ? 2.4 : 3.2} />
-      <group position={[0, 0.2, 0]}>
-        {projects.map((project, index) => {
-          const angle = getFrameAngle(index, projects.length);
-          return (
-            <GalleryFrame
-              key={project.slug}
-              angle={angle}
-              index={index}
-              isDark={isDark}
-              project={project}
-              radius={radius}
-              reducedMotion={reducedMotion}
-              selected={selectedSlug === project.slug}
-              onSelect={onSelect}
-            />
-          );
-        })}
-      </group>
-    </>
-  );
-}
-
-const CAMERA_TRANSITION_DURATION = 0.8;
-const DESKTOP_FRAME_FOCUS_DISTANCE = 2.35;
-const FOCUSED_FRAME_SCREEN_WIDTH = 0.78;
-const FRAME_WIDTH = 1.76;
-const SELECTED_FRAME_SCALE = 1.12;
-
-type SelectedFrame = { angle: number; position: [number, number, number] };
-type CameraPose = { lookAt: THREE.Vector3; position: THREE.Vector3 };
-
-function getFrameAngle(index: number, projectCount: number) {
-  return projectCount <= 5 ?
-      Math.PI / 2 + (index - (projectCount - 1) / 2) * 0.55
-    : (index / projectCount) * Math.PI * 2;
-}
-
-function getFramePosition(angle: number, index: number, radius: number): [number, number, number] {
-  return [Math.cos(angle) * radius, index % 2 === 0 ? 0.15 : 0.55, -Math.sin(angle) * radius];
-}
-
-function GalleryCameraRig({
-  reducedMotion,
-  selectedFrame,
-}: {
-  reducedMotion: boolean;
-  selectedFrame: SelectedFrame | null;
-}) {
-  const controls = useRef<OrbitControlsImpl>(null);
-  const homePose = useRef<CameraPose | null>(null);
-  const transition = useRef({
-    active: false,
-    elapsed: 0,
-    fromLookAt: new THREE.Vector3(),
-    fromPosition: new THREE.Vector3(),
-    toLookAt: new THREE.Vector3(),
-    toPosition: new THREE.Vector3(),
-  });
-  const { camera, size } = useThree();
+  const sendPulse = useCallback(() => {
+    setPulse((value) => value + 1);
+    if (!soundEnabled.current) return;
+    if (!startup.current) {
+      startup.current = new Audio("/audio/win95_startup.mp3");
+      startup.current.volume = 0.45;
+    }
+    startup.current.currentTime = 0;
+    void startup.current.play().catch(() => setNotice("Sound is unavailable in this browser."));
+  }, []);
+  const stopDrift = useCallback(() => setMoving(false), []);
 
   useEffect(() => {
-    const orbitControls = controls.current;
-    if (!orbitControls) return;
-    if (selectedFrame && !homePose.current)
-      homePose.current = {
-        lookAt: orbitControls.target.clone(),
-        position: camera.position.clone(),
-      };
-    const destination =
-      selectedFrame ?
-        getFocusedCameraPose(
-          selectedFrame,
-          getResponsiveFocusDistance(camera, size.width / size.height),
+    const onKey = (event: KeyboardEvent) => {
+      if (
+        event.target instanceof HTMLElement &&
+        (event.target.closest(
+          "input, textarea, select, [contenteditable=true]",
+        ) ||
+          event.altKey ||
+          event.ctrlKey ||
+          event.metaKey)
+      )
+        return;
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        step(1);
+      }
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        step(-1);
+      }
+      if (event.key === "Escape") overview();
+      if (
+        event.code === "Space" &&
+        !(
+          event.target instanceof HTMLElement &&
+          event.target.closest("button, a")
         )
-      : homePose.current;
-    if (!destination) return;
-    const nextTransition = transition.current;
-    nextTransition.active = !reducedMotion;
-    nextTransition.elapsed = 0;
-    nextTransition.fromLookAt.copy(orbitControls.target);
-    nextTransition.fromPosition.copy(camera.position);
-    nextTransition.toLookAt.copy(destination.lookAt);
-    nextTransition.toPosition.copy(destination.position);
-    orbitControls.enabled = false;
-    if (reducedMotion) {
-      camera.position.copy(destination.position);
-      orbitControls.target.copy(destination.lookAt);
-      camera.lookAt(destination.lookAt);
-      orbitControls.enabled = !selectedFrame;
-      if (!selectedFrame) homePose.current = null;
-    }
-  }, [camera, reducedMotion, selectedFrame, size.height, size.width]);
-
-  useFrame((_, delta) => {
-    const orbitControls = controls.current;
-    const currentTransition = transition.current;
-    if (!orbitControls || !currentTransition.active) return;
-    currentTransition.elapsed += delta;
-    const linearProgress = Math.min(currentTransition.elapsed / CAMERA_TRANSITION_DURATION, 1);
-    const progress = 1 - Math.pow(1 - linearProgress, 3);
-    camera.position.lerpVectors(
-      currentTransition.fromPosition,
-      currentTransition.toPosition,
-      progress,
-    );
-    orbitControls.target.lerpVectors(
-      currentTransition.fromLookAt,
-      currentTransition.toLookAt,
-      progress,
-    );
-    camera.lookAt(orbitControls.target);
-    if (linearProgress === 1) {
-      currentTransition.active = false;
-      orbitControls.enabled = !selectedFrame;
-      if (!selectedFrame) homePose.current = null;
-    }
-  });
+      ) {
+        event.preventDefault();
+        if (!reducedMotion) setMoving((value) => !value);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [step, overview, reducedMotion]);
+  useEffect(() => {
+    filmstrip.current
+      ?.querySelector('[aria-pressed="true"]')
+      ?.scrollIntoView({
+        behavior: reducedMotion ? "instant" : "smooth",
+        block: "nearest",
+        inline: "center",
+      });
+  }, [selectedSlug, reducedMotion]);
+  useEffect(() => {
+    if (!notice) return;
+    const timer = window.setTimeout(() => setNotice(""), 3500);
+    return () => window.clearTimeout(timer);
+  }, [notice]);
 
   return (
-    <OrbitControls
-      ref={controls}
-      enableDamping={!reducedMotion}
-      enabled={!selectedFrame}
-      enablePan={false}
-      makeDefault
-      maxDistance={11}
-      maxPolarAngle={Math.PI / 2.08}
-      minDistance={3.8}
-      minPolarAngle={Math.PI / 3.4}
-      target={[0, 0.7, 0]}
-    />
-  );
-}
-
-function getResponsiveFocusDistance(camera: THREE.Camera, aspect: number) {
-  if (!(camera instanceof THREE.PerspectiveCamera)) return DESKTOP_FRAME_FOCUS_DISTANCE;
-  const verticalFov = THREE.MathUtils.degToRad(camera.getEffectiveFOV());
-  const horizontalFov = 2 * Math.atan(Math.tan(verticalFov / 2) * aspect);
-  const distanceToFitWidth =
-    (FRAME_WIDTH * SELECTED_FRAME_SCALE) /
-    (2 * Math.tan(horizontalFov / 2) * FOCUSED_FRAME_SCREEN_WIDTH);
-  return Math.max(DESKTOP_FRAME_FOCUS_DISTANCE, distanceToFitWidth);
-}
-
-function getFocusedCameraPose(frame: SelectedFrame, focusDistance: number): CameraPose {
-  const lookAt = new THREE.Vector3(...frame.position);
-  const frameRotation = new THREE.Quaternion().setFromEuler(
-    new THREE.Euler(0, frame.angle - Math.PI / 2, 0),
-  );
-  const position = new THREE.Vector3(0, 0, focusDistance)
-    .applyQuaternion(frameRotation)
-    .add(lookAt);
-  return { lookAt, position };
-}
-
-function GalleryFrame({
-  angle,
-  index,
-  isDark,
-  project,
-  radius,
-  reducedMotion,
-  selected,
-  onSelect,
-}: {
-  angle: number;
-  index: number;
-  isDark: boolean;
-  project: Project;
-  radius: number;
-  reducedMotion: boolean;
-  selected: boolean;
-  onSelect: (slug: string | null) => void;
-}) {
-  const group = useRef<THREE.Group>(null);
-  const [hovered, setHovered] = useState(false);
-  useCursor(hovered, selected && project.link ? "grab" : "pointer");
-  const position = useMemo(() => getFramePosition(angle, index, radius), [angle, index, radius]);
-
-  useFrame((_, delta) => {
-    if (!group.current || reducedMotion) return;
-    const targetScale =
-      selected ? SELECTED_FRAME_SCALE
-      : hovered ? 1.04
-      : 1;
-    const nextScale = THREE.MathUtils.damp(group.current.scale.x, targetScale, 8, delta);
-    group.current.scale.setScalar(nextScale);
-  });
-
-  return (
-    <group
-      ref={group}
-      position={position}
-      rotation={[0, angle - Math.PI / 2, 0]}
-      scale={reducedMotion && selected ? SELECTED_FRAME_SCALE : 1}
+    <main
+      ref={root}
+      className={`spatial-gallery ${dark ? "sg-dark" : "sg-light"} ${selectedProject ? "sg-focused" : ""}`}
+      aria-label="Interactive spatial portfolio gallery"
     >
-      <mesh
-        onClick={(event) => {
-          event.stopPropagation();
-          // if (selected) {
-          //   if (project.link) openProject(project.link);
-          //   else onSelect(null);
-          //   return;
-          // }
-          onSelect(project.slug);
-        }}
-        onPointerEnter={(event) => {
-          event.stopPropagation();
-          setHovered(true);
-        }}
-        onPointerLeave={() => setHovered(false)}
-      >
-        <planeGeometry args={[FRAME_WIDTH, 1.2]} />
-        <meshStandardMaterial
-          color={
-            selected ? "#e85d39"
-            : isDark ?
-              "#252a30"
-            : "#c8d0d8"
-          }
-          metalness={0.2}
-          roughness={0.68}
-        />
-        <DreiImage
-          position={[0, 0, 0.012]}
-          scale={[1.64, 1.08]}
-          url={project.cover}
-          toneMapped={false}
-        />
-      </mesh>
-    </group>
+      <div className={`sg-canvas ${hoveredSlug ? "sg-hovering" : ""}`}>
+        {webgl === true && (
+          <SceneBoundary onError={markFailed}>
+            <Canvas
+              camera={{ fov: 44, position: [12, 12, 22], near: 0.1, far: 100 }}
+              dpr={[1, 1.5]}
+              gl={{ antialias: true, powerPreference: "high-performance" }}
+              onPointerMissed={(event) => {
+                if (event.type === "click") select(null);
+              }}
+              aria-label="Orbiting project exhibits. Use the project navigator below for keyboard access."
+            >
+              <GalleryWorld
+                projects={visibleProjects}
+                selectedSlug={selectedSlug}
+                arrangement={arrangement}
+                dark={dark}
+                palette={palette}
+                moving={moving}
+                reducedMotion={reducedMotion}
+                pulse={pulse}
+                reset={reset}
+                onSelect={select}
+                onHover={setHoveredSlug}
+                onPulse={sendPulse}
+                onReady={markReady}
+                onInteract={stopDrift}
+                onError={markFailed}
+              />
+            </Canvas>
+          </SceneBoundary>
+        )}
+      </div>
+      <div className="sg-vignette" aria-hidden="true" />
+      <div className="sg-grain" aria-hidden="true" />
+
+      <header className="sg-header">
+        <a className="sg-brand" href="/" aria-label="Back to portfolio">
+          <ArrowLeftIcon size={17} />
+          <span>Back</span>
+        </a>
+        <nav className="sg-categories" aria-label="Gallery categories">
+          {categories.map((item) => (
+            <button
+              key={item.value}
+              type="button"
+              aria-pressed={category === item.value}
+              disabled={
+                !projects.some((project) =>
+                  project.categories.includes(item.value),
+                )
+              }
+              onClick={() => {
+                setCategory(item.value);
+                setSelectedSlug(null);
+                setHoveredSlug(null);
+                chime(3);
+              }}
+            >
+              {item.short}
+            </button>
+          ))}
+        </nav>
+        <aside className="sg-scene-tools" aria-label="Scene controls">
+        <div className="sg-arrangements">
+          <button
+            type="button"
+            aria-pressed={arrangement === "orbit"}
+            onClick={() => {
+              setArrangement("orbit");
+              overview();
+            }}
+          >
+            <CircleNotchIcon size={19} /> Orbit
+          </button>
+          <button
+            type="button"
+            aria-pressed={arrangement === "constellation"}
+            onClick={() => {
+              setArrangement("constellation");
+              overview();
+            }}
+          >
+            <DotsNineIcon size={19} /> Constellation
+          </button>
+        </div>
+          <div className="sg-utilities">
+            <button
+              type="button"
+              className="sg-motion-button"
+              aria-label={moving ? "Pause scene motion" : "Resume scene motion"}
+              aria-pressed={moving}
+              disabled={reducedMotion}
+              title={
+                reducedMotion
+                  ? "Motion reduced to match your system preference"
+                  : undefined
+              }
+              onClick={() => setMoving((value) => !value)}
+            >
+              {moving ? <PauseIcon size={15} /> : <PlayIcon size={15} />}{" "}
+
+            </button>
+            <button
+              type="button"
+              aria-label={
+                sound ? "Mute interaction sounds" : "Enable interaction sounds"
+              }
+              aria-pressed={sound}
+              title={sound ? "Sound on" : "Sound off"}
+              onClick={async () => {
+                try {
+                  if (!audio.current) audio.current = new AudioContext();
+                  await audio.current.resume();
+                  if (sound) startup.current?.pause();
+                  soundEnabled.current = !sound;
+                  setSound(!sound);
+                  if (!sound) chime(0);
+                } catch {
+                  setNotice("Sound is unavailable in this browser.");
+                }
+              }}
+            >
+              {sound ? (
+                <SpeakerHighIcon size={18} />
+              ) : (
+                <SpeakerSlashIcon size={18} />
+              )}
+            </button>
+            <button
+              type="button"
+              aria-label={
+                dark
+                  ? "Switch to light atmosphere"
+                  : "Switch to dark atmosphere"
+              }
+              onClick={() => {
+                document.documentElement.classList.toggle("dark", !dark);
+                setDark(!dark);
+                try {
+                  localStorage.setItem(
+                    "theme",
+                    dark ? "light" : "dark",
+                  );
+                } catch {
+                  /* Optional preference. */
+                }
+              }}
+            >
+              {dark ? <SunIcon size={18} /> : <MoonIcon size={18} />}
+            </button>
+            <button
+              type="button"
+              className="sg-fullscreen"
+              aria-label="Toggle fullscreen"
+              onClick={async () => {
+                try {
+                  if (document.fullscreenElement)
+                    await document.exitFullscreen();
+                  else if (root.current?.requestFullscreen)
+                    await root.current.requestFullscreen();
+                  else setNotice("Fullscreen isn’t available in this browser.");
+                } catch {
+                  setNotice("Fullscreen isn’t available in this browser.");
+                }
+              }}
+            >
+              <ArrowsOutIcon size={18} />
+            </button>
+          </div>
+        <button
+          type="button"
+          className="sg-surprise"
+          disabled={visibleProjects.length < 2}
+          onClick={() => {
+            const candidates = visibleProjects.filter(
+              (project) => project.slug !== selectedSlug,
+            );
+            if (candidates.length)
+              select(
+                candidates[Math.floor(Math.random() * candidates.length)].slug,
+              );
+          }}
+        >
+          <ShuffleIcon size={16} /> Surprise me
+        </button>
+        </aside>
+      </header>
+
+      {webgl === false && (
+        <section className="sg-fallback" role="status">
+          <p>The 3D scene isn’t available on this device.</p>
+          <a className="sg-primary" href="/work/">Browse projects <ArrowRightIcon size={17} /></a>
+        </section>
+      )}
+      {webgl !== false && !ready && (
+        <div className="sg-loading" role="status">
+          <CircleNotchIcon size={30} />
+          <p>Setting things in motion</p>
+          <a href="/work/">Browse the project list</a>
+        </div>
+      )}
+
+      <div className="sg-bottom">
+        <div className="sg-caption-row">
+          <section className="sg-caption" aria-live="polite" aria-atomic="true">
+            {selectedProject ? (
+              <div key={selectedProject.slug} className="sg-project-copy">
+                <h2>{selectedProject.title}</h2>
+                <p>{selectedProject.summary}</p>
+                {selectedProject.link && (
+                  <a
+                    className="sg-project-link"
+                    href={selectedProject.link}
+                    target={
+                      /^https?:\/\//.test(selectedProject.link)
+                        ? "_blank"
+                        : undefined
+                    }
+                    rel={
+                      /^https?:\/\//.test(selectedProject.link)
+                        ? "noopener noreferrer"
+                        : undefined
+                    }
+                  >
+                    Explore project <ArrowUpRightIcon size={18} />
+                  </a>
+                )}
+              </div>
+            ) : (
+              <div className="sg-overview-copy">
+                <p>
+                  {hoveredProject
+                    ? hoveredProject.title
+                    : null}
+                </p>
+                <span>
+                  {hoveredProject
+                    ? "Click to take a closer look"
+                    : "Drag to orbit · Scroll to zoom · Select to explore"}
+                </span>
+              </div>
+            )}
+          </section>
+          <div className="sg-navigation">
+            {selectedProject && (
+              <button
+                className="sg-overview-icon"
+                onClick={overview}
+                title="Return to overview"
+                aria-label="Return to overview"
+              >
+                <CircleNotchIcon size={20} />
+              </button>
+            )}
+            <button
+              aria-label="Previous project"
+              onClick={() => step(-1)}
+              disabled={!visibleProjects.length}
+            >
+              <ArrowLeftIcon size={20} />
+            </button>
+            <span>
+              <strong>
+                {selectedIndex === -1
+                  ? "—"
+                  : String(selectedIndex + 1).padStart(2, "0")}
+              </strong>{" "}
+              / {String(visibleProjects.length).padStart(2, "0")}
+            </span>
+            <button
+              aria-label="Next project"
+              onClick={() => step(1)}
+              disabled={!visibleProjects.length}
+            >
+              <ArrowRightIcon size={20} />
+            </button>
+          </div>
+        </div>
+        <div
+          className="sg-filmstrip"
+          ref={filmstrip}
+          aria-label="Choose a project"
+        >
+          {visibleProjects.map((project) => (
+            <button
+              key={project.slug}
+              type="button"
+              aria-label={`Focus ${project.title}`}
+              title={project.title}
+              aria-pressed={selectedSlug === project.slug}
+              onClick={() => select(project.slug)}
+            >
+              <img src={project.cover} alt="" loading="lazy" />
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="sg-notice" role="status">
+        {notice}
+      </div>
+    </main>
   );
 }
