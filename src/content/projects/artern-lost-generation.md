@@ -4,14 +4,20 @@ summary: "Sound work for Artern's Lost Generation discussion series."
 slug: "artern-lost-generation"
 cover: "../../assets/images/artern-lostgeneration.jpg"
 alt: "Artern - Lost Generation project artwork"
-categories: ["sound-music"]
-tags: ["Sound design","Audio production"]
+categories:
+  - "sound-music"
+tags:
+  - "Sound design"
+  - "Audio production"
 year: 2018
 role: "Sound designer"
 featured: false
 published: true
 links: []
-embeds: [{"provider":"youtube","title":"Artern - Lost Generation video","url":"https://www.youtube.com/watch?v=_KtUbHRzklU"}]
+embeds:
+  - provider: "youtube"
+    title: "Artern - Lost Generation video"
+    url: "https://www.youtube.com/watch?v=_KtUbHRzklU"
 gallery: []
 ---
 

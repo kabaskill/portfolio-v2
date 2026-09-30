@@ -4,14 +4,21 @@ summary: "A short logo animation with original sound design."
 slug: "logo-design"
 cover: "../../assets/images/logodesign.jpg"
 alt: "Logo Design project artwork"
-categories: ["sound-music", "experiment"]
-tags: ["Sound design","Audio production"]
+categories:
+  - "sound-music"
+  - "experiment"
+tags:
+  - "Sound design"
+  - "Audio production"
 role: "Sound designer"
 year: 2022
 featured: false
 published: true
 links: []
-embeds: [{"provider":"youtube","title":"Logo Design video","url":"https://www.youtube.com/watch?v=ILklZxQckEM"}]
+embeds:
+  - provider: "youtube"
+    title: "Logo Design video"
+    url: "https://www.youtube.com/watch?v=ILklZxQckEM"
 gallery: []
 ---
 

@@ -4,14 +4,20 @@ summary: "Sound design for An Ordinary Day, a short film about everyday sexism."
 slug: "an-ordinary-day"
 cover: "../../assets/images/anordinaryday.jpg"
 alt: "An Ordinary Day project artwork"
-categories: ["sound-music"]
-tags: ["Sound design","Audio production"]
+categories:
+  - "sound-music"
+tags:
+  - "Sound design"
+  - "Audio production"
 year: 2015
 role: "Sound designer"
 featured: false
 published: true
 links: []
-embeds: [{"provider":"youtube","title":"An Ordinary Day video","url":"https://www.youtube.com/watch?v=ttb41edWA7U"}]
+embeds:
+  - provider: "youtube"
+    title: "An Ordinary Day video"
+    url: "https://www.youtube.com/watch?v=ttb41edWA7U"
 gallery: []
 ---
 

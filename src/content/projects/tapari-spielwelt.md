@@ -4,14 +4,21 @@ summary: "Sound design for Tapari, an interactive, screen-free story mat for chi
 slug: "tapari-spielwelt"
 cover: "../../assets/images/tapari-spielwelt.jpg"
 alt: "Tapari-Spielwelt project artwork"
-categories: ["sound-music", "experiment"]
-tags: ["Sound design","Audio production"]
+categories:
+  - "sound-music"
+  - "experiment"
+tags:
+  - "Sound design"
+  - "Audio production"
 role: "Sound designer and writer"
 year: 2023
 featured: false
 published: true
 links: []
-embeds: [{"provider":"youtube","title":"Tapari-Spielwelt video","url":"https://www.youtube.com/watch?v=VWLYl_1PPBI"}]
+embeds:
+  - provider: "youtube"
+    title: "Tapari-Spielwelt video"
+    url: "https://www.youtube.com/watch?v=VWLYl_1PPBI"
 gallery: []
 ---
 

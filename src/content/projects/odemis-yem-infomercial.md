@@ -4,14 +4,20 @@ summary: "Sound design for an Odemis Yem agricultural infomercial."
 slug: "odemis-yem-infomercial"
 cover: "../../assets/images/odemisyem.jpg"
 alt: "Odemis Yem Infomercial project artwork"
-categories: ["sound-music"]
-tags: ["Sound design","Audio production"]
+categories:
+  - "sound-music"
+tags:
+  - "Sound design"
+  - "Audio production"
 role: "Sound designer"
 year: 2013
 featured: false
 published: true
 links: []
-embeds: [{"provider":"youtube","title":"Odemis Yem Infomercial video","url":"https://www.youtube.com/watch?v=TM2zVTFPnis"}]
+embeds:
+  - provider: "youtube"
+    title: "Odemis Yem Infomercial video"
+    url: "https://www.youtube.com/watch?v=TM2zVTFPnis"
 gallery: []
 ---
 

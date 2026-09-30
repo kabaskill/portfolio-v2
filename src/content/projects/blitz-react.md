@@ -4,12 +4,14 @@ summary: "A compact command-line tool for starting React projects with a small s
 slug: "blitz-react"
 cover: "../../assets/images/blitz-react.png"
 alt: "Blitz React lightning mark and project wordmark"
-categories: ["development-design", "experiment"]
+categories:
+  - "development-design"
+  - "experiment"
 year: 2025
 tags:
-  - React
-  - TypeScript
-  - npm
+  - "React"
+  - "TypeScript"
+  - "npm"
 role: "Creator and maintainer"
 featured: false
 links:

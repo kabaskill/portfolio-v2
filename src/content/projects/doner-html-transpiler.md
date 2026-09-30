@@ -4,12 +4,14 @@ summary: "A German-to-English HTML transpiler built with Go, React, and TypeScri
 slug: "doner-html-transpiler"
 cover: "../../assets/images/doner.png"
 alt: "DÖNER transpiler project artwork with code brackets and a döner illustration"
-categories: ["development-design", "experiment"]
+categories:
+  - "development-design"
+  - "experiment"
 tags:
-  - Go
-  - React
-  - TypeScript
-  - HTML
+  - "Go"
+  - "React"
+  - "TypeScript"
+  - "HTML"
 role: "Developer"
 year: 2025
 featured: true

@@ -4,14 +4,20 @@ summary: "Sound design for Human: Unknown, a documentary produced by Erka Medya.
 slug: "human-unknown"
 cover: "../../assets/images/humanunknown.jpg"
 alt: "Human: Unknown project artwork"
-categories: ["sound-music"]
-tags: ["Sound design","Audio production"]
+categories:
+  - "sound-music"
+tags:
+  - "Sound design"
+  - "Audio production"
 role: "Sound designer"
 year: 2016
 featured: false
 published: true
 links: []
-embeds: [{"provider":"youtube","title":"Human: Unknown video","url":"https://www.youtube.com/watch?v=Qmc0SBNCqVA"}]
+embeds:
+  - provider: "youtube"
+    title: "Human: Unknown video"
+    url: "https://www.youtube.com/watch?v=Qmc0SBNCqVA"
 gallery: []
 ---
 

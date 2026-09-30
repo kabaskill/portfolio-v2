@@ -4,13 +4,20 @@ summary: "A gamified music-theory application that turns listening, notation, an
 slug: "fugue-state"
 cover: "../../assets/images/FugueState-1.png"
 alt: "Fugue State music theory application title artwork"
-categories: ["development-design", "experiment"]
+categories:
+  - "development-design"
+  - "experiment"
 year: 2024
-tags: ["React","Game design","Music theory"]
+tags:
+  - "React"
+  - "Game design"
+  - "Music theory"
 role: "Developer"
 featured: false
 published: true
-links: [{"label":"View repository","url":"https://github.com/kabaskill/fugue-state-react"}]
+links:
+  - label: "View repository"
+    url: "https://github.com/kabaskill/fugue-state-react"
 embeds: []
 gallery: []
 ---

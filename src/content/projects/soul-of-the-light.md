@@ -4,14 +4,20 @@ summary: "Sound design for Soul of the Light, a short documentary about India an
 slug: "soul-of-the-light"
 cover: "../../assets/images/soulofthelight.jpg"
 alt: "Soul of the Light project artwork"
-categories: ["sound-music"]
-tags: ["Sound design","Audio production"]
+categories:
+  - "sound-music"
+tags:
+  - "Sound design"
+  - "Audio production"
 role: "Sound designer"
 featured: false
 year: 2015
 published: true
 links: []
-embeds: [{"provider":"vimeo","title":"Soul of the Light video","url":"https://vimeo.com/242382390"}]
+embeds:
+  - provider: "vimeo"
+    title: "Soul of the Light video"
+    url: "https://vimeo.com/242382390"
 gallery: []
 ---
 

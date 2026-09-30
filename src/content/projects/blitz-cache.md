@@ -4,13 +4,24 @@ summary: "A TypeScript-first data fetching and caching library with LRU storage,
 slug: "blitz-cache"
 cover: "../../assets/images/blitz-cache-cover.jpg"
 alt: "Abstract data cache with layered tiles and request paths"
-categories: ["development-design", "experiment"]
-tags: ["TypeScript", "React", "Caching", "NPM", "Open source"]
+categories:
+  - "development-design"
+  - "experiment"
+tags:
+  - "TypeScript"
+  - "React"
+  - "Caching"
+  - "NPM"
+  - "Open source"
 year: 2026
 role: "Creator and maintainer"
 featured: false
 published: true
-links: [{"label":"View repository","url":"https://github.com/kabaskill/blitz-cache"},{"label":"View on npm","url":"https://www.npmjs.com/package/blitz-cache"}]
+links:
+  - label: "View repository"
+    url: "https://github.com/kabaskill/blitz-cache"
+  - label: "View on npm"
+    url: "https://www.npmjs.com/package/blitz-cache"
 embeds: []
 gallery: []
 ---

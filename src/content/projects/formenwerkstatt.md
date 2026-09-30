@@ -4,11 +4,12 @@ summary: "A digital rebrand and website for Formenwerkstatt, a toolmaking compan
 slug: "formenwerkstatt"
 cover: "../../assets/images/fw-banner.png"
 alt: "Formenwerkstatt visual identity on a blue and white field"
-categories: ["development-design"]
+categories:
+  - "development-design"
 tags:
-  - Web design
-  - Frontend
-  - Content
+  - "Web design"
+  - "Frontend"
+  - "Content"
 year: 2024
 role: "Web developer and designer"
 featured: false

@@ -4,14 +4,20 @@ summary: "Sound work for a 12-part documentary journey across Anatolia."
 slug: "caravan-travels-of-an-ancient-civilization"
 cover: "../../assets/images/caravan.jpg"
 alt: "Caravan: Travels of an Ancient Civilization project artwork"
-categories: ["sound-music"]
-tags: ["Sound design","Audio production"]
+categories:
+  - "sound-music"
+tags:
+  - "Sound design"
+  - "Audio production"
 role: "Sound designer"
 year: 2019
 featured: false
 published: true
 links: []
-embeds: [{"provider":"youtube","title":"Caravan: Travels of an Ancient Civilization video","url":"https://www.youtube.com/watch?v=YtIUmmLDSOE"}]
+embeds:
+  - provider: "youtube"
+    title: "Caravan: Travels of an Ancient Civilization video"
+    url: "https://www.youtube.com/watch?v=YtIUmmLDSOE"
 gallery: []
 ---
 

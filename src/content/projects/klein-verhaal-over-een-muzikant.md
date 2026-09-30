@@ -4,14 +4,20 @@ summary: "Sound work for Klein Verhaal Over Een Muzikant, a short portrait of a 
 slug: "klein-verhaal-over-een-muzikant"
 cover: "../../assets/images/kleinverhaalovereenmuzikant.jpg"
 alt: "Klein Verhaal Over Een Muzikant project artwork"
-categories: ["sound-music"]
-tags: ["Sound design","Audio production"]
+categories:
+  - "sound-music"
+tags:
+  - "Sound design"
+  - "Audio production"
 role: "Sound designer"
 year: 2010
 featured: false
 published: true
 links: []
-embeds: [{"provider":"vimeo","title":"Klein Verhaal Over Een Muzikant video","url":"https://vimeo.com/100407055"}]
+embeds:
+  - provider: "vimeo"
+    title: "Klein Verhaal Over Een Muzikant video"
+    url: "https://vimeo.com/100407055"
 gallery: []
 ---
 

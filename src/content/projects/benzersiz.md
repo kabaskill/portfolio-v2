@@ -4,14 +4,20 @@ summary: "Sound mix for Benzersiz, a Turkish thriller about a pharmacist's life 
 slug: "benzersiz"
 cover: "../../assets/images/benzersiz.jpg"
 alt: "Benzersiz project artwork"
-categories: ["sound-music"]
-tags: ["Sound design","Audio production"]
+categories:
+  - "sound-music"
+tags:
+  - "Sound design"
+  - "Audio production"
 year: 2016
 role: "Sound designer"
 featured: false
 published: true
 links: []
-embeds: [{"provider":"youtube","title":"Benzersiz video","url":"https://www.youtube.com/watch?v=kIDfSPAmMKU"}]
+embeds:
+  - provider: "youtube"
+    title: "Benzersiz video"
+    url: "https://www.youtube.com/watch?v=kIDfSPAmMKU"
 gallery: []
 ---
 

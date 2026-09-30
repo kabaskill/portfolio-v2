@@ -4,14 +4,26 @@ summary: "A data platform for regional water conditions, built around normalized
 slug: "droplet"
 cover: "../../assets/images/droplet-cover.png"
 alt: "Abstract water data platform cover with a droplet and contour map"
-categories: ["development-design", "experiment"]
-tags: ["React", "TypeScript", "PostgreSQL", "Redis", "Data platform", "AI"]
+categories:
+  - "development-design"
+  - "experiment"
+tags:
+  - "React"
+  - "TypeScript"
+  - "PostgreSQL"
+  - "Redis"
+  - "Data platform"
+  - "AI"
 year: 2026
 role: "Creator and maintainer"
 featured: true
 published: true
 showInWork: true
-links: [{"label":"View repository","url":"https://github.com/kabaskill/droplet"},{"label":"Planned live site","url":"https://droplet.oguzkabasakal.com/"}]
+links:
+  - label: "View repository"
+    url: "https://github.com/kabaskill/droplet"
+  - label: "Live site"
+    url: "https://droplet.oguzkabasakal.com/"
 embeds: []
 gallery: []
 ---

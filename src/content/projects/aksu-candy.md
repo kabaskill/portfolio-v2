@@ -4,14 +4,20 @@ summary: "Sound design for an Aksu Candy commercial."
 slug: "aksu-candy"
 cover: "../../assets/images/aksucandy.jpg"
 alt: "Aksu Candy project artwork"
-categories: ["sound-music"]
-tags: ["Sound design","Audio production"]
+categories:
+  - "sound-music"
+tags:
+  - "Sound design"
+  - "Audio production"
 role: "Sound designer"
 year : 2016
 featured: false
 published: true
 links: []
-embeds: [{"provider":"youtube","title":"Aksu Candy video","url":"https://www.youtube.com/watch?v=UsbmHNWdSf0"}]
+embeds:
+  - provider: "youtube"
+    title: "Aksu Candy video"
+    url: "https://www.youtube.com/watch?v=UsbmHNWdSf0"
 gallery: []
 ---
 

@@ -4,14 +4,20 @@ summary: "Sound design for Zero, a short film about an apocalypse survivor."
 slug: "zero"
 cover: "../../assets/images/zero.jpg"
 alt: "Zero project artwork"
-categories: ["sound-music"]
-tags: ["Sound design","Audio production"]
+categories:
+  - "sound-music"
+tags:
+  - "Sound design"
+  - "Audio production"
 year: 2014
 role: "Sound designer"
 featured: false
 published: true
 links: []
-embeds: [{"provider":"vimeo","title":"Zero video","url":"https://vimeo.com/287928387"}]
+embeds:
+  - provider: "vimeo"
+    title: "Zero video"
+    url: "https://vimeo.com/287928387"
 gallery: []
 ---
 

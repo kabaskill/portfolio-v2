@@ -4,13 +4,20 @@ summary: "A board-game discovery app built as my Neuefische bootcamp graduation 
 slug: "gamedalf"
 cover: "../../assets/images/gamedalf.png"
 alt: "GameDalf project artwork"
-categories: ["development-design", "experiment"]
-tags: ["Web app", "API", "Neuefische"]
+categories:
+  - "development-design"
+  - "experiment"
+tags:
+  - "Web app"
+  - "API"
+  - "Neuefische"
 role: "Developer"
 year: 2023
 featured: false
 published: true
-links: [{"label":"Open project","url":"https://gamedalf.vercel.app"}]
+links:
+  - label: "Open project"
+    url: "https://gamedalf.vercel.app"
 embeds: []
 gallery: []
 ---

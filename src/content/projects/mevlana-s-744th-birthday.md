@@ -4,14 +4,20 @@ summary: "Sound work for a film documenting Mevlana's 744th Vuslat anniversary."
 slug: "mevlana-s-744th-birthday"
 cover: "../../assets/images/mevlana.jpg"
 alt: "Mevlana's 744th Birthday project artwork"
-categories: ["sound-music"]
-tags: ["Sound design","Audio production"]
+categories:
+  - "sound-music"
+tags:
+  - "Sound design"
+  - "Audio production"
 role: "Sound designer"
 year: 2018
 featured: false
 published: true
 links: []
-embeds: [{"provider":"youtube","title":"Mevlana's 744th Birthday video","url":"https://www.youtube.com/watch?v=pZcudV-PUYY"}]
+embeds:
+  - provider: "youtube"
+    title: "Mevlana's 744th Birthday video"
+    url: "https://www.youtube.com/watch?v=pZcudV-PUYY"
 gallery: []
 ---
 

@@ -4,15 +4,27 @@ summary: "A 360-degree audiovisual installation made for a second-semester Expan
 slug: "saya"
 cover: "../../assets/images/saya.jpg"
 alt: "SAYA project artwork"
-categories: ["development-design", "sound-music", "experiment"]
+categories:
+  - "development-design"
+  - "sound-music"
+  - "experiment"
 showInWork: true
-tags: ["Sound design","Music production","Performance"]
+tags:
+  - "Sound design"
+  - "Music production"
+  - "Performance"
 role: "Sound designer and musician"
 year: 2023
 featured: false
 published: true
 links: []
-embeds: [{"provider":"youtube","title":"SAYA - Sound","url":"https://www.youtube.com/watch?v=U7g0K1s2__w"},{"provider":"youtube","title":"SAYA - Music","url":"https://www.youtube.com/watch?v=Z_-ZmBUz1lk"}]
+embeds:
+  - provider: "youtube"
+    title: "SAYA - Sound"
+    url: "https://www.youtube.com/watch?v=U7g0K1s2__w"
+  - provider: "youtube"
+    title: "SAYA - Music"
+    url: "https://www.youtube.com/watch?v=Z_-ZmBUz1lk"
 gallery: []
 ---
 

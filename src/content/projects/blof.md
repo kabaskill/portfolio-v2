@@ -4,14 +4,29 @@ summary: "Four Blof recordings, including Deli Gibi Sevdim, Huysuz, Olmaz, and S
 slug: "blof"
 cover: "../../assets/images/blof-deligibisevdim.jpg"
 alt: "Blof music project artwork"
-categories: ["sound-music"]
-tags: ["Music production","Performance"]
+categories:
+  - "sound-music"
+tags:
+  - "Music production"
+  - "Performance"
 role: "Musician"
 year: 2018
 featured: false
 published: true
 links: []
-embeds: [{"provider":"youtube","title":"Blof - Deli Gibi Sevdim","url":"https://www.youtube.com/watch?v=aFwXboxvJ3U"},{"provider":"youtube","title":"Blof - Huysuz","url":"https://www.youtube.com/watch?v=0-9jZ_arQzg"},{"provider":"youtube","title":"Blof - Olmaz","url":"https://www.youtube.com/watch?v=a64I2vC2shM"},{"provider":"youtube","title":"Blof - Saklambac","url":"https://www.youtube.com/watch?v=38mLrlco9sc"}]
+embeds:
+  - provider: "youtube"
+    title: "Blof - Deli Gibi Sevdim"
+    url: "https://www.youtube.com/watch?v=aFwXboxvJ3U"
+  - provider: "youtube"
+    title: "Blof - Huysuz"
+    url: "https://www.youtube.com/watch?v=0-9jZ_arQzg"
+  - provider: "youtube"
+    title: "Blof - Olmaz"
+    url: "https://www.youtube.com/watch?v=a64I2vC2shM"
+  - provider: "youtube"
+    title: "Blof - Saklambac"
+    url: "https://www.youtube.com/watch?v=38mLrlco9sc"
 gallery: []
 ---
 
