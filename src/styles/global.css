@@ -136,7 +136,142 @@
     color: var(--muted);
   }
 
-  .rich-text code {
+  .rich-text h2 {
+    margin-bottom: 1.25rem;
+  }
+
+  .rich-text h3 {
+    margin-top: 2.25rem;
+    font-size: 1.35rem;
+    line-height: 1.2;
+    letter-spacing: -0.04em;
+    font-weight: 550;
+  }
+
+  .rich-text a {
+    color: var(--foreground);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in oklab, var(--accent) 65%, transparent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    transition: color 160ms ease, text-decoration-color 160ms ease;
+  }
+
+  .rich-text a:hover {
+    color: var(--accent);
+    text-decoration-color: currentColor;
+  }
+
+  .rich-text ul,
+  .rich-text ol {
+    padding-left: 1.5rem;
+    color: var(--muted);
+  }
+
+  .rich-text ul {
+    list-style: disc;
+  }
+
+  .rich-text ol {
+    list-style: decimal;
+  }
+
+  .rich-text li {
+    padding-left: 0.35rem;
+  }
+
+  .rich-text li + li {
+    margin-top: 0.35rem;
+  }
+
+  .rich-text li::marker {
+    color: var(--accent);
+  }
+
+  .rich-text blockquote {
+    margin: 2.5rem 0;
+    padding: 0.35rem 0 0.35rem 1.5rem;
+    border-left: 2px solid var(--accent);
+    color: var(--foreground);
+    font-size: 1.1rem;
+    line-height: 1.55;
+    letter-spacing: -0.025em;
+  }
+
+  .rich-text blockquote p {
+    margin: 0;
+    color: inherit;
+  }
+
+  .rich-text img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+  }
+
+  .rich-text p:has(> img) {
+    margin: 2.5rem 0 0.75rem;
+  }
+
+  .rich-text p:has(> img) + p {
+    margin-top: 0.75rem;
+  }
+
+  .rich-text table {
+    display: block;
+    width: 100%;
+    margin: 2rem 0;
+    overflow-x: auto;
+    border-collapse: collapse;
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+
+  .rich-text th,
+  .rich-text td {
+    min-width: 9rem;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .rich-text th {
+    color: var(--foreground);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .rich-text hr {
+    margin: 3rem 0;
+    border: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .rich-text pre {
+    margin: 2rem 0;
+    overflow-x: auto;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1.7;
+  }
+
+  .rich-text pre code {
+    display: block;
+    padding: 0;
+    background: transparent;
+  }
+
+  .rich-text :not(pre) > code {
     padding: 0.15rem 0.3rem;
     border-radius: 0.25rem;
     background: var(--surface);

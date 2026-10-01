@@ -4,7 +4,10 @@ import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { cn } from "../../lib/cn";
 
-const posts = await getCollection("posts");
+const unorderedPosts = await getCollection("posts");
+const posts = unorderedPosts.sort(
+  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
+);
 ---
 
 <SiteLayout title="Journal | Oguz Kabasakal">
