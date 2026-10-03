@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
 import ProjectCategories from "./ProjectCategories.astro";
@@ -6,9 +7,10 @@ import { cn } from "../lib/cn";
 
 interface Props {
   project: CollectionEntry<"projects">;
+  sizes: string;
 }
 
-const { project } = Astro.props;
+const { project, sizes } = Astro.props;
 const { data } = project;
 const href =
   data.categories.includes("experiment") ? `/experiments/${data.slug}` : `/work/${data.slug}`;
@@ -19,12 +21,17 @@ const href =
     class="relative aspect-[4/3] overflow-hidden rounded-xl bg-card"
     transition:name={`project-${data.slug}`}
   >
-    <img
+    <Image
       class={cn(
         "block size-full object-contain transition-transform duration-[600ms] ease-out",
         "motion-safe:group-hover:scale-[1.04]",
       )}
-      src={data.cover.src}
+      src={data.cover}
+      format="webp"
+      quality={80}
+      width={Math.min(data.cover.width, 1600)}
+      widths={[400, 800, 1200, 1600].filter((width) => width < Math.min(data.cover.width, 1600)).concat(Math.min(data.cover.width, 1600))}
+      sizes={sizes}
       alt={data.alt}
       loading="lazy"
     />

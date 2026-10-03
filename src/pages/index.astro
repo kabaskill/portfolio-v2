@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import {
   ArrowDownRightIcon,
@@ -129,7 +130,7 @@ const experimentCover = experiment?.data.cover;
             index % 4 === 2 && "md:col-span-5",
             index % 4 === 3 && "md:col-span-7 md:pt-12",
           )}>
-            <ProjectCard project={project} />
+            <ProjectCard project={project} sizes={`(min-width: 1432px) ${index % 4 === 0 || index % 4 === 3 ? 807 : 569}px, (min-width: 768px) ${index % 4 === 0 || index % 4 === 3 ? 58 : 42}vw, calc(100vw - 48px)`} />
           </div>
         ))
       }
@@ -228,12 +229,17 @@ const experimentCover = experiment?.data.cover;
           </span>
         </div>
         {experimentCover && (
-          <img
+          <Image
             class={cn(
               "block aspect-[1.2] w-full rounded-xl object-cover transition-transform duration-500 ease-out",
               "motion-safe:hover:rotate-0 md:rotate-3",
             )}
-            src={experimentCover.src}
+            src={experimentCover}
+            format="webp"
+            quality={80}
+            width={Math.min(experimentCover.width, 1200)}
+            widths={[400, 800, 1200].filter((width) => width < Math.min(experimentCover.width, 1200)).concat(Math.min(experimentCover.width, 1200))}
+            sizes="(min-width: 1432px) 700px, (min-width: 768px) 50vw, calc(100vw - 48px)"
             alt={experiment.data.alt}
             loading="lazy"
           />

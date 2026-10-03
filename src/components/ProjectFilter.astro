@@ -63,7 +63,7 @@ const orderedProjects = sortProjects(projects, "work-all");
           data-project-slug={project.data.slug}
           data-categories={project.data.categories.join(" ")}
         >
-          <ProjectCard project={project} />
+          <ProjectCard project={project} sizes={`(min-width: 1840px) 544px, (min-width: 1280px) 30vw, (min-width: 768px) ${[0, 3, 4].includes(index % 6) ? 58 : 42}vw, calc(100vw - 48px)`} />
         </div>
       ))
     }

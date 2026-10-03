@@ -4,6 +4,7 @@ import { ArrowLeftIcon, ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr"
 import ProjectCategories from "../../components/ProjectCategories.astro";
 import MediaCollection from "../../components/react/MediaCollection";
 import SiteLayout from "../../layouts/SiteLayout.astro";
+import { optimizedImage } from "../../lib/optimized-image";
 import { cn } from "../../lib/cn";
 
 export async function getStaticPaths() {
@@ -16,7 +17,13 @@ export async function getStaticPaths() {
 const { project } = Astro.props;
 const { Content } = await render(project);
 const coverImage = project.data.cover;
-const gallery = project.data.gallery.map((image) => ({ ...image, src: image.src.src }));
+const [optimizedCover, thumbnail, gallery] = await Promise.all([
+  optimizedImage(coverImage),
+  optimizedImage(coverImage, 800),
+  Promise.all(project.data.gallery.map(async (image) => ({
+    ...image, src: (await optimizedImage(image.src)).src,
+  }))),
+]);
 ---
 
 <SiteLayout title={`${project.data.title} | Oguz Kabasakal`} description={project.data.summary} image={coverImage.src} imageAlt={project.data.alt}>
@@ -65,7 +72,7 @@ const gallery = project.data.gallery.map((image) => ({ ...image, src: image.src.
         <div transition:name={`project-${project.data.slug}`}>
           <MediaCollection
             client:load
-            cover={{ src: coverImage.src, alt: project.data.alt }}
+            cover={{ src: optimizedCover.src, thumbnailSrc: thumbnail.src, alt: project.data.alt }}
             coverTitle={project.data.title}
             embeds={project.data.embeds}
             images={gallery}
