@@ -1,0 +1,56 @@
+---
+title: "Most files are zip files"
+excerpt: "At least the ones you are using daily"
+publishedAt: 2026-10-01
+cover: null
+---
+
+export const docxParts = [
+  { path: "[Content_Types].xml", job: "keeps track of the part types" },
+  { path: "word/document.xml", job: "holds the main document text and structure" },
+  { path: "word/styles.xml", job: "stores the named styles" },
+  { path: "word/_rels/document.xml.rels", job: "maps references to other parts" },
+  { path: "word/media/", job: "holds images and other media" },
+];
+
+Here's a list of most common ones:
+
+- All sorts of Office files including Microsoft, OpenOffice and MacOS
+- Windows executables (.msi, .exe)
+- Mobile app files (.apk and .ipa)
+- Java files (.jar)
+- .epub files
+- .ISO files
+- Adobe files (to some extent)
+
+> If all of those are just zip files, why need other file formats?
+
+There are 2 reasons: packaging and file size.
+
+Imagine your Downloads folder. When you first set up your computer that folder is empty. But you go online and start downloading some files. After some time it'll get crowded, so you decide to organize it. Maybe you crate a folder for images, documents and so on. Now your Downloads folder have multiple folders for different files and it looks tidy. Most importantly you'd know where your files are. 
+
+> Having a separate file format is the same process. It just packages all the files that a particular project needs.
+
+Let's give a concrete example. A Word Document can hold various things. Text, page layout and formatting data like colors, font sizes etc. as well as images, links, tables and so on. However a Word document starts empty when you create it, like your Downloads folder. As more time goes on, you add more and more data and all of it has to go somewhere. So Microsoft decided to package all of that data into a single file format, like a Documents folder in your Downloads folder. This way, when you open a Word document, it knows where to look for the text, images and other data.
+
+How about the file size? It's a fact that text files are really good for compressing. The reason for this is that text files have a lot of repeated data. For example, if you have a text file with the word "hello" repeated 1000 times, a compression algorithm can store it as "hello x 1000" instead of storing "hello" 1000 times. I'm simplifying a lot here of course but that's the gist of it.
+
+## What's inside the `.zip` though?
+
+When you open a `.docx` file with an archive program like 7zip or WinRar, you'll find something like this:
+
+<ul>
+  {docxParts.map(({ path, job }) => (
+    <li><code>{path}</code> {job}.</li>
+  ))}
+</ul>
+
+All the other formats listed above follow a similar principle. They all have a specific structure and a set of files that they need to function properly. The `.zip` format is just a convenient way to package all of those files together into a single file that can be easily shared and opened. Of course, the structure of each format is different, but the idea is the same. Also, there are a lot more goes into this subject like compression algorithms and encryption, but that's a topic for another day.
+
+> What about Adobe files?
+
+Adobe files are not zip files, but they do have a similar structure. They are based on the PDF format, which is a container format that can hold various types of data, including text, images, and multimedia. So in theory, you could just open an Adobe file as a PDF and see what's inside. However, for obvious reasons it won't work as good as just unzipping.
+
+At the end of the day, you only need WinRar or similar to get an image from an Office document. Just unzip it and get your images from the media folder.
+
+Stay positive.
